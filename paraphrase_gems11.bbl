@@ -1,0 +1,94 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citename{Bannard and
+  Callison-Burch}2005]{BannardCallisonBurch05}
+Colin Bannard and Chris Callison-Burch.
+\newblock 2005.
+\newblock Paraphrasing with bilingual parallel corpora.
+\newblock In {\em Proceedings of ACL}.
+
+\bibitem[\protect\citename{Callison-Burch}2008]{CallisonBurch08}
+Chris Callison-Burch.
+\newblock 2008.
+\newblock Syntactic constraints on paraphrases extracted from parallel corpora.
+\newblock In {\em Proceedings of EMNLP}.
+
+\bibitem[\protect\citename{Charikar}2002]{Charikar02}
+Moses Charikar.
+\newblock 2002.
+\newblock Similarity estimation techniques from rounding algorithms.
+\newblock In {\em Proceedings of STOC.}
+
+\bibitem[\protect\citename{Clarke and Lapata}2008]{ClarkeLapata08}
+James Clarke and Mirella Lapata.
+\newblock 2008.
+\newblock Global inference for sentence compression: An integer linear
+  programming approach.
+\newblock {\em Journal of Artificial Intelligence Research}, 31:399–429.
+
+\bibitem[\protect\citename{Klein and Manning}2003]{KleinManning03}
+Dan Klein and Christopher~D. Manning.
+\newblock 2003.
+\newblock Fast exact inference with a factored model for natural language
+  parsing.
+\newblock {\em Advances in Neural Information Processing Systems}, 15:3--10.
+
+\bibitem[\protect\citename{Koehn \bgroup et al.\egroup }2003]{KoehnEtAl03}
+Philipp Koehn, Franz~Josef Och, and Daniel Marcu.
+\newblock 2003.
+\newblock Statistical phrase-based translation.
+
+\bibitem[\protect\citename{Lin and Pantel}2001]{Lin01discoveryof}
+Dekang Lin and Patrick Pantel.
+\newblock 2001.
+\newblock Discovery of inference rules for question answering.
+\newblock {\em Natural Language Engineering}, 7:343--360.
+
+\bibitem[\protect\citename{Lin \bgroup et al.\egroup }2010]{LinEtAlLREC10}
+Dekang Lin, Kenneth Church, Heng Ji, Satoshi Sekine, David Yarowsky, Shane
+  Bergsma, Kailash Patil, Emily Pitler, Rachel Lathbury, Vikram Rao, Kapil
+  Dalwani, and Sushant Narsale.
+\newblock 2010.
+\newblock New tools for web-scale n-grams.
+\newblock In {\em Proceedings of LREC}.
+
+\bibitem[\protect\citename{Mad}]{MadnaniDorr10}
+
+
+\bibitem[\protect\citename{Pang \bgroup et al.\egroup }2003]{PangEtAl03}
+Bo~Pang, Kevin Knight, and Daniel Marcu.
+\newblock 2003.
+
+\bibitem[\protect\citename{Pas¸ca and Dienes}2005]{PascaDienes05}
+Marius Pas¸ca and P´eter Dienes.
+\newblock 2005.
+\newblock Aligning needles in a haystack: Paraphrase acquisition across the
+  web.
+\newblock In {\em Proceedings of IJCNLP}, page 119—130.
+
+\bibitem[\protect\citename{Quirk \bgroup et al.\egroup
+  }2004]{QuirkDolanBrockett04}
+Chris Quirk, Chris Brockett, and William Dolan.
+\newblock 2004.
+\newblock Monolingual machine translation for paraphrase generation.
+\newblock In {\em Proceedings of EMNLP,Barcelona}, page 142–149.
+
+\bibitem[\protect\citename{{Van Durme} and Lall}2010]{VanDurmeLallACL10}
+Benjamin {Van Durme} and Ashwin Lall.
+\newblock 2010.
+\newblock Online generation of locality sensitive hash signatures.
+\newblock In {\em Proceedings of ACL, Short Papers}.
+
+\bibitem[\protect\citename{Zhao \bgroup et al.\egroup }2008]{ZhaoEtAlACL08}
+Shiqi Zhao, Cheng Niu, Ming Zhou, Ting Liu, and Sheng Li.
+\newblock 2008.
+\newblock Combining multiple resources to improve smt-based paraphrasing model.
+
+\bibitem[\protect\citename{Zollmann and Venugopal}2006]{ZollmannVenygopal06}
+Andreas Zollmann and Ashish Venugopal.
+\newblock 2006.
+\newblock Syntax augmented machine translation via chart parsing.
+\newblock NAACL 2006 - Workshop on statistical machine translation. New York,
+  June.
+
+\end{thebibliography}
