@@ -239,14 +239,16 @@ Evaluation on the correlation between the ranking according to each of the parap
 
 \subsection{Paraphrase Pivoting Via French}
 {\bf Data and Experimental Design}
-Paraphrases are extracted from the French-English Europarl 
+For this experiment, the French-English Corpus from the Europarl  \cite{Koehn05} was used to train the translation model 
 
 @@ mention training corpus is specific to one domain only (parliament transcription), LSH signatures are computed with google ngram, while test sentences in HITs are from the original domain; important effects of different training texts used will be discussed later in section @@ 
 @@ explain HIT format, how not all pphrases are evaluation at once, so pphrases might be evaluated (with repeated HITs) by different sets (potentially with different sizes if some HIT rejected) of Turkers @@
 
 {\bf Experimental Results and Examples}
 @@ result, with table, separate for hiero and samt @@
-@@ mention hypothesis of LSH improving paraphrase quality in terms of correlation to human judgment is verified by the numbers in the table of overall results @@
+@@ mention hypothesis of LSH improving paraphrase quality (cmp'ed to ) in terms of correlation to human judgment is verified by the numbers in the table of overall results (consistently outperform respective method in grammaticality);  explain LSH improves grammar because LSH cannot distinguish antonym vs paraphrases, hence inherently would not do good at meaning, but it improves grammar by ensuring paraphrases share neighboring context with original phrase, which is closely related to requirements for grammaticality; 
+
+@@ mention similar trend of kTau w.r.t. number of n-gram of original phrase is observed in analysis results, meaning correlations between paraphrase re-ranking methods and human judgment are invariant with respect to number of tokens in a phrase. result not included here due to space constraint. @@
 
 
 @@ note examples are chosen with *extreme* rank difference to ensure/be confident that sufficient difference in score is present @@
@@ -257,13 +259,24 @@ Paraphrases are extracted from the French-English Europarl
 
 @@ example for which LSH helping out Multilingual Pivoting when misalignment is severe (non-sense paraphrases) (1) cite ccb's ppr and mention well-known fact about aligner quality and direct deterioration propagation in pivoting-based (or any grammar-extraction-based method) paraphrase extraction and (2) *briefly* mention potentially incorporating of LSH and tomb counter in improving misalignments, for example, by counting whether aligned phrases co-occur frequent enough in corpus) @@
 
+
+%%%% table of kTau w.r.t. top K
+
+
+
+
 @@ mention data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
 @@ human judgment isn't entirely correct, depending on turker experience with task, with english; context of sentences, length, etc @@
 
 {\bf Why is Monolingual similarity alone insufficient?}
+@@ section: false examples of LSH being worse @@
 
-" section: false examples of LSH being worse @@
+{\bf Effects of human judgment quality on gold standard}
+Despite the ease of setup and the economical benefits, subjective evaluation using Mechanical Turk are susceptible to multiple sources of error, causing substantial amount of noise in the collected data. First of all, turker's proficiency in English in terms of either age or language nativeness, would affect how the contextual clues are interpreted, which consequently influence the judgment of the paraphrases. Moreover, the experience in working on HITs and the consistency among, as well as within, turkers would also have an influence in the result quality. 
+
+An example of noisy judgment is that for the phrase "attackers", paraphrase candidate "forwards on" was likely generated from misalignment in grammar extraction stage but is ranked 7\.5, 6, and 1 out of 34 candidates for meaning, grammar and bilingual-pivoting paraphrase score, respectively, whereas monolingual-based method ranks it at 33. The actual human scores shows that "forwards on" received 2 and 4 for meaning and for grammar, 4 and 5. These scores have little correlation to the actual paraphrase quality and demonstrates one kind of noises that can be present in the data for constructing the paraphrase gold standard.
+
 
 SUMMARY/additional of sources of error (pull from ur-en section)
 
@@ -274,17 +287,17 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \begin{center}
 \begin{tabular}{rcc}%{|l|l|l|}
 \hline\hline \bf \footnotesize Re-ranking Method & \bf \footnotesize Meaning & \bf \footnotesize Grammar \\ \hline
-{\scriptsize Hiero-Hiero} & {\scriptsize 0.14 (475)} & {\scriptsize 0.04 (471)} \\
-{\scriptsize Hiero-LSH} & {\scriptsize 0.14 (493)} & {\scriptsize \bf 0.24 (490)} \\
-{\scriptsize SAMT-SAMT}& {\scriptsize 0.19 (300)}& {\scriptsize 0.08 (292)} \\
-{\scriptsize SAMT-LSH} & {\scriptsize 0.15 (326)} & {\scriptsize 0.22 (318)} \\
+{\scriptsize BiP} & {\scriptsize 0.14 (475)} & {\scriptsize 0.04 (471)} \\
+{\scriptsize BiP-MonoDS} & {\scriptsize 0.14 (493)} & {\scriptsize \bf 0.24 (490)} \\
+{\scriptsize SyntBiP} & {\scriptsize 0.19 (300)}& {\scriptsize 0.08 (292)} \\
+{\scriptsize SyntBip-MonoDS} & {\scriptsize 0.15 (326)} & {\scriptsize 0.22 (318)} \\
 \hline 
-{\scriptsize SAMT$_{matched}$-SAMT} &  {\scriptsize \bf 0.20 (179)} & {\scriptsize 0.15 (175)} \\
-{\scriptsize SAMT$_{matched}$-LSH}&  {\scriptsize 0.17 (190)} & {\scriptsize 0.16 (187)} \\
+{\scriptsize SyntBiP$_{matched}$} &  {\scriptsize \bf 0.20 (179)} & {\scriptsize 0.15 (175)} \\
+{\scriptsize SyntBiP$_{matched}$-MonoDS}&  {\scriptsize 0.17 (190)} & {\scriptsize 0.16 (187)} \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table4} Kendall Tau's rank coefficients for correlation of human judgment, collected from Mechanical Turk experiments, in terms of paraphrase meaning and grammaticality with Hiero-based, SAMT-based, and LSH-based translation scores. Numbers with bolded face are the maximum within that column}
+\caption{\label{table4} Kendall Tau's rank coefficients for correlation of human judgment, collected from Mechanical Turk experiments, in terms of paraphrase meaning and grammaticality with bilingual pivoting (BiP), syntactically-constrained bilingual pivoting (SyntBiP), and monolingual distributional similarity via LSH (MonoDS) paraphrase scores. Numbers with bolded face are the maximum within that column}
 \end{table}
 
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
@@ -294,48 +307,6 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 
 
 
-\begin{table*}%[t!]
-\begin{center}
-\begin{tabular}{rcccccccccccc}%{|l|l|l|}
-\hline \hline & \multicolumn{3}{c} {N = 1} &  \multicolumn{3}{c}{N = 2} &  \multicolumn{3}{c}{N = 3} &  \multicolumn{3}{c}{N = 4} \\
-\bf \scriptsize Re-ranking Method & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
-{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} \\
-{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23} \\
-{\scriptsize SAMT-SAMT}& {\scriptsize \bf 0.16}& {\scriptsize 0.06} \\
-{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{table5} @@@@@ (M = Meaning, G = Grammar,  = Support) Kendall Tau's rank coefficients for correlation of human judgment, collected from Mechanical Turk experiments, in terms of paraphrase meaning and grammaticality with Hiero-based, SAMT-based, and LSH-based translation scores. Numbers with bolded face are the maximum within that column}
-\end{table*}
-
-% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
-% kTauNgram_all_sorted: all Kendal Tau scores
-% cntNgram_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
-
-
-%%%%%%%%% table for pphrase size analysis, at LEAST size N
-
-\begin{table*}%[t!]
-\begin{center}
-\begin{tabular}{rccccccccc}%{|l|l|l|}
-\hline \hline \bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} \\
-\bf \scriptsize Method & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
-{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} & {\scriptsize } & {\scriptsize 0.14} & {\scriptsize 0.01} & {\scriptsize } & {\scriptsize 0.14} & {\scriptsize -0.01} & {\scriptsize } \\
-{\scriptsize Hiero-LSH} & {\scriptsize 0.13} & {\scriptsize 0.24} & {\scriptsize } & {\scriptsize 0.11} & {\scriptsize 0.26} & {\scriptsize } & {\scriptsize 0.10} & {\scriptsize 0.23} & {\scriptsize } \\
-{\scriptsize SAMT-SAMT} & {\scriptsize 0.17} & {\scriptsize 0.08} & {\scriptsize } & {\scriptsize 0.20} & {\scriptsize 0.08} & {\scriptsize } & {\scriptsize 0.21} & {\scriptsize 0.09} & {\scriptsize } \\
-{\scriptsize SAMT-LSH} & {\scriptsize 0.17} & {\scriptsize 0.22} & {\scriptsize } & {\scriptsize 0.20} & {\scriptsize 0.23} & {\scriptsize } & {\scriptsize 0.19} & {\scriptsize 0.22} & {\scriptsize } \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{table6} Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the minimum size of paraphrase candidate pool, where meaning, grammar and support are represented as M, G and S, respectively}
-\end{table*}
-
-% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
-% kTauPPsize_all_sorted: all Kendal Tau scores
-% cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
-
-% mention LSH consistently beat other score in each category
 
 %%%%%%%%% table for pphrase size analysis, at MOST size N
 
@@ -352,7 +323,6 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 {\scriptsize 15} & {\scriptsize 0.13 (195)} & {\scriptsize 0.18 (191)} & {\scriptsize 0.21(213)} & {\scriptsize 0.28 (210)} & {\scriptsize 0.08 (75)} & {\scriptsize 0.12 (67)} & {\scriptsize 0.01 (83)} & {\scriptsize 0.25 (74)} \\
 {\scriptsize 20} & {\scriptsize 0.12 (280)} & {\scriptsize 0.12 (276)} & {\scriptsize 0.18 (298)} & {\scriptsize 0.26 (295)} & {\scriptsize 0.10 (110)} & {\scriptsize 0.10 (102)} & {\scriptsize 0.17 (131)} & {\scriptsize 0.24 (123)} \\
 {\scriptsize 30} & {\scriptsize 0.13 (375)} & {\scriptsize 0.07 (371)} & {\scriptsize 0.16 (393)} & {\scriptsize 0.25 (390)} & {\scriptsize 0.21 (200)} & {\scriptsize 0.10 (192)} & {\scriptsize 0.17 (226)} & {\scriptsize 0.23 (218)} \\
-
 
 \hline
 \end{tabular}
@@ -418,13 +388,29 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table9} @@@@@@@@@@@@ Kendall Tau's rank coefficients for correlation between human judgment and LSH score for both meaning and grammar. LSH cutoff is defined as the LSH score above which elements are included in the rank list for calculating Kendall Tau coefficients}
+\caption{\label{table9} Kendall Tau's rank coefficients as a function of binned LSH scores for correlation between human judgment and LSH score for both meaning and grammar.}
 \end{table}
 
 
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
 % kTauLSHCutoff_all_sorted: all Kendal Tau scores
 % cntLSHCutoff_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
+
+%%%%%%%%%%%%% Average of Top K meaning and grammar for each re-ranking score 
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rccccccccc}%{|l|l|l|}
+\hline \hline & & \multicolumn{2}{c} {K = 1} &  \multicolumn{2}{c}{K = 3} &  \multicolumn{2}{c}{K= 5} &  \multicolumn{2}{c}{K = 10} \\
+\bf \scriptsize Re-ranking Method & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
+{\scriptsize Hiero-Hiero} & {\scriptsize 500} & {\scriptsize 3.62 } & {\scriptsize 3.83} & {\scriptsize 4.13} & {\scriptsize 4.22}  & {\scriptsize 4.26} & {\scriptsize 4.38} & {\scriptsize 4.39} & {\scriptsize 4.52}  \\
+{\scriptsize Hiero-LSH} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 4.07} & {\scriptsize 4.45}  & {\scriptsize 4.19} & {\scriptsize 4.54} & {\scriptsize 4.30} & {\scriptsize 4.62}  \\
+{\scriptsize SAMT-SAMT}& {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.04} & {\scriptsize 4.13} & {\scriptsize 4.47}  & {\scriptsize 4.20} & {\scriptsize 4.55} & {\scriptsize 4.25} & {\scriptsize 4.63} \\
+{\scriptsize SAMT-LSH} & {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.23} & {\scriptsize 4.01} & {\scriptsize 4.54}  & {\scriptsize 4.09} & {\scriptsize 4.62} & {\scriptsize 4.23} & {\scriptsize 4.67} \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{table10} Average human evaluation scores for top K candidates from each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\end{table*}
 
 
 
@@ -445,6 +431,53 @@ The positive results reported in the pilot studies encourages additional evaluat
 %@@ the success from pilot study encourages to move from only small amount of test phrases to a large scale evaluation on mechanical turk; maybe even evaluate effect (on coverage, performance, etc) the number of pivoting languages, which will potentially result in larger number of paraphrase candidates per phrase @@
 %@@ Synt-constrainted paraphrasing method by construction incorporate context dependency, whereas the information is absent in the monolingual counterpart, so natural next step would be to include context by taking into account the neighboring words of the phrases; hence would introduce 2 additional context-dependent scores into the larger scale of mTurk evaluation @@
 %@@feature sparsity issue due to thresholding in google ngram@@
+
+%%%%%%%%%%%%%%%% TABLE for evaluation w.r.t. Ngram %%%%%%%%%%%%%%%%%%
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rcccccccccccc}%{|l|l|l|}
+\hline \hline & \multicolumn{3}{c} {N = 1} &  \multicolumn{3}{c}{N = 2} &  \multicolumn{3}{c}{N = 3} &  \multicolumn{3}{c}{N = 4} \\
+\bf \scriptsize Re-ranking Method & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
+{\scriptsize Hiero-Hiero} & {\scriptsize 0.18} & {\scriptsize 0.03} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
+{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23}  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }\\
+{\scriptsize SAMT-SAMT}& {\scriptsize \bf 0.16}& {\scriptsize 0.06} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
+{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} \\
+%{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23} \\
+%{\scriptsize SAMT-SAMT}& {\scriptsize \bf 0.16}& {\scriptsize 0.06} \\
+%{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{table5} {\bf wont be included in ppr} (M = Meaning, G = Grammar,  = Support) Kendall Tau's rank coefficients for correlation of human judgment, collected from Mechanical Turk experiments, in terms of paraphrase meaning and grammaticality with Hiero-based, SAMT-based, and LSH-based translation scores. Numbers with bolded face are the maximum within that column}
+\end{table*}
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% kTauNgram_all_sorted: all Kendal Tau scores
+% cntNgram_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
+
+
+
+%%%%%%%%%%%%%%% table for pphrase size analysis, at LEAST size N %%%%%%%%%%%%%%%
+
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rccccccccc}%{|l|l|l|}
+\hline \hline \bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} \\
+\bf \scriptsize Method & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
+{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} & {\scriptsize } & {\scriptsize 0.14} & {\scriptsize 0.01} & {\scriptsize } & {\scriptsize 0.14} & {\scriptsize -0.01} & {\scriptsize } \\
+{\scriptsize Hiero-LSH} & {\scriptsize 0.13} & {\scriptsize 0.24} & {\scriptsize } & {\scriptsize 0.11} & {\scriptsize 0.26} & {\scriptsize } & {\scriptsize 0.10} & {\scriptsize 0.23} & {\scriptsize } \\
+{\scriptsize SAMT-SAMT} & {\scriptsize 0.17} & {\scriptsize 0.08} & {\scriptsize } & {\scriptsize 0.20} & {\scriptsize 0.08} & {\scriptsize } & {\scriptsize 0.21} & {\scriptsize 0.09} & {\scriptsize } \\
+{\scriptsize SAMT-LSH} & {\scriptsize 0.17} & {\scriptsize 0.22} & {\scriptsize } & {\scriptsize 0.20} & {\scriptsize 0.23} & {\scriptsize } & {\scriptsize 0.19} & {\scriptsize 0.22} & {\scriptsize } \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{table6} {\bf wont be included in ppr} Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the minimum size of paraphrase candidate pool, where meaning, grammar and support are represented as M, G and S, respectively}
+\end{table*}
+
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% kTauPPsize_all_sorted: all Kendal Tau scores
+% cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
+
 \bibliographystyle{acl}
 \bibliography{references}
 
