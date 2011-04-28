@@ -375,8 +375,12 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \begin{tabular}{rcccc}%{|l|l|l|} ################################### fill in table with results avgLSHgrammar and avgLSHmeaning
 \hline \hline
 \bf \scriptsize LSH Region & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
-{\scriptsize 1 $\geq$ x $>$ 0.9} & {\scriptsize 3.49} & {\scriptsize 4.17} & {\scriptsize 905}  \\
-{\scriptsize 0.9 $\geq$ x $>$ 0.8} & {\scriptsize 3.27} & {\scriptsize 3.98} & {\scriptsize 830}  \\
+%{\scriptsize 1 $\geq$ x $>$ 0.9} & {\scriptsize 3.49} & {\scriptsize 4.17} & {\scriptsize 905}  \\
+%{\scriptsize 0.9 $\geq$ x $>$ 0.8} & {\scriptsize 3.27} & {\scriptsize 3.98} & {\scriptsize 830}  \\
+{\scriptsize 1 $\geq$ x $>$ 0.95} & {\scriptsize 3.99} & {\scriptsize 4.43} & {\scriptsize 350}  \\
+{\scriptsize 0.95 $\geq$ x $>$ 0.9} & {\scriptsize 3.17} & {\scriptsize 4.00} & {\scriptsize 555}  \\
+{\scriptsize 0.9 $\geq$ x $>$ 0.85} & {\scriptsize 3.25} & {\scriptsize 3.98} & {\scriptsize 470}  \\
+{\scriptsize 0.85 $\geq$ x $>$ 0.8} & {\scriptsize 3.30} & {\scriptsize 3.98} & {\scriptsize 360}  \\
 {\scriptsize 0.8 $\geq$ x $>$ 0.7} & {\scriptsize 3.21} & {\scriptsize 3.91} & {\scriptsize 750}  \\
 {\scriptsize 0.7 $\geq$ x $>$ 0.6} & {\scriptsize 3.27} & {\scriptsize 3.80} & {\scriptsize 935}  \\
 {\scriptsize 0.6 $\geq$ x $>$ 0.5} & {\scriptsize 3.08} & {\scriptsize 3.68} & {\scriptsize 915}  \\
@@ -411,6 +415,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \end{center}
 \caption{\label{table10} Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
 \end{table*}
+% variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
+
 
 %%%%%%%%%%%%% Average of **mean** of Top K meaning and grammar for each re-ranking score 
 \begin{table*}%[t!]
@@ -436,6 +442,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \end{center}
 \caption{\label{table11} Average of the mean human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
 \end{table*}
+
+% variable avgTopKmean in code, e.g. avgTopKmean[kTop]['meaning']['hiero']
 
 
 
