@@ -201,7 +201,7 @@ While the monolingual distributional similarity shows promise as a paraphrase ra
 
 An evaluation of confidence measures produced by syntactically constrained translation model and the LSH-approximated distributional similarity was performed through human intelligence tasks (HIT) on Amazon's Mechanical Turk in the context of paraphrase substitution. Paraphrase sets were collected by picking 1,000 randomly from a written corpus used in \newcite{ClarkeLapata08} for assessing sentence compression methods. Each sentence in the HIT in which a phrase appears is extracted from the corpus. Sentences, in which the phrase is substituted with each of its paraphrase candidates, are presented to human judges along with the original text. A 5-point grading scale is used by the judges to evaluate the effect of each paraphrase on the meaning-preservation and grammaticality with 5 being the most favorable.
 
-@@ include table of paraphrase examples for ``study in detail" ? @@
+\mnote{include table of paraphrase examples for ``study in detail" ?}
 %The paraphrase candidates generated and ranked by each of the scores are listed in Table \ref{tbl:pp-candidates}. 
 
 %@@ note: context-aware, take information from Courtney's ppr @@
@@ -479,17 +479,20 @@ The positive results reported in the pilot studies encourages additional evaluat
 %%%%%%%%%%%%%%%% TABLE for evaluation w.r.t. Ngram %%%%%%%%%%%%%%%%%%
 \begin{table*}%[t!]
 \begin{center}
-\begin{tabular}{rcccccccccccc}%{|l|l|l|}
-\hline \hline & \multicolumn{3}{c} {N = 1} &  \multicolumn{3}{c}{N = 2} &  \multicolumn{3}{c}{N = 3} &  \multicolumn{3}{c}{N = 4} \\
-\bf \scriptsize Re-ranking Method & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
-{\scriptsize Hiero-Hiero} & {\scriptsize 0.18} & {\scriptsize 0.03} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23}  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }\\
-{\scriptsize SAMT-SAMT}& {\scriptsize \bf 0.16}& {\scriptsize 0.06} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
+\begin{tabular}{rcccccccc}%{|l|l|l|}
+\hline \hline & \multicolumn{2}{c} {N = 1} &  \multicolumn{2}{c}{N = 2} &  \multicolumn{2}{c}{N = 3} &  \multicolumn{2}{c}{N = 4} \\
+\bf \scriptsize Re-ranking Method & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G  \\ \hline
+{\scriptsize Hiero-Hiero} & {\scriptsize 0.18 (120)} & {\scriptsize -0.06 (120)}  & {\scriptsize 0.09 (125)} & {\scriptsize -0.03 (125)}  & {\scriptsize 0.15 (120)} & {\scriptsize 0.15 (117)}  & {\scriptsize 0.14 (110)} & {\scriptsize 0.13 (109)}  \\
+{\scriptsize Hiero-LSH} & {\scriptsize 0.03 (125)} & {\scriptsize 0.23 (125)}   & {\scriptsize 0.07 (125)} & {\scriptsize 0.17 (125)}  & {\scriptsize 0.13 (124)} & {\scriptsize 0.29 (121)}  & {\scriptsize 0.33 (119)} & {\scriptsize 0.28 (119)}  \\
+{\scriptsize SAMT-SAMT}& {\scriptsize 0.20 (99)}& {\scriptsize 0.00 (97)}  & {\scriptsize 0.26 (74)} & {\scriptsize 0.01 (75)}  & {\scriptsize 0.28 (73)} & {\scriptsize 0.26 (68)}  & {\scriptsize -0.06 (54)} & {\scriptsize 0.08 (52)}  \\
+{\scriptsize SAMT-LSH} & {\scriptsize 0.13 (104)} & {\scriptsize 0.21 (102)}  & {\scriptsize 0.17 (84)} & {\scriptsize 0.23 (85)}  & {\scriptsize 0.19 (79)} & {\scriptsize 0.22 (74)}  & {\scriptsize 0.13 (59)} & {\scriptsize 0.21 (57)}  \\ 
+
+%%%%%%%%%%% continue populating table %%%%%%%%%%%%
+
 %{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} \\
 %{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23} \\
 %{\scriptsize SAMT-SAMT}& {\scriptsize \bf 0.16}& {\scriptsize 0.06} \\
-%{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} \\
+%{\scriptsize SAMT-LSH} & {\scriptsize 0.13} & {\scriptsize 0.20} \\ 
 \hline
 \end{tabular}
 \end{center}
