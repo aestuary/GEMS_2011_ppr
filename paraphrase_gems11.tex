@@ -258,6 +258,7 @@ For this experiment, the French-English Corpus from the Europarl  \cite{Koehn05}
 
 {\bf Experimental Results and Examples}
 @@ result, with table, separate for hiero and samt @@
+@@ explain matched-synt criteria,, and phrases with [X] are excluded @@
 @@ mention hypothesis of LSH improving paraphrase quality (cmp'ed to ) in terms of correlation to human judgment is verified by the numbers in the table of overall results (consistently outperform respective method in grammaticality);  explain LSH improves grammar because LSH cannot distinguish antonym vs paraphrases, hence inherently would not do good at meaning, but it improves grammar by ensuring paraphrases share neighboring context with original phrase, which is closely related to requirements for grammaticality; 
 
 @@ mention similar trend of kTau w.r.t. number of n-gram of original phrase is observed in analysis results, meaning correlations between paraphrase re-ranking methods and human judgment are invariant with respect to number of tokens in a phrase. result not included here due to space constraint. @@
@@ -301,13 +302,13 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline\hline \bf \footnotesize Re-ranking Method & \bf \footnotesize Meaning & \bf \footnotesize Grammar \\ \hline
 {\scriptsize BiP} & {\scriptsize 0.14 (475)} & {\scriptsize 0.04 (471)} \\
 {\scriptsize BiP-MonoDS} & {\scriptsize 0.14 (493)} & {\scriptsize \bf 0.24 (490)} \\
-{\scriptsize SyntBiP} & {\scriptsize 0.19 (300)}& {\scriptsize 0.08 (292)} \\
+{\scriptsize SyntBiP} & {\scriptsize \bf 0.19 (300)}& {\scriptsize 0.08 (292)} \\
 {\scriptsize SyntBip-MonoDS} & {\scriptsize 0.15 (326)} & {\scriptsize 0.22 (318)} \\
 \hline 
-{\scriptsize SyntBiP$_{matched}$} &  {\scriptsize \bf 0.20 (179)} & {\scriptsize 0.15 (175)} \\
+{\scriptsize SyntBiP$_{matched}$} &  {\scriptsize 0.20 (179)} & {\scriptsize 0.15 (175)} \\
 {\scriptsize SyntBiP$_{matched}$-MonoDS}&  {\scriptsize 0.17 (190)} & {\scriptsize 0.16 (187)} \\
-{\scriptsize SyntBiP*} &  {\scriptsize \bf  (179)} & {\scriptsize  (175)} \\
-{\scriptsize SyntBiP-MonoDS*}&  {\scriptsize  (190)} & {\scriptsize  (187)} \\
+{\scriptsize SyntBiP*} &  {\scriptsize \bf 0.21 (273)} & {\scriptsize 0.09 (266)} \\
+{\scriptsize SyntBiP-MonoDS*}&  {\scriptsize 0.16 (295)} & {\scriptsize \bf 0.22 (288)} \\
 \hline
 \end{tabular}
 \end{center}
