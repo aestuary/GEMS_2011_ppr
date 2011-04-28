@@ -142,13 +142,18 @@ The lack of semantic correspondence in the bilingual methods is likely due to ei
 
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{rcc}%{|l|l|l|}
+\begin{tabular}{ccc}%{|l|l|l|}
 \hline\hline \bf \footnotesize Hiero & \bf \footnotesize SAMT & \bf \footnotesize LSH \\ \hline
-{\scriptsize necessary (-2.14)} & {\scriptsize needlessly (-3.75)} & {\scriptsize needlessly (0.93)} \\
-{\scriptsize reason (-2.48)} & {\scriptsize only (-4.41)} & {\scriptsize groundless (0.85)} \\
-{\scriptsize unnecessary (-2.60)}& {\scriptsize exactly (-5.80)}& {\scriptsize unnecessary (0.79)}\\
-{\scriptsize same (-2.99)} & {\scriptsize just (-6.74)} & {\scriptsize useless (0.79)} \\
-{\scriptsize useless (-3.30)}& {\scriptsize always (-6.74)}& {\scriptsize illegally (0.78)}\\
+{\scriptsize necessary (0.118)} & {\scriptsize needlessly (0.024)} & {\scriptsize needlessly (0.93)} \\
+{\scriptsize reason (0.084)} & {\scriptsize only (0.012)} & {\scriptsize groundless (0.85)} \\
+{\scriptsize unnecessary (0.074)}& {\scriptsize exactly (0.003)}& {\scriptsize unnecessary (0.79)}\\
+{\scriptsize same (0.050)} & {\scriptsize just (0.001)} & {\scriptsize useless (0.79)} \\
+{\scriptsize useless (0.037)}& {\scriptsize always (0.001)}& {\scriptsize illegally (0.78)}\\
+%{\scriptsize necessary (-2.14)} & {\scriptsize needlessly (-3.75)} & {\scriptsize needlessly (0.93)} \\
+%{\scriptsize reason (-2.48)} & {\scriptsize only (-4.41)} & {\scriptsize groundless (0.85)} \\
+%{\scriptsize unnecessary (-2.60)}& {\scriptsize exactly (-5.80)}& {\scriptsize unnecessary (0.79)}\\
+%{\scriptsize same (-2.99)} & {\scriptsize just (-6.74)} & {\scriptsize useless (0.79)} \\
+%{\scriptsize useless (-3.30)}& {\scriptsize always (-6.74)}& {\scriptsize illegally (0.78)}\\
 \hline
 \end{tabular}
 \end{center}
@@ -160,18 +165,23 @@ Table~\ref{table2} shows another example of the extracted paraphrases for the ph
 
 \begin{table}[t!]
 \begin{center}
-\begin{tabular}{rcc}%{|l|l|l|}
+\begin{tabular}{ccc}%{|l|l|l|}
 \hline\hline 
-\bf \small Hiero & \bf \small SAMT & \bf \small LSH \\ \hline
-{\scriptsize large number of, -1.10} & {\scriptsize large number of, -0.98} & {\scriptsize large quantity of, 0.98} \\
-{\scriptsize in large numbers, -2.20} & {\scriptsize great number of, -2.37} & {\scriptsize large number of, 0.98} \\
-{\scriptsize great number of, -2.48}& {\scriptsize vast number of, -2.77}& {\scriptsize great number of, 0.97}\\
-{\scriptsize large numbers of, -2.89} & & {\scriptsize vast number of, 0.94} \\
-{\scriptsize vast number of, -2.89}& & {\scriptsize in large numbers, 0.10}\\
+\bf \small BiP & \bf \small SyntBiP & \bf \small MonoDS \\ \hline
+{\scriptsize large number of, 0.333} & {\scriptsize large number of, 0.375} & {\scriptsize large quantity of, 0.98} \\
+{\scriptsize in large numbers, 0.111} & {\scriptsize great number of, 0.093} & {\scriptsize large number of, 0.98} \\
+{\scriptsize great number of, 0.084}& {\scriptsize vast number of, 0.063}& {\scriptsize great number of, 0.97}\\
+{\scriptsize large numbers of, 0.056} & & {\scriptsize vast number of, 0.94} \\
+{\scriptsize vast number of, 0.056}& & {\scriptsize in large numbers, 0.10}\\
+%{\scriptsize large number of, -1.10} & {\scriptsize large number of, -0.98} & {\scriptsize large quantity of, 0.98} \\
+%{\scriptsize in large numbers, -2.20} & {\scriptsize great number of, -2.37} & {\scriptsize large number of, 0.98} \\
+%{\scriptsize great number of, -2.48}& {\scriptsize vast number of, -2.77}& {\scriptsize great number of, 0.97}\\
+%{\scriptsize large numbers of, -2.89} & & {\scriptsize vast number of, 0.94} \\
+%{\scriptsize vast number of, -2.89}& & {\scriptsize in large numbers, 0.10}\\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table2} Paraphrases for {\em huge amount of} according to the original(Hiero), syntactic-constraint-based (SAMT) translation score and the monolingual similarity score (LSH), ranked by corresponding scores listed next to each paraphrase}
+\caption{\label{table2} Paraphrases for {\em huge amount of} according to the bilingual pivoting (BiP), syntactic-constrainted bilingual pivoting (SyntBiP) translation score and the monolingual similarity score via LSH (MonoDS), ranked by corresponding scores listed next to each paraphrase}
 \end{table}
 
 %@@ discuss adv and disadv of each of the scores; LSH complementary to the shortfall of paraphrases extracted by parallel corpus, e.g. multiple meaning of foreign word would result in paraphrases that isn't correct at all @@
