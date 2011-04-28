@@ -296,6 +296,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline 
 {\scriptsize SyntBiP$_{matched}$} &  {\scriptsize \bf 0.20 (179)} & {\scriptsize 0.15 (175)} \\
 {\scriptsize SyntBiP$_{matched}$-MonoDS}&  {\scriptsize 0.17 (190)} & {\scriptsize 0.16 (187)} \\
+{\scriptsize SyntBiP*} &  {\scriptsize \bf  (179)} & {\scriptsize  (175)} \\
+{\scriptsize SyntBiP-MonoDS*}&  {\scriptsize  (190)} & {\scriptsize  (187)} \\
 \hline
 \end{tabular}
 \end{center}
@@ -306,6 +308,7 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 % kTau_all_sorted: all Kendal Tau scores
 % cnt_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
+% mention: (cite SAMT-BiP) weakness of BiP in grammar kTau fixed by MonoDS, but meaning correlation stays the same after MonoDS because MonoDS categorize syntactic *classes*, like cities, but is not meant/capable of grouping paraphrases
 
 
 
@@ -317,7 +320,7 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \begin{tabular}{rcccccccc}%{|l|l|l|}
 \hline \hline 
 %\bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} &  \multicolumn{3}{c}{@15} &  \multicolumn{3}{c}{@20} &  \multicolumn{3}{c}{@30} \\
- & \multicolumn{2}{c} {\scriptsize Hiero-Hiero} &  \multicolumn{2}{c}{\scriptsize Hiero-LSH} &  \multicolumn{2}{c}{\scriptsize SAMT-SAMT} &  \multicolumn{2}{c}{\scriptsize SAMT-LSH} \\
+ & \multicolumn{2}{c} {\scriptsize BiP} &  \multicolumn{2}{c}{\scriptsize BiP-MonoDS} &  \multicolumn{2}{c}{\scriptsize SyntBiP} &  \multicolumn{2}{c}{\scriptsize SyntBip-MonoDS} \\
 \bf \scriptsize $\leq$ N$_{pool size}$ & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
 {\scriptsize 3} & {\scriptsize 0.24 (36)} & {\scriptsize 0.30 (33)} & {\scriptsize 0.30 (49)} & {\scriptsize 0.21 (47)} & {\scriptsize 1.0 (5)} & {\scriptsize -0.33 (3)}  & {\scriptsize -1.0 (5)} & {\scriptsize 0.33 (3)} \\
 {\scriptsize 6} & {\scriptsize 0.16 (90)} & {\scriptsize 0.27 (86)} & {\scriptsize 0.26 (108)} & {\scriptsize 0.25 (105)} & {\scriptsize 0.03 (26)} & {\scriptsize 0.10 (19)} & {\scriptsize -0.34 (26)} & {\scriptsize -0.09 (19)} \\
@@ -332,17 +335,12 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \caption{\label{table7} Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the maximum size of paraphrase candidate pool, where the support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
 \end{table*}
 
-
-
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
 % kTauPPsize_all_sorted: all Kendal Tau scores
 % cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
-% mention LSH consistently beat other score in each category
-
 
 %%%%%%%%% table for LSH cutoff analysis
-
 \begin{table}%[t!]
 \begin{center}
 \begin{tabular}{rcccc}%{|l|l|l|}
@@ -376,7 +374,7 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \begin{center}
 \begin{tabular}{rcccc}%{|l|l|l|} ################################### fill in table with results avgLSHgrammar and avgLSHmeaning
 \hline \hline
-\bf \scriptsize LSH boundary & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
+\bf \scriptsize LSH Region & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
 {\scriptsize 1 $\geq$ x $>$ 0.9} & {\scriptsize 3.49} & {\scriptsize 4.17} & {\scriptsize 905}  \\
 {\scriptsize 0.9 $\geq$ x $>$ 0.8} & {\scriptsize 3.27} & {\scriptsize 3.98} & {\scriptsize 830}  \\
 {\scriptsize 0.8 $\geq$ x $>$ 0.7} & {\scriptsize 3.21} & {\scriptsize 3.91} & {\scriptsize 750}  \\
@@ -398,20 +396,45 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 % kTauLSHCutoff_all_sorted: all Kendal Tau scores
 % cntLSHCutoff_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
-%%%%%%%%%%%%% Average of Top K meaning and grammar for each re-ranking score 
+%%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
 \begin{table*}%[t!]
 \begin{center}
 \begin{tabular}{rccccccccc}%{|l|l|l|}
 \hline \hline & & \multicolumn{2}{c} {K = 1} &  \multicolumn{2}{c}{K = 3} &  \multicolumn{2}{c}{K= 5} &  \multicolumn{2}{c}{K = 10} \\
 \bf \scriptsize Re-ranking Method & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
-{\scriptsize Hiero-Hiero} & {\scriptsize 500} & {\scriptsize 3.62 } & {\scriptsize 3.83} & {\scriptsize 4.13} & {\scriptsize 4.22}  & {\scriptsize 4.26} & {\scriptsize 4.38} & {\scriptsize 4.39} & {\scriptsize 4.52}  \\
-{\scriptsize Hiero-LSH} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 4.07} & {\scriptsize 4.45}  & {\scriptsize 4.19} & {\scriptsize 4.54} & {\scriptsize 4.30} & {\scriptsize 4.62}  \\
-{\scriptsize SAMT-SAMT}& {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.04} & {\scriptsize 4.13} & {\scriptsize 4.47}  & {\scriptsize 4.20} & {\scriptsize 4.55} & {\scriptsize 4.25} & {\scriptsize 4.63} \\
-{\scriptsize SAMT-LSH} & {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.23} & {\scriptsize 4.01} & {\scriptsize 4.54}  & {\scriptsize 4.09} & {\scriptsize 4.62} & {\scriptsize 4.23} & {\scriptsize 4.67} \\
+{\scriptsize BiP} & {\scriptsize 500} & {\scriptsize 3.62 } & {\scriptsize 3.83} & {\scriptsize 4.13} & {\scriptsize 4.22}  & {\scriptsize 4.26} & {\scriptsize 4.38} & {\scriptsize 4.39} & {\scriptsize 4.52}  \\
+{\scriptsize BiP-MonoDS} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 4.07} & {\scriptsize 4.45}  & {\scriptsize 4.19} & {\scriptsize 4.54} & {\scriptsize 4.30} & {\scriptsize 4.62}  \\
+{\scriptsize SyntBiP}& {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.04} & {\scriptsize 4.13} & {\scriptsize 4.47}  & {\scriptsize 4.20} & {\scriptsize 4.55} & {\scriptsize 4.25} & {\scriptsize 4.63} \\
+{\scriptsize SyntBiP-MonoDS} & {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.23} & {\scriptsize 4.01} & {\scriptsize 4.54}  & {\scriptsize 4.09} & {\scriptsize 4.62} & {\scriptsize 4.23} & {\scriptsize 4.67} \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table10} Average human evaluation scores for top K candidates from each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\caption{\label{table10} Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\end{table*}
+
+%%%%%%%%%%%%% Average of **mean** of Top K meaning and grammar for each re-ranking score 
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rcccccccccccc}%{|l|l|l|}
+\hline \hline & \multicolumn{3}{c} {\scriptsize BiP} &  \multicolumn{3}{c}{\scriptsize BiP-MonoDS} &  \multicolumn{3}{c}{\scriptsize SyntBiP} &  \multicolumn{3}{c}{\scriptsize SyntBip-MonoDS} \\
+\bf \scriptsize Top K & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
+{\scriptsize 1} & {\scriptsize 3.62} & {\scriptsize 3.83} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 500} & {\scriptsize 3.60} & {\scriptsize 4.04} & {\scriptsize 390} & {\scriptsize 3.60} & {\scriptsize 4.20} & {\scriptsize 390}  \\
+{\scriptsize 3} & {\scriptsize 3.50} & {\scriptsize 3.61} & {\scriptsize 465} & {\scriptsize 3.50} & {\scriptsize 3.99} & {\scriptsize 465} & {\scriptsize 3.55} & {\scriptsize 4.01} & {\scriptsize 290} & {\scriptsize 3.42} & {\scriptsize 4.16} & {\scriptsize 290}  \\
+{\scriptsize 5} & {\scriptsize 3.44} & {\scriptsize 3.58} & {\scriptsize 425} & {\scriptsize 3.37} & {\scriptsize 3.89} & {\scriptsize 425} & {\scriptsize 3.46} & {\scriptsize 3.99} & {\scriptsize 245} & {\scriptsize 3.37} & {\scriptsize 4.15} & {\scriptsize 245}  \\
+{\scriptsize 7} & {\scriptsize 3.35} & {\scriptsize 3.52} & {\scriptsize 385} & {\scriptsize 3.28} & {\scriptsize 3.83} & {\scriptsize 385} & {\scriptsize 3.42} & {\scriptsize 3.95} & {\scriptsize 205} & {\scriptsize 3.32} & {\scriptsize 4.09} & {\scriptsize 205}  \\
+{\scriptsize 10} & {\scriptsize 3.29} & {\scriptsize 3.50} & {\scriptsize 360} & {\scriptsize 3.18} & {\scriptsize 3.75} & {\scriptsize 360} & {\scriptsize 3.20} & {\scriptsize 3.83} & {\scriptsize 160} & {\scriptsize 3.14} & {\scriptsize 4.00} & {\scriptsize 160}  \\
+{\scriptsize 15} & {\scriptsize 3.25} & {\scriptsize 3.57} & {\scriptsize 305} & {\scriptsize 3.17} & {\scriptsize 3.76} & {\scriptsize 305} & {\scriptsize 3.01} & {\scriptsize 3.79} & {\scriptsize 140} & {\scriptsize 3.00} & {\scriptsize 3.91} & {\scriptsize 140}  \\
+{\scriptsize 20} & {\scriptsize 3.16} & {\scriptsize 3.62} & {\scriptsize 210} & {\scriptsize 3.07} & {\scriptsize 3.78} & {\scriptsize 210} & {\scriptsize 2.88} & {\scriptsize 3.74} & {\scriptsize 100} & {\scriptsize 2.86} & {\scriptsize 3.82} & {\scriptsize 100}  \\
+%\hline \hline \bf \scriptsize Re-ranking & \multicolumn{3}{c} {K = 1} &  \multicolumn{3}{c}{K = 3} &  \multicolumn{3}{c}{K= 5} &  \multicolumn{3}{c}{K = 7} &  \multicolumn{3}{c}{K = 10} &  \multicolumn{3}{c}{K = 15} &  \multicolumn{3}{c}{K = 20} \\
+%\bf \scriptsize Method & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize S \\ \hline
+%{\scriptsize BiP} & {\scriptsize 3.62} & {\scriptsize 3.83} & {\scriptsize } & {\scriptsize 3.50}  & {\scriptsize 3.61} & {\scriptsize } & {\scriptsize 3.44} & {\scriptsize 3.58} & {\scriptsize } & {\scriptsize 3.35} & {\scriptsize 3.52} & {\scriptsize } & {\scriptsize 3.29} & {\scriptsize 3.50} & {\scriptsize } & {\scriptsize 3.25} & {\scriptsize 3.57} & {\scriptsize }  & {\scriptsize 3.16} & {\scriptsize 3.62} & {\scriptsize } \\
+%{\scriptsize BiP-MonoDS}  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  \\
+%{\scriptsize SyntBiP} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  \\
+%{\scriptsize SyntBiP-MonoDS} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize }  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{table11} Average of the mean human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
 \end{table*}
 
 
