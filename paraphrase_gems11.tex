@@ -121,32 +121,47 @@ We attempt to re-rank the paraphrases using other information.  This is similar 
 
 
 \section{Evaluation}
-We evaluate the paraphrase confidence metrics by first demonstrating through some paraphrase examples the characteristics of each re-ranking method. Next we present the results from a pilot study conducted for sentence compression to qualitatively evaluate correlation between each scoring method and human judgments. A more systematic analysis will then be presented through another experimental study based on paraphrase extraction pivoting over the French-English corpora, demonstrating the strengths and weaknesses of each method. 
+We evaluate the paraphrase confidence metrics by first demonstrating through some paraphrase examples the characteristics of each re-ranking method in Section \ref{:sect_ur_en}. Next we present the results from a pilot study conducted primarily for sentence compression to qualitatively evaluate correlation between each paraphrase scoring method and human judgments in terms of paraphrase grammaticality and meaning-preservation. A more systematic analysis will then be presented in Section \ref{results_fr_en} through another experimental study based on paraphrase extraction pivoting over the French-English corpora, demonstrating the strengths and weaknesses of each method. 
 
-For presentation simplicity, paraphrase re-ranking methods monolingual distributional similarity via LSH, bilingual pivoting and syntactic-constrained bilingual pivoting are labeled as MonoDS, BiP and SyntBiP, respectively. In terms of paraphrase extraction method, bilingual pivoting (BiP) and syntactically-constrained bilingual pivoting (SyntBiP) re-ranking methods are assumed to operate on paraphrases extracted from the respective paraphrase extraction methods. For the monolingual distributional similarity (MonoDS) scores, the paraphrase extraction method is indicated by the prefix of the label, for example, BiP-MonoDS. Note that for Section \ref{sect:results_fr_en}, an additional re-ranking method denoted as SyntBiP${_matched}$ is the same as SyntBiP except that only paraphrases with matching syntactic type as the original phrase in the contextual sentence are included in the calculation of evaluation metric.
+For presentation simplicity, paraphrase re-ranking methods monolingual distributional similarity via LSH, bilingual pivoting and syntactic-constrained bilingual pivoting are labeled as MonoDS, BiP and SyntBiP, respectively. In terms of paraphrase extraction method, bilingual pivoting (BiP) and syntactically-constrained bilingual pivoting (SyntBiP) re-ranking methods are assumed to operate on paraphrases extracted from the respective paraphrase extraction methods. For the monolingual distributional similarity (MonoDS) scores, the paraphrase extraction method is indicated by the prefix of the label, for example, BiP-MonoDS. Note that for Section \ref{sect:results_fr_en}, an additional re-ranking method denoted as SyntBiP$_{matched}$ is the same as SyntBiP except that only paraphrases with matching syntactic type as the original phrase in the contextual sentence are included in the calculation of evaluation metric.
 
 %\subsection{Data and Metric}
 %@@ explain Kendall Tau and Kendall Tau b
-{\bf Data}
+\subsection{Data}
 
 For the paraphrase examples presented in the next section, a bilingual paraphrase model was trained using the parallel corpus between Urdu and English from NIST 2009. This data set, which was collected from newswire and weblogs, consists of roughly 1.7 million words and 200K sentences in each language. This corpus is significantly smaller than the corpora used in \newcite{CallisonBurch08} which contained a total of 315 million English words and as such, the translation and paraphrase candidates presented here are expected of lesser quality. The word alignments in this parallel corpus were generated with the Berkeley aligner and the English dataset was parsed using Stanford parser \cite{KleinManning03}. %\newcite{VanDurmeLallNIPS09}%VanDurmeLallACL10} \cite{}
 
-For both the pilot study and the more detailed evaluation using human judgment collected from Mechanical Turk (Sections \ref{sect:results_pilot} and Section \ref{sect:results_fr_end}), the French-English parallel data from the Europarl corpus\cite{Koehn05} was used to train the paraphrase model. *add on* This is a much larger bilingual corpus than Urdu-English and therefore produces much higher 
+For both the pilot study and the more detailed evaluation using human judgment collected from Mechanical Turk (Sections \ref{sect:results_pilot} and Section \ref{sect:results_fr_en}), the French-English parallel data from the Europarl corpus\cite{Koehn05} was used to train the paraphrase model. The parallel corpus are extracted from proceedings of the European parliament with a total of over 1 million sentences and close to 100 million words in the English text. The rest of grammar extraction preprocessing follows the same procedure as for the Urdu-English data. This bilingual corpus is a much larger data set and therefore should produce more reasonable paraphrases.
 
-\mnote{add on: size of fr\_en and stats similar to ur-en above}
-
-\subsection{Method and Experimental Design}
+\subsection{Re-ranking Methods}
 All bilingual pivoting-based paraphrase models used for all the examples and experiments were trained using the bilingual pivoting-based method in \newcite{BannardCallisonBurch05}, and the syntactically-constrained bilingual pivoting in \newcite{CallisonBurch08}. For the syntactically constrained paraphrase extraction, CCG-style notation for syntactic labeling \cite{Steedman99} was incorporated in order to reinforce matching syntactic types for paraphrases in the bilingual pivoting stage. Note that only phrases with non-terminal labels are use
 
 %The Google N-gram Corpus (Brants and Franz, 2006) 
 In all subsequent analysis results, the web-scale n-gram collection of \newcite{LinEtAlLREC10} was used to compute the distributional similarity features required for LSH signature extraction as described in \newcite{VanDurmeLallACL10}. A random values pool size of 10000 and 512 random projection vectors (i.e. bits) per n-gram are used for the task. In order to expand the coverage of the candidates scored by the monolingual method, the LSH signatures are obtained only for the phrases in the union set of the phrase-level outputs from the original and from the syntactically constrained paraphrase models. Since the n-gram corpus consists of at most 5-gram and the distributional similarity for a phrase is calculated in conjunction with a single neighboring word, the LSH signatures are only generated for phrases that are 4-gram or less. Phrase pairs with negative LSH scores, which indicate that the phrases are distributionally opposite in the feature space, are ignored in the analysis.
 
+It is important to keep in mind that while the training data for the bilingual paraphrase models and the testing data for human evaluation come from the Europarl corpus in which the english structure follows the European parliament proceedings, the training data for monolingual distributional similarity feature extractions are from web-scale n-gram collection consisting of english text from diverse sources. As a result, a paraphrase selection based on bilingual pivoting followed by monolingual distributional similarity re-ranking involves language statistics from different data.
+
+\subsection{Experimental Design}
+Two experiments on human evaluation of confidence measures produced by bilingual- and monolingual-based paraphrase scores were performed through human intelligence tasks (HIT) on Amazon's Mechanical Turk in the context of paraphrase substitution.  Each HIT consists of 5 original sentences, each of which contains a phrase extracted from the paraphrase table produced in advance. For every paraphrase candidate of a particular phrase, the phrase in the sentence is substituted in by its candidate. Sentences in a HIT are presented to a human judge along with the original context. For each candidate sentence in the HIT, the judge is asked to use a 5-point grading scale to evaluate, in isolation, the extent of meaning-preservation and grammaticality of the paraphrase replacement, with 5 being the most favorable. 
+
+For the pilot study primarily aimed at assessing sentence compression methods, 1,000 phrases of up to 4-gram were collected randomly from a written corpus used in \newcite{ClarkeLapata08} for the human evaluation task. All context in the corpus in which the phrases appear are used to construct HIT sentences. For the second experiment, 25 phrases per n-gram category, where n goes from 1 to 4, are randomly sampled from the paraphrase table generated by the bilingual pivoting method. A phrase is selected according to the following requirements:
+
+\begin{itemize}
+\item Phrase occurs at least 5 times in parallel corpus and has appeared in web-scale n-gram, i.e. contains a non-zero LSH signature
+\item There is at least 1 non-negative LSH score based on monolingual distributional similarity.
+\item The union of paraphrase candidates from BiP, SyntBiP and MonoDS must be greater than 10.
+\end{itemize}
+
+After a phrase is chosen, the union of the top paraphrase candidates from each method are used as the final paraphrase set. Five distinct sentences for each source phrase are sampled for constructing the HIT. Human evaluation of each sentence is repeated by multiple turkers (Mechanical Turk workers) and the averaged score for each phrase-paraphrase pair is subsequently used for analysis.
+
+\subsection{Evaluation Metric}
+Evaluation on the correlation between the ranking according to each of the paraphrase scores and human judgment is based on Kendall's tau coefficient, a common measure of correlation between two ranked quantities. Given a set of elements ranked by 2 different metrics, one interpretation of Kendall's tau is the ratio of agreement in relative ranking in all possible pairs of values drawn from the set. Kendall's tau coefficient ranges between -1 and 1, where 1 indicates a perfect agreement between a pair of ranked lists. Kendall's tau b, a variant of Kendall's tau, accounts for tied ranking within a ranked list by simply ignoring counts of pairs with ties in the ratio. Since tied rankings are possible for human judgment as well as all 3 re-ranking methods, Kendall's tau b is used in our analysis.
 
 \subsection{Paraphrase Examples from Urdu-English Corpus}
-\ref{sect:results_ur_en}
+\label{sect:results_ur_en}
 An example shown in Table~\ref{table1} consists of a list of paraphrases generated for the word  {\em unnecessarily} and the corresponding paraphrase scores from each of the 3 confidence metrics. Only the top 5 candidates are shown for the ease of comparison. Out of the top 5 paraphrases, only two from the original bilingual paraphrase extraction are semantically close to actual phrase and none of them are syntactically correct. With the S-C paraphrase model, only the best paraphrase candidate, {\em needlessly}, carries the close enough meaning to {\em unnecessarily}. 
 
-The lack of semantic correspondence in the bilingual methods is likely due to either polysemy in the foreign translation or word alignment mismatch in the bilingual translation. Such problems are not pronounced in the monolingual-based scores. The four paraphrases with the highest LSH-approximated cosine distance are very similar in meaning to the original phrase. Note that cosine distance ranges from -1 to 1 with 1 corresponding to the best match, so the LSH paraphrase candidates in this example are quantitatively close to the true phrase.
+The lack of semantic correspondence in the bilingual methods is likely due to either polysemy in the foreign translation or word alignment mismatch in the bilingual translation. Such problems are not pronounced in the monolingual-based scores. The four paraphrases with the highest LSH-approximated cosine distance are very similar in meaning to the original phrase. Note that cosine distance ranges from -1 to 1 with 1 corresponding to the best match, so the LSH paraphrase candidates in this example are quantitatively close to the true phrase in terms of distributional similarity.
 
 \begin{table}[h]
 \begin{center}
@@ -176,11 +191,19 @@ Table~\ref{table2} shows another example of the extracted paraphrases for the ph
 \begin{tabular}{ccc}%{|l|l|l|}
 \hline\hline 
 \bf \small BiP & \bf \small SyntBiP & \bf \small MonoDS \\ \hline
-{\scriptsize large number of, 0.333} & {\scriptsize large number of, 0.375} & {\scriptsize large quantity of, 0.98} \\
-{\scriptsize in large numbers, 0.111} & {\scriptsize great number of, 0.093} & {\scriptsize large number of, 0.98} \\
-{\scriptsize great number of, 0.084}& {\scriptsize vast number of, 0.063}& {\scriptsize great number of, 0.97}\\
-{\scriptsize large numbers of, 0.056} & & {\scriptsize vast number of, 0.94} \\
-{\scriptsize vast number of, 0.056}& & {\scriptsize in large numbers, 0.10}\\
+
+{\scriptsize large number of, 0.33} & {\scriptsize large number of, 0.38} & {\scriptsize large quantity of, 0.98} \\
+{\scriptsize in large numbers, 0.11} & {\scriptsize great number of, 0.09} & {\scriptsize large number of, 0.98} \\
+{\scriptsize great number of, 0.08}& {\scriptsize vast number of, 0.06}& {\scriptsize great number of, 0.97}\\
+{\scriptsize large numbers of, 0.06} & & {\scriptsize vast number of, 0.94} \\
+{\scriptsize vast number of, 0.06}& & {\scriptsize in large numbers, 0.10}\\
+
+%{\scriptsize large number of, 0.333} & {\scriptsize large number of, 0.375} & {\scriptsize large quantity of, 0.98} \\
+%{\scriptsize in large numbers, 0.111} & {\scriptsize great number of, 0.093} & {\scriptsize large number of, 0.98} \\
+%{\scriptsize great number of, 0.084}& {\scriptsize vast number of, 0.063}& {\scriptsize great number of, 0.97}\\
+%{\scriptsize large numbers of, 0.056} & & {\scriptsize vast number of, 0.94} \\
+%{\scriptsize vast number of, 0.056}& & {\scriptsize in large numbers, 0.10}\\
+
 %{\scriptsize large number of, -1.10} & {\scriptsize large number of, -0.98} & {\scriptsize large quantity of, 0.98} \\
 %{\scriptsize in large numbers, -2.20} & {\scriptsize great number of, -2.37} & {\scriptsize large number of, 0.98} \\
 %{\scriptsize great number of, -2.48}& {\scriptsize vast number of, -2.77}& {\scriptsize great number of, 0.97}\\
@@ -195,8 +218,6 @@ Table~\ref{table2} shows another example of the extracted paraphrases for the ph
 
 %@@ discuss adv and disadv of each of the scores; LSH complementary to the shortfall of paraphrases extracted by parallel corpus, e.g. multiple meaning of foreign word would result in paraphrases that isn't correct at all @@
 
-While the monolingual distributional similarity shows promise as a paraphrase ranking method, it has a number of drawbacks. The process of obtaining counts from the n-gram corpus to construct the distributional feature vector requires traversing through the entire collection of N-grams, which takes a substantial amount of time. A revision of the algorithm to allow parallel processing can possibly alleviate such problem. Another issue is the tradeoff between the size of LSH signature vector and the consistency of approximated cosine distance between phrases. While compactness of LSH features is desirable for computation speed and storage, it sacrifices the accuracy of the phrasal distributional similarity due the dependency on random seeds in the random projection algorithm. Moreover, the method is currently limited to phrases with up to 4 contiguous words that are present in the N-gram corpus, and since cosine similarity is affected by angle between 2 vectors irrespective of the vector magnitudes, monolingual scoring for larger n-grams suffers from feature sparsity resulted from thresholding on low occurrences of higher n-grams. All of these problems should be addressed in the future.
-
 %@@ LSH score: computation duration due to distributional counts collection, tradeoff between storage/LSH signature vector size and consistency/accuracy of approximated cosine distance due to random seeds required for random projection algorithm; currently only supports contiguous phrases and phrases of up-to-4-gram; ALSO only limited to phrases seen in the n-gram corpus; 
 
 %@@first time applied to paraphrase reranking as compared to previous approaches of paraphrase-extraction entirely based on monolingual parallel corpus; issue/relationship with thresholding similarity score; issue of feature dimension sparsity of higher-n-gram due to occurrence count thresholding in google ngram @@
@@ -207,9 +228,24 @@ While the monolingual distributional similarity shows promise as a paraphrase ra
 %@@@ mention amount of paraphrases extracted from ur-en
 
 \subsection{Pilot Study Results}
-\ref{sect:results_pilot}
+\label{sect:results_pilot}
 
-An evaluation of confidence measures produced by syntactically constrained translation model and the LSH-approximated distributional similarity was performed through human intelligence tasks (HIT) on Amazon's Mechanical Turk in the context of paraphrase substitution. Paraphrase sets were collected by picking 1,000 randomly from a written corpus used in \newcite{ClarkeLapata08} for assessing sentence compression methods. Each sentence in the HIT in which a phrase appears is extracted from the corpus. Sentences, in which the phrase is substituted with each of its paraphrase candidates, are presented to human judges along with the original text. A 5-point grading scale is used by the judges to evaluate the effect of each paraphrase on the meaning-preservation and grammaticality with 5 being the most favorable.
+Table \ref{tbl:table3} shows the Kendall's tau coefficients that quantifies the correlation between paraphrase re-ranking scores and human judgment collected using the Mechanical Turk. The positive values listed indicate that both paraphrase measures agree with human judgment in terms of meaning-preservation (0.28 and 0.19 for monolingual and bilingual, respectively) and grammaticality (0.31 and 0.15.) However, human judgment associates stronger with distributional similarity score with significantly higher coefficient values than bilingual translation score, with a larger difference in the grammaticality category. This implies that statistical semantic information provided through distributional similarity is useful for judging the naturalness of paraphrase perceived by humans and provides additional grammatical information as compared to bilingual pivoting-based re-ranking metrics. This conclusion motivates the next experimental study for exploring the benefits of combining monolingual and multilingual resources in the task of paraphrase extraction.
+
+\begin{table}
+\begin{center}
+\footnotesize
+\begin{tabular}{rcc} 
+\hline
+\hline
+ & {\bf MonoDS} & {\bf BiP}\\
+ Meaning &  0.28     &  0.19 \\
+ Grammar &  0.31   &  0.15 \\
+\end{tabular}
+\caption{\small Kendall Tau's rank coefficient, comparing the paraphrase ranking quality of monolingual and bilingual scores, with respect to human judgments, for the pilot study.}
+\label{tbl:table3}
+\end{center}
+\end{table}
 
 \mnote{include table of paraphrase examples for ``study in detail" ?}
 %The paraphrase candidates generated and ranked by each of the scores are listed in Table \ref{tbl:pp-candidates}. 
@@ -241,32 +277,14 @@ An evaluation of confidence measures produced by syntactically constrained trans
 %\end{center}
 %\end{table}
 
-Evaluation on the correlation between the ranking according to each of the paraphrase scores and human judgment is based on Kendall's tau coefficient, a common measure of correlation between two ranked quantities. Kendall's tau ranges between -1 and 1, where 1 indicates a perfect agreement between 2 sets of ranking. The positive values in Table \ref{tbl:table3} indicate that both paraphrase measures agree with human judgment in terms of meaning-preservation (0.28 and 0.19 for monolingual and bilingual, respectively) and grammaticality (0.31 and 0.15.) However, human judgment associates stronger with distributional similarity score with significantly higher coefficient values than bilingual translation score. This implies that statistical semantic information provided through distributional similarity is useful for judging the naturalness of paraphrase perceived by humans, an inefficacy also reflected for the bilingual-based evaluation method.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  
-\begin{table}
-\begin{center}
-\footnotesize
-\begin{tabular}{rcc} 
-\hline
-\hline
- & {\bf MonoDS} & {\bf BiP}\\
- Meaning &  0.28     &  0.19 \\
- Grammar &  0.31   &  0.15 \\
-\end{tabular}
-\caption{\small Kendall Tau's rank coefficient, comparing the paraphrase ranking quality of monolingual and bilingual scores, with respect to human judgments, for the pilot study.}
-\label{tbl:table3}
-\end{center}
-\end{table}
 
-
-\subsection{Evaluation on Paraphrase Pivoting Via French}
+\subsection{Results from Second Human Evaluation}
 \label{sect:results_fr_en}
-%{\bf Data and Experimental Design}
 
-
-
-@@ mention training corpus is specific to one domain only (parliament transcription), LSH signatures are computed with google ngram, while test sentences in HITs are from the original domain; important effects of different training texts used will be discussed later in section @@ 
-@@ explain HIT format, how not all pphrases are evaluation at once, so pphrases might be evaluated (with repeated HITs) by different sets (potentially with different sizes if some HIT rejected) of Turkers @@
 
 {\bf Experimental Results and Examples}
 @@ result, with table, separate for hiero and samt @@
@@ -362,51 +380,55 @@ The drawback of monolingual method is shown in  \ref{tbl:Table3}
 
 @@ mention data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
-@@ human judgment isn't entirely correct, depending on turker experience with task, with english; context of sentences, length, etc @@
+
+@@@additional of sources of error (pull from ur-en section)
+
+@@ need to note hiero score is domain-specific, restricted to parlament speech, whereas lsh is computed over google ngram, could be slightly unfair to lsh in this case, but on the other hand, (briefly mention, elaborate in future work section) one potential use of this for "hybrid" paraphrasing to specific domain is by filtering paraphrase candidates by "biasedly"-trained hiero/samt scores to retain phrases of interest @@
+
+@@ potential problem of random seeds in lsh @@
+
+While the monolingual distributional similarity shows promise as a paraphrase ranking method, it has a number of drawbacks. The process of obtaining counts from the n-gram corpus to construct the distributional feature vector requires traversing through the entire collection of N-grams, which takes a substantial amount of time. A revision of the algorithm to allow parallel processing can possibly alleviate such problem. Another issue is the tradeoff between the size of LSH signature vector and the consistency of approximated cosine distance between phrases. While compactness of LSH features is desirable for computation speed and storage, it sacrifices the accuracy of the phrasal distributional similarity due the dependency on random seeds in the random projection algorithm. Moreover, the method is currently limited to phrases with up to 4 contiguous words that are present in the N-gram corpus, and since cosine similarity is affected by angle between 2 vectors irrespective of the vector magnitudes, monolingual scoring for larger n-grams suffers from feature sparsity resulted from thresholding on low occurrences of higher n-grams. All of these problems should be addressed in the future.
+
+
+
 
 {\bf Why is Monolingual distributional similarity alone insufficient?}
 
 Despite of the better grammatical correlation between the context-based first order distributional similarity and human judgment, this monolingual method alone is insufficient to produce a reasonable ranked list of paraphrases. In addition to the limitation of monolingual distribution similarity such as data vector sparsity, there are other drawbacks when paraphrase candidates are not pre-selected by the bilingual pivoting method. Without a paraphrase filtering scheme, distributional similarity theoretically can be used to generate a list of paraphrases with decreasing similarity score from DS feature vectors of all phrases in the vocabulary, which can be very large. The size of candidate list can be limited based on any desired score cutoff. However, resulting candidates would only be based on contextual similarity that only enforces grammaticality, and as such, no direct restriction on the semantic of phrase is imposed. As a result, the inability of distributional similarity methods to handle cousin terms or antonym is often observed. 
 
-An example below demonstage...?
-
-
-@@ section: false examples of LSH being worse @@
+An example in Table \ref{table6} below compare the lists of top 10 re-ranked paraphrase generated according to monolingual distributional similarity alone and by bilingual pivoting method. Although monolingual paraphrase extraction method alone produces some reasonable paraphrase such as \emph{somewhat reluctant}, \emph{disinclined}, and \emph{less willing}, the top ranked elements include \emph{willing} and \emph{eager}, which are the antonym of \emph{reluctant}. This exemplifies the ability of monolingual method to capture only grammaticality in paraphrases based on the neighboring content, yet fail to distinguish between antonyms and synonyms. On the other hand, such candidates never gets generated in the pivoting stage by the bilingual pivot method since antonyms unlikely share the same foreign translations. This example illustrates the reason monolingual distributional similarity alone is inadequate for re-ranked paraphrase generation and that bilingual- and monolingual-based techniques provide orthogonal information for paraphrase re-ranking. 
 
 \begin{table}%[t!]
 \begin{center}
 \begin{tabular}{lll}%{|l|l|l|}
 \hline\hline 
 \multicolumn{3}{c} {\bf \footnotesize \emph{reluctant}}\\ \hline
-\bf \footnotesize MonoDS & \bf \footnotesize BiP \\ \hline
+\multicolumn{1}{c}{\bf \footnotesize MonoDS-alone} & \multicolumn{1}{c} {\bf \footnotesize BiP} \\ \hline
 {\scriptsize willing (0.992)} & {\scriptsize not (0.558)} & {\scriptsize } \\
 {\scriptsize loath (0.983)} & {\scriptsize unwilling (0.041)} & {\scriptsize } \\
-{\scriptsize somewhat reluctant (0.98)} & {\scriptsize reluctance (0.031)}& {\scriptsize } \\
-{\scriptsize unable (0.976)} & {\scriptsize reticent (0.025)} \\
-{\scriptsize denied access (0.976)} &  {\scriptsize hesitant (0.016)} & {\scriptsize } \\
-{\scriptsize disinclined (0.976)}&  {\scriptsize reticent about (0.014)} & {\scriptsize } \\
-{\scriptsize very unwilling (0.974)} &  {\scriptsize reservations (0.011)} & {\scriptsize } \\
-{\scriptsize conducive (0.973)}&  {\scriptsize reticence (0.010)} & {\scriptsize } \\
-{\scriptsize linked (0.973)}&  {\scriptsize hesitate (0.009)} & {\scriptsize } \\
-{\scriptsize less willing (0.973)}&  {\scriptsize are reluctant (0.009)} & {\scriptsize } \\
+{\scriptsize eager (0.98)}& {\scriptsize reluctance (0.031)}& {\scriptsize } \\
+{\scriptsize somewhat reluctant (0.98)} & {\scriptsize reticent (0.025)} \\
+{\scriptsize unable (0.976)} &  {\scriptsize hesitant (0.016)} & {\scriptsize } \\
+{\scriptsize denied access (0.976)}&  {\scriptsize reticent about (0.014)} & {\scriptsize } \\
+{\scriptsize disinclined (0.976)} &  {\scriptsize reservations (0.011)} & {\scriptsize } \\
+{\scriptsize very unwilling (0.974)}&  {\scriptsize reticence (0.010)} & {\scriptsize } \\
+{\scriptsize conducive (0.973)}&  {\scriptsize hesitate (0.009)} & {\scriptsize } \\
+{\scriptsize linked (0.973)}&  {\scriptsize are reluctant (0.009)} & {\scriptsize } \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Top 10 re-ranked paraphrase candidates according to monolingual distributional similarity (MonoDS) and bilingual pivoting paraphrase (BiP) scores. The corresponding scores are indicated in brackets}
-\label{table} 
+\caption{Top 10 re-ranked paraphrase candidates for the phrase \emph{reluctant} according to monolingual distributional similarity (MonoDS) alone and bilingual pivoting paraphrase (BiP) method. The corresponding scores are indicated in brackets}
+\label{table6} 
 \end{table}
 
 
 
 {\bf Effects of human judgment quality on gold standard}
+%@@ human judgment isn't entirely correct, depending on turker experience with task, with english; context of sentences, length, etc @@
 Despite the ease of setup and the economical benefits, subjective evaluation using Mechanical Turk are susceptible to multiple sources of error, causing substantial amount of noise in the collected data. First of all, turker's proficiency in English in terms of either age or language nativeness, would affect how the contextual clues are interpreted, which consequently influence the judgment of the paraphrases. Moreover, the experience in working on HITs and the consistency among, as well as within, turkers would also have an influence in the result quality. 
 
-An example of noisy judgment is that for the phrase "attackers", paraphrase candidate "forwards on" was likely generated from misalignment in grammar extraction stage but is ranked 7\.5, 6, and 1 out of 34 candidates for meaning, grammar and bilingual-pivoting paraphrase score, respectively, whereas monolingual-based method ranks it at 33. The actual human scores shows that "forwards on" received 2 and 4 for meaning and for grammar, 4 and 5. These scores have little correlation to the actual paraphrase quality and demonstrates one kind of noises that can be present in the data for constructing the paraphrase gold standard.
+An example of noisy human judgment is one of the paraphrases generated for the phrase "attackers". Paraphrase candidate "forwards on" was ranked 7\.5, 6, and 1 out of 34 candidates for meaning, grammar and bilingual-pivoting paraphrase score, respectively, whereas monolingual-based method ranks it at 33. This paraphrase is apparently incorrect but was likely to be generated from misalignment in grammar extraction stage. The actual human scores shows that, with respect to a full score of 5, "forwards on" received 2 and 4 for meaning and 4 and 5 for grammar. These scores do not correlate to the actual paraphrase quality and demonstrates one of the potential noises by human in the data for that influence quality of paraphrase gold standard.
 
-
-SUMMARY/additional of sources of error (pull from ur-en section)
-
-@@ need to note hiero score is domain-specific, restricted to parlament speech, whereas lsh is computed over google ngram, could be slightly unfair to lsh in this case, but on the other hand, (briefly mention, elaborate in future work section) one potential use of this for "hybrid" paraphrasing to specific domain is by filtering paraphrase candidates by "biasedly"-trained hiero/samt scores to retain phrases of interest @@
 
 
 
@@ -430,7 +452,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table7} Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the maximum size of paraphrase candidate pool, where the support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
+\caption{Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the maximum size of paraphrase candidate pool, where the support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
+\label{table7} 
 \end{table*}
 
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
@@ -456,7 +479,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table8} Kendall Tau's rank coefficients for correlation between human judgment and LSH score for both meaning and grammar. LSH cutoff is defined as the LSH score above which elements are included in the rank list for calculating Kendall Tau coefficients}
+\caption{Kendall Tau's rank coefficients for correlation between human judgment and LSH score for both meaning and grammar. LSH cutoff is defined as the LSH score above which elements are included in the rank list for calculating Kendall Tau coefficients}
+\label{table8}
 \end{table}
 
 
@@ -490,7 +514,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table9} Kendall Tau's rank coefficients as a function of binned LSH scores for correlation between human judgment and LSH score for both meaning and grammar.}
+\caption{Kendall Tau's rank coefficients as a function of binned LSH scores for correlation between human judgment and LSH score for both meaning and grammar.}
+\label{table9}
 \end{table}
 
 
@@ -511,7 +536,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table10} Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\label{table10} 
 \end{table*}
 % variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
@@ -538,7 +564,8 @@ SUMMARY/additional of sources of error (pull from ur-en section)
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{table11} Average of the mean human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\caption{Average of the mean human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\label{table11}
 \end{table*}
 
 % variable avgTopKmean in code, e.g. avgTopKmean[kTop]['meaning']['hiero']
@@ -563,6 +590,34 @@ The positive results reported in the pilot studies encourages additional evaluat
 %@@ Synt-constrainted paraphrasing method by construction incorporate context dependency, whereas the information is absent in the monolingual counterpart, so natural next step would be to include context by taking into account the neighboring words of the phrases; hence would introduce 2 additional context-dependent scores into the larger scale of mTurk evaluation @@
 %@@feature sparsity issue due to thresholding in google ngram@@
 
+\bibliographystyle{acl}
+\bibliography{references}
+
+\end{document}
+
+
+%%% table template
+
+\begin{table}%[t!]
+\begin{center}
+\begin{tabular}{rcc}%{|l|l|l|}
+\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
+{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+{\scriptsize } & {\scriptsize }& {\scriptsize } \\
+{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+\hline 
+{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{tableX} XX}
+\end{table}
+
+
 %%%%%%%%%%%%%%%% TABLE for evaluation w.r.t. Ngram %%%%%%%%%%%%%%%%%%
 \begin{table*}%[t!]
 \begin{center}
@@ -573,8 +628,6 @@ The positive results reported in the pilot studies encourages additional evaluat
 {\scriptsize Hiero-LSH} & {\scriptsize 0.03 (125)} & {\scriptsize 0.23 (125)}   & {\scriptsize 0.07 (125)} & {\scriptsize 0.17 (125)}  & {\scriptsize 0.13 (124)} & {\scriptsize 0.29 (121)}  & {\scriptsize 0.33 (119)} & {\scriptsize 0.28 (119)}  \\
 {\scriptsize SAMT-SAMT}& {\scriptsize 0.20 (99)}& {\scriptsize 0.00 (97)}  & {\scriptsize 0.26 (74)} & {\scriptsize 0.01 (75)}  & {\scriptsize 0.28 (73)} & {\scriptsize 0.26 (68)}  & {\scriptsize -0.06 (54)} & {\scriptsize 0.08 (52)}  \\
 {\scriptsize SAMT-LSH} & {\scriptsize 0.13 (104)} & {\scriptsize 0.21 (102)}  & {\scriptsize 0.17 (84)} & {\scriptsize 0.23 (85)}  & {\scriptsize 0.19 (79)} & {\scriptsize 0.22 (74)}  & {\scriptsize 0.13 (59)} & {\scriptsize 0.21 (57)}  \\ 
-
-%%%%%%%%%%% continue populating table %%%%%%%%%%%%
 
 %{\scriptsize Hiero-Hiero} & {\scriptsize 0.12} & {\scriptsize 0.03} \\
 %{\scriptsize Hiero-LSH} & {\scriptsize 0.12} & {\scriptsize \bf 0.23} \\
@@ -612,29 +665,4 @@ The positive results reported in the pilot studies encourages additional evaluat
 % kTauPPsize_all_sorted: all Kendal Tau scores
 % cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
-\bibliographystyle{acl}
-\bibliography{references}
 
-\end{document}
-
-
-%%% table template
-
-\begin{table}%[t!]
-\begin{center}
-\begin{tabular}{rcc}%{|l|l|l|}
-\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize }& {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-\hline 
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{tableX} XX}
-\end{table}
