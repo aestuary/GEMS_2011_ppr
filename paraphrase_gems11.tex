@@ -304,7 +304,7 @@ A interesting characteristics in the methods can be observed by comparing the co
 % Bi, Meaning: SyntBiP > BiP; Grammar: SyntBiPmatched > SyntBiP
 In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same syntactic type as the source phrase are included in the ranked list for Kendall's tau calculation. The same set of phrases that satisfies the syntactic type requirement is also used for calculations with the original re-ranking methods (labeled as SyntBiP* and SyntBiP-MonoDS* in the table.) Comparing only the bilingual methods across panels, syntactic matching definitely increases the correlation of bilingual pivoting metrics in grammaticality with human judgments (e.g. 0.15 for SyntBiP$_{matched}$ and 0.08 for SyntBiP) but with only minimal effects on meaning. The maximum values in the bottom panel for both categories are roughly the same as that in the corresponding category in the upper panel (\{0.21,0.19\} in meaning and \{0.22, 0.24\} in grammar for lower and upper panels, respectively.) This suggests that syntactic type matching offers only minor advantage when distributional similarity metric is used in conjunction of the bilingual approach, although it definitely help in grammaticality within purely bilingual pivoting re-ranking.
 
-A similar analysis was performed by breaking up phrases into n-gram categories.
+A similar analysis was performed by breaking up phrases into n-gram categories and the result, which is not included here, was close to the overall case where re-ranking scores based on bilingual pivoting have higher correlation in meaning and lower in grammar than those based on distributional similarity.
 
 %@@ mention similar trend of kTau w.r.t. number of n-gram of original phrase is observed in analysis results, meaning correlations between paraphrase re-ranking methods and human judgment are invariant with respect to number of tokens in a phrase. result not included here due to space constraint. @@
 
@@ -337,57 +337,113 @@ A similar analysis was performed by breaking up phrases into n-gram categories.
 % cnt_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
 
-@@ note examples are chosen with *extreme* rank difference to ensure/be confident that sufficient difference in score is present @@
+%  effect of paraphrase candidate pool size
+The effects from the paraphrase candidate pool sizes are illustrated in Table \ref{table7}. Both ranking metrics decrease gradually in correlation with human judgment in meaning as the number of available paraphrases grows. The same relationship occurs for BiP in the grammaticality but the Kendal's tau stays roughly the same, which implies that even at large numbers of paraphrase candidates, distributional similarity can serve as a metric   close to human judgment in ordering grammaticality.
 
-@@ examples of LSH better than hiero @@
-
+%%%%%%%%% table for pphrase size analysis, at MOST size N
 \begin{table}%[t!]
 \begin{center}
-\begin{tabular}{ccc}%{|l|l|l|}
-\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize }& {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-\hline 
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+\begin{tabular}{rcccc}%{|l|l|l|}
+\hline \hline 
+%\bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} &  \multicolumn{3}{c}{@15} &  \multicolumn{3}{c}{@20} &  \multicolumn{3}{c}{@30} \\
+ & \multicolumn{2}{c} {\scriptsize BiP} &  \multicolumn{2}{c}{\scriptsize BiP-MonoDS} \\
+\bf \scriptsize $\leq$ N$_{pool}$ & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
+{\scriptsize 3} & {\scriptsize 0.24 (36)} & {\scriptsize 0.30 (33)} & {\scriptsize 0.30 (49)} & {\scriptsize 0.21 (47)} \\
+{\scriptsize 6} & {\scriptsize 0.16 (90)} & {\scriptsize 0.27 (86)} & {\scriptsize 0.26 (108)} & {\scriptsize 0.25 (105)} \\
+{\scriptsize 10} & {\scriptsize 0.16 (150)} & {\scriptsize 0.22 (146)} & {\scriptsize 0.24 (168)} & {\scriptsize 0.27 (165)} \\
+{\scriptsize 15} & {\scriptsize 0.13 (195)} & {\scriptsize 0.18 (191)} & {\scriptsize 0.21(213)} & {\scriptsize 0.28 (210)} \\
+{\scriptsize 20} & {\scriptsize 0.12 (280)} & {\scriptsize 0.12 (276)} & {\scriptsize 0.18 (298)} & {\scriptsize 0.26 (295)} \\
+{\scriptsize 30} & {\scriptsize 0.13 (375)} & {\scriptsize 0.07 (371)} & {\scriptsize 0.16 (393)} & {\scriptsize 0.25 (390)} \\
+
 \hline
 \end{tabular}
 \end{center}
-\caption{XX}
-\label{table5} 
+\caption{Kendall Tau's rank coefficients for correlation between human judgment and 2 re-ranking methods as a function of the maximum size of paraphrase candidate pool. Support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
+\label{table7} 
+\end{table}
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% kTauPPsize_all_sorted: all Kendal Tau scores
+% cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
+
+% analysis on relationship between human judgment scores and LSH binning 
+To verify LSH value indeed predictably represents human judgment of paraphrases, the human evaluation scores are averaged for each category and each range of LSH values, as shown in Table \ref{table9}. 
+
+
+%%%%%%%%% table for LSH cutoff on average meaning and grammar analysis
+\begin{table}%[t!]
+\begin{center}
+\begin{tabular}{rcccc}%{|l|l|l|} ################################### fill in table with results avgLSHgrammar and avgLSHmeaning
+\hline \hline
+\bf \scriptsize LSH Region & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
+%{\scriptsize 1 $\geq$ x $>$ 0.9} & {\scriptsize 3.49} & {\scriptsize 4.17} & {\scriptsize 905}  \\
+%{\scriptsize 0.9 $\geq$ x $>$ 0.8} & {\scriptsize 3.27} & {\scriptsize 3.98} & {\scriptsize 830}  \\
+{\scriptsize 1 $\geq$ x $>$ 0.95} & {\scriptsize 3.99} & {\scriptsize 4.43} & {\scriptsize 350}  \\
+{\scriptsize 0.95 $\geq$ x $>$ 0.9} & {\scriptsize 3.17} & {\scriptsize 4.00} & {\scriptsize 555}  \\
+{\scriptsize 0.9 $\geq$ x $>$ 0.85} & {\scriptsize 3.25} & {\scriptsize 3.98} & {\scriptsize 470}  \\
+{\scriptsize 0.85 $\geq$ x $>$ 0.8} & {\scriptsize 3.30} & {\scriptsize 3.98} & {\scriptsize 360}  \\
+{\scriptsize 0.8 $\geq$ x $>$ 0.7} & {\scriptsize 3.21} & {\scriptsize 3.91} & {\scriptsize 750}  \\
+{\scriptsize 0.7 $\geq$ x $>$ 0.6} & {\scriptsize 3.27} & {\scriptsize 3.80} & {\scriptsize 935}  \\
+{\scriptsize 0.6 $\geq$ x $>$ 0.5} & {\scriptsize 3.08} & {\scriptsize 3.68} & {\scriptsize 915}  \\
+{\scriptsize 0.5 $\geq$ x $>$ 0.4} & {\scriptsize 3.1 } & {\scriptsize 3.57} & {\scriptsize 665}  \\
+{\scriptsize 0.4 $\geq$ x $>$ 0.3} & {\scriptsize 3.08} & {\scriptsize 3.54} & {\scriptsize 790}  \\
+{\scriptsize 0.3 $\geq$ x $>$ 0.2} & {\scriptsize 2.93} & {\scriptsize 3.35} & {\scriptsize 805}  \\
+{\scriptsize 0.2 $\geq$ x $>$ 0.1} & {\scriptsize 2.98} & {\scriptsize 3.30} & {\scriptsize 880}  \\
+{\scriptsize 0.1 $\geq$ x $>$ 0} & {\scriptsize 2.89} & {\scriptsize 3.21} & {\scriptsize 760}  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Kendall Tau's rank coefficients as a function of binned LSH scores for correlation between human judgment and LSH score for both meaning and grammar.}
+\label{table9}
 \end{table}
 
 
-%@@ examples of LSH better than samt @@
+@@ examples of LSH better than BiP @@
+
+%\begin{table}%[t!]
+%\begin{center}
+%\begin{tabular}{ccc}%{|l|l|l|}
+%\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } & {\scriptsize }& {\scriptsize } \\
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%\hline 
+%{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+%\hline
+%\end{tabular}
+%\end{center}
+%\caption{XX}
+%\label{table5} 
+%\end{table}
+
 
 @@ example for which LSH helping out Multilingual Pivoting when misalignment is severe (non-sense paraphrases) (1) cite ccb's ppr and mention well-known fact about aligner quality and direct deterioration propagation in pivoting-based (or any grammar-extraction-based method) paraphrase extraction and (2) *briefly* mention potentially incorporating of LSH and tomb counter in improving misalignments, for example, by counting whether aligned phrases co-occur frequent enough in corpus) @@
 
 
 %@@ examples of hiero better than lsh @@
 %The drawback of monolingual method is shown in  \ref{tbl:Table3}
-\begin{table}%[t!]
-\begin{center}
-\begin{tabular}{rcc}%{|l|l|l|}
-\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-{\scriptsize } & {\scriptsize }& {\scriptsize } \\
-{\scriptsize } & {\scriptsize } & {\scriptsize } \\
-\hline 
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
-{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
-{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
-\hline
-\end{tabular}
-\end{center}
-\caption{XX}
-\label{tableX}
-\end{table}
+%\begin{table}%[t!]
+%\begin{center}
+%\begin{tabular}{rcc}%{|l|l|l|}
+%\hline\hline \bf \footnotesize X & \bf \footnotesize X & \bf \footnotesize X \\ \hline
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } & {\scriptsize }& {\scriptsize } \\
+%{\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%\hline 
+%{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize } &  {\scriptsize } & {\scriptsize } \\
+%{\scriptsize }&  {\scriptsize } & {\scriptsize } \\
+%\hline
+%\end{tabular}
+%\end{center}
+%\caption{XX}
+%\label{tableX}
+%\end{table}
 
 %%%% table of kTau w.r.t. top K
 
@@ -455,90 +511,9 @@ An example of noisy human judgment is one of the paraphrases generated for the p
 
 
 
-%%%%%%%%% table for pphrase size analysis, at MOST size N
-
-\begin{table*}%[t!]
-\begin{center}
-\begin{tabular}{rcccccccc}%{|l|l|l|}
-\hline \hline 
-%\bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} &  \multicolumn{3}{c}{@15} &  \multicolumn{3}{c}{@20} &  \multicolumn{3}{c}{@30} \\
- & \multicolumn{2}{c} {\scriptsize BiP} &  \multicolumn{2}{c}{\scriptsize BiP-MonoDS} &  \multicolumn{2}{c}{\scriptsize SyntBiP} &  \multicolumn{2}{c}{\scriptsize SyntBip-MonoDS} \\
-\bf \scriptsize $\leq$ N$_{pool size}$ & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
-{\scriptsize 3} & {\scriptsize 0.24 (36)} & {\scriptsize 0.30 (33)} & {\scriptsize 0.30 (49)} & {\scriptsize 0.21 (47)} & {\scriptsize 1.0 (5)} & {\scriptsize -0.33 (3)}  & {\scriptsize -1.0 (5)} & {\scriptsize 0.33 (3)} \\
-{\scriptsize 6} & {\scriptsize 0.16 (90)} & {\scriptsize 0.27 (86)} & {\scriptsize 0.26 (108)} & {\scriptsize 0.25 (105)} & {\scriptsize 0.03 (26)} & {\scriptsize 0.10 (19)} & {\scriptsize -0.34 (26)} & {\scriptsize -0.09 (19)} \\
-{\scriptsize 10} & {\scriptsize 0.16 (150)} & {\scriptsize 0.22 (146)} & {\scriptsize 0.24 (168)} & {\scriptsize 0.27 (165)} & {\scriptsize 0.10 (50)} & {\scriptsize 0.10 (43)} & {\scriptsize -0.04 (50)} & {\scriptsize 0.30 (43)} \\
-{\scriptsize 15} & {\scriptsize 0.13 (195)} & {\scriptsize 0.18 (191)} & {\scriptsize 0.21(213)} & {\scriptsize 0.28 (210)} & {\scriptsize 0.08 (75)} & {\scriptsize 0.12 (67)} & {\scriptsize 0.01 (83)} & {\scriptsize 0.25 (74)} \\
-{\scriptsize 20} & {\scriptsize 0.12 (280)} & {\scriptsize 0.12 (276)} & {\scriptsize 0.18 (298)} & {\scriptsize 0.26 (295)} & {\scriptsize 0.10 (110)} & {\scriptsize 0.10 (102)} & {\scriptsize 0.17 (131)} & {\scriptsize 0.24 (123)} \\
-{\scriptsize 30} & {\scriptsize 0.13 (375)} & {\scriptsize 0.07 (371)} & {\scriptsize 0.16 (393)} & {\scriptsize 0.25 (390)} & {\scriptsize 0.21 (200)} & {\scriptsize 0.10 (192)} & {\scriptsize 0.17 (226)} & {\scriptsize 0.23 (218)} \\
-
-\hline
-\end{tabular}
-\end{center}
-\caption{Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the maximum size of paraphrase candidate pool, where the support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
-\label{table7} 
-\end{table*}
-
-% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
-% kTauPPsize_all_sorted: all Kendal Tau scores
-% cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
-
-
-%%%%%%%%% table for LSH cutoff analysis
-\begin{table}%[t!]
-\begin{center}
-\begin{tabular}{rcccc}%{|l|l|l|}
-\hline \hline
-\bf \scriptsize LSH cutoff & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
-{\scriptsize $\geq$ 0.9} & {\scriptsize 0.19} & {\scriptsize 0.18} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.8} & {\scriptsize 0.24} & {\scriptsize 0.14} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.7} & {\scriptsize 0.15} & {\scriptsize 0.16} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.6} & {\scriptsize 0.10} & {\scriptsize 0.18} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.5} & {\scriptsize 0.13} & {\scriptsize 0.15} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.4} & {\scriptsize 0.12 } & {\scriptsize 0.16} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.3} & {\scriptsize 0.11} & {\scriptsize 0.16} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.2} & {\scriptsize 0.13} & {\scriptsize 0.19} & {\scriptsize }  \\
-{\scriptsize $\geq$ 0.1} & {\scriptsize 0.13} & {\scriptsize 0.21} & {\scriptsize }  \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Kendall Tau's rank coefficients for correlation between human judgment and LSH score for both meaning and grammar. LSH cutoff is defined as the LSH score above which elements are included in the rank list for calculating Kendall Tau coefficients}
-\label{table8}
-\end{table}
-
-
-% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
-% kTauLSHCutoff_all_sorted: all Kendal Tau scores
-% cntLSHCutoff_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
 
 
-%%%%%%%%% table for LSH cutoff on average meaning and grammar analysis
-
-\begin{table}%[t!]
-\begin{center}
-\begin{tabular}{rcccc}%{|l|l|l|} ################################### fill in table with results avgLSHgrammar and avgLSHmeaning
-\hline \hline
-\bf \scriptsize LSH Region & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
-%{\scriptsize 1 $\geq$ x $>$ 0.9} & {\scriptsize 3.49} & {\scriptsize 4.17} & {\scriptsize 905}  \\
-%{\scriptsize 0.9 $\geq$ x $>$ 0.8} & {\scriptsize 3.27} & {\scriptsize 3.98} & {\scriptsize 830}  \\
-{\scriptsize 1 $\geq$ x $>$ 0.95} & {\scriptsize 3.99} & {\scriptsize 4.43} & {\scriptsize 350}  \\
-{\scriptsize 0.95 $\geq$ x $>$ 0.9} & {\scriptsize 3.17} & {\scriptsize 4.00} & {\scriptsize 555}  \\
-{\scriptsize 0.9 $\geq$ x $>$ 0.85} & {\scriptsize 3.25} & {\scriptsize 3.98} & {\scriptsize 470}  \\
-{\scriptsize 0.85 $\geq$ x $>$ 0.8} & {\scriptsize 3.30} & {\scriptsize 3.98} & {\scriptsize 360}  \\
-{\scriptsize 0.8 $\geq$ x $>$ 0.7} & {\scriptsize 3.21} & {\scriptsize 3.91} & {\scriptsize 750}  \\
-{\scriptsize 0.7 $\geq$ x $>$ 0.6} & {\scriptsize 3.27} & {\scriptsize 3.80} & {\scriptsize 935}  \\
-{\scriptsize 0.6 $\geq$ x $>$ 0.5} & {\scriptsize 3.08} & {\scriptsize 3.68} & {\scriptsize 915}  \\
-{\scriptsize 0.5 $\geq$ x $>$ 0.4} & {\scriptsize 3.1 } & {\scriptsize 3.57} & {\scriptsize 665}  \\
-{\scriptsize 0.4 $\geq$ x $>$ 0.3} & {\scriptsize 3.08} & {\scriptsize 3.54} & {\scriptsize 790}  \\
-{\scriptsize 0.3 $\geq$ x $>$ 0.2} & {\scriptsize 2.93} & {\scriptsize 3.35} & {\scriptsize 805}  \\
-{\scriptsize 0.2 $\geq$ x $>$ 0.1} & {\scriptsize 2.98} & {\scriptsize 3.30} & {\scriptsize 880}  \\
-{\scriptsize 0.1 $\geq$ x $>$ 0} & {\scriptsize 2.89} & {\scriptsize 3.21} & {\scriptsize 760}  \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Kendall Tau's rank coefficients as a function of binned LSH scores for correlation between human judgment and LSH score for both meaning and grammar.}
-\label{table9}
-\end{table}
 
 
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
@@ -688,3 +663,56 @@ The positive results reported in the pilot studies encourages additional evaluat
 % cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
 
+
+%%%%%%%%%%%%%%%%% table for pphrase size analysis, at MOST size N %%%%%%%%%%%%%%%%%
+
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rcccccccc}%{|l|l|l|}
+\hline \hline 
+%\bf \scriptsize Re-ranking & \multicolumn{3}{c} {@3} &  \multicolumn{3}{c}{@6} &  \multicolumn{3}{c}{@10} &  \multicolumn{3}{c}{@15} &  \multicolumn{3}{c}{@20} &  \multicolumn{3}{c}{@30} \\
+ & \multicolumn{2}{c} {\scriptsize BiP} &  \multicolumn{2}{c}{\scriptsize BiP-MonoDS} &  \multicolumn{2}{c}{\scriptsize SyntBiP} &  \multicolumn{2}{c}{\scriptsize SyntBip-MonoDS} \\
+\bf \scriptsize $\leq$ N$_{pool size}$ & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
+{\scriptsize 3} & {\scriptsize 0.24 (36)} & {\scriptsize 0.30 (33)} & {\scriptsize 0.30 (49)} & {\scriptsize 0.21 (47)} & {\scriptsize 1.0 (5)} & {\scriptsize -0.33 (3)}  & {\scriptsize -1.0 (5)} & {\scriptsize 0.33 (3)} \\
+{\scriptsize 6} & {\scriptsize 0.16 (90)} & {\scriptsize 0.27 (86)} & {\scriptsize 0.26 (108)} & {\scriptsize 0.25 (105)} & {\scriptsize 0.03 (26)} & {\scriptsize 0.10 (19)} & {\scriptsize -0.34 (26)} & {\scriptsize -0.09 (19)} \\
+{\scriptsize 10} & {\scriptsize 0.16 (150)} & {\scriptsize 0.22 (146)} & {\scriptsize 0.24 (168)} & {\scriptsize 0.27 (165)} & {\scriptsize 0.10 (50)} & {\scriptsize 0.10 (43)} & {\scriptsize -0.04 (50)} & {\scriptsize 0.30 (43)} \\
+{\scriptsize 15} & {\scriptsize 0.13 (195)} & {\scriptsize 0.18 (191)} & {\scriptsize 0.21(213)} & {\scriptsize 0.28 (210)} & {\scriptsize 0.08 (75)} & {\scriptsize 0.12 (67)} & {\scriptsize 0.01 (83)} & {\scriptsize 0.25 (74)} \\
+{\scriptsize 20} & {\scriptsize 0.12 (280)} & {\scriptsize 0.12 (276)} & {\scriptsize 0.18 (298)} & {\scriptsize 0.26 (295)} & {\scriptsize 0.10 (110)} & {\scriptsize 0.10 (102)} & {\scriptsize 0.17 (131)} & {\scriptsize 0.24 (123)} \\
+{\scriptsize 30} & {\scriptsize 0.13 (375)} & {\scriptsize 0.07 (371)} & {\scriptsize 0.16 (393)} & {\scriptsize 0.25 (390)} & {\scriptsize 0.21 (200)} & {\scriptsize 0.10 (192)} & {\scriptsize 0.17 (226)} & {\scriptsize 0.23 (218)} \\
+
+\hline
+\end{tabular}
+\end{center}
+\caption{Kendall Tau's rank coefficients for correlation between human judgment and each re-ranking method as a function of the maximum size of paraphrase candidate pool, where the support is indicated in the bracket; meaning and grammar are represented as M and G, respectively}
+\label{table7} 
+\end{table*}
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% kTauPPsize_all_sorted: all Kendal Tau scores
+% cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
+
+
+%%%%%%%%% table for LSH cutoff analysis (replaced by table of the binning of LSH in the ppr)  %%%%%%%%%%%%%
+\begin{table}%[t!]
+\begin{center}
+\begin{tabular}{rcccc}%{|l|l|l|}
+\hline \hline
+\bf \scriptsize LSH cutoff & \bf \scriptsize Meaning & \bf \scriptsize Grammar & \bf \scriptsize Support \\ \hline
+{\scriptsize $\geq$ 0.9} & {\scriptsize 0.19} & {\scriptsize 0.18} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.8} & {\scriptsize 0.24} & {\scriptsize 0.14} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.7} & {\scriptsize 0.15} & {\scriptsize 0.16} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.6} & {\scriptsize 0.10} & {\scriptsize 0.18} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.5} & {\scriptsize 0.13} & {\scriptsize 0.15} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.4} & {\scriptsize 0.12 } & {\scriptsize 0.16} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.3} & {\scriptsize 0.11} & {\scriptsize 0.16} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.2} & {\scriptsize 0.13} & {\scriptsize 0.19} & {\scriptsize }  \\
+{\scriptsize $\geq$ 0.1} & {\scriptsize 0.13} & {\scriptsize 0.21} & {\scriptsize }  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Kendall Tau's rank coefficients for correlation between human judgment and LSH score for both meaning and grammar. LSH cutoff is defined as the LSH score above which elements are included in the rank list for calculating Kendall Tau coefficients}
+\label{table8}
+\end{table}
+
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% kTauLSHCutoff_all_sorted: all Kendal Tau scores
+% cntLSHCutoff_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
