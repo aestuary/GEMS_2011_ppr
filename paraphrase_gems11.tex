@@ -255,15 +255,9 @@ In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same synt
 
 A similar analysis was performed by breaking up phrases into n-gram categories and the result, which is not included here, was close to the overall case where re-ranking scores based on bilingual pivoting have higher correlation in meaning and lower in grammar than those based on distributional similarity.
 
-%@@ mention similar trend of kTau w.r.t. number of n-gram of original phrase is observed in analysis results, meaning correlations between paraphrase re-ranking methods and human judgment are invariant with respect to number of tokens in a phrase. result not included here due to space constraint. @@
-
-% Mono: meaning and grammar fairly consistent in correlation measure except for SyntBiPmatched. can be due to the fact that most  paraphrase candidates that can possible be grammatical were eliminated in the synt type matching process, reducing the number of ranked candidates,...
-% mention: (cite SAMT-BiP) weakness of BiP in grammar kTau fixed by MonoDS, but meaning correlation stays the same after MonoDS because MonoDS categorize syntactic *classes*, like cities, but is not meant/capable of grouping paraphrases
 
 
-
-
-%  effect of paraphrase candidate pool size
+%%%  effect of paraphrase candidate pool size
 The effects from the paraphrase candidate pool sizes are illustrated in Table \ref{table7}. Both ranking metrics decrease gradually in correlation with human judgment in meaning as the number of available paraphrases grows. The same relationship occurs for BiP in the grammaticality but the Kendal's tau stays roughly the same, which implies that even at large numbers of paraphrase candidates, distributional similarity can serve as a metric   close to human judgment in ordering grammaticality.
 
 %%%%%%%%% table for pphrase size analysis, at MOST size N
@@ -330,8 +324,6 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 %** top range: one bin on top way higher than the avg value in the lower bins (~3.20) = can be confident about paraphrase with above 0.95 (step function drop off after 0.05 from 1)
 
 
-
-
 % top K analysis
 %@@ mention data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
@@ -368,7 +360,6 @@ In question answering applications such as search query, the order of answers pr
 % variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
 % @@ examples of LSH better than BiP @@
-%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%  HERE (this sections) 
 
 % misalignment: 3 examples
 %- considerable changes    1069038 caused quite    1.0     1.0     21.5    1.0  (m:23)
