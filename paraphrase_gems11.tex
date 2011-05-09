@@ -325,7 +325,7 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 
 
 % top K analysis
-%@@ mention data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
+%@@ data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
 % graph of average topK w.r.t. K
 \begin{figure*}
@@ -336,9 +336,9 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 \label{fig_meanTopK}
 \end{figure*}
 
-The quality of paraphrase ranking can be reflected through the relationship between the averaged human scores and the top K candidates as K increases. Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as a function of K.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
+Since crowd-sourced human evaluation is known to be noisy, the analysis on top K paraphrases as a function of K is an alternative way to evaluate the quality of paraphrase rankings produced by different metrics. Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as K grows.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
 
-
+% max top K candidates
 In question answering applications such as search query, the order of answers presented is important because the lower an answer is ranked, the less likely it would be looked at or chosen, or, equivalently, more time would be spent to find an optimal answer. Based on this intuition, the paraphrase ranking methods are evaluated using the maximum human judgment score among the top K candidates obtained by each method. As shown in Table \ref{table10}, when only the top candidate is considered, the averaged score corresponding to the monolingual re-ranking methods are roughly the same as that to the bilingual methods in meaning, but as K grows, the bilingual methods outperforms the monolingual methods. In terms of grammaticality, scores associated with monolingual re-ranking methods are consistently higher than the bilingual methods but the difference tapers off as K increases. This suggests that when only limited top paraphrase candidates can be evaluated, MonoDS should guarantee better quality of results.
 
 %%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
@@ -360,20 +360,22 @@ In question answering applications such as search query, the order of answers pr
 % variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
 % @@ examples of LSH better than BiP @@
-
 % misalignment: 3 examples
 %- considerable changes    1069038 caused quite    1.0     1.0     21.5    1.0  (m:23)
 %- always declared 377087  always been     1.0     1.0     19.0    8.0 (m:20)
 %- significantly affected  10321   known   2.0     2.5     20.0    4.0 	(max 20)
-%- hauled  344042  delivered       17.0    18.5    2.5     19.0
-@@ example for which LSH helping out Multilingual Pivoting when misalignment is severe (non-sense paraphrases) (1) cite ccb's ppr and mention well-known fact about aligner quality and direct deterioration propagation in pivoting-based (or any grammar-extraction-based method) paraphrase extraction and (2) *briefly* mention potentially incorporating of LSH and tomb counter in improving misalignments, for example, by counting whether aligned phrases co-occur frequent enough in corpus) @@
+%@@ example for which LSH helping out Multilingual Pivoting when misalignment is severe (non-sense paraphrases) (1) cite ccb's ppr and mention well-known fact about aligner quality and direct deterioration propagation in pivoting-based (or any grammar-extraction-based method) paraphrase extraction and (2) *briefly* mention potentially incorporating of LSH and tomb counter in improving misalignments, for example, by counting whether aligned phrases co-occur frequent enough in corpus) @@
+The examples in the top panel of Table \ref{table11} illustrates a few disadvantages of the bilingual paraphrase scores and how monolingual re-ranking complements the bilingual methods. Translation models based on bilingual corpora is known to suffer from misalignment of the parallel text \cite{BannardCallisonBurch05}, producing incorrect translations that propagate through in the paraphrase model. This issue is exemplified in the phrase pairs \{\emph{considerable changes, caused quite}\}, \{\emph{always declared, always been}\}, and \{\emph{significantly affected, known}\} listed Table \ref{table11}. The paraphrases are apparently unrelated to the original phrase, 
 
 % affected by context
 %- fiscal burden   918627  tax     5.5     3.5     16.0    5.0 (m:18)==> correct based on context not by definition, example not as "clean" (not top or bottom rankings)
+\textit{let us waste no more time : let us invest in infrastructure , transport networks , the environment and energy ; let us organize ourselves better , so that small and medium-sized enterprises can benefit from research investment and the member states can reduce the \textbf{fiscal burden} consisting of taxes and social contributions .}
 % hauled  344042  delivered       17.0    18.5    2.5     19.0
 
+\emph{countries which do not comply with community legislation should be \textbf{hauled} before the court of justice and i think mrs palacio will do so .}
+
 % effect of training MonoDS and BiP with different corpora
-An example to illustrate the effect of using different corpora to train the 2 paraphrase re-ranking models is the phrase pair \{\emph{legalise}, \emph{legalize}\}. Meaning, grammar and MonoDS all received top rank out of all paraphrases, whereas BiP assigns a rank of 10 out of 23. Since the bilingual pivoting method was trained with Europarl data, which is dominated by British english, BiP fails to acknowledge the American spelling of the same word. On the other hand, distributional similarity feature vectors were extracted from the n-gram corpus with different variations of english, hence this information was constructively informative for paraphrase ranking. This property can be exploited for adaptation of specific domain of paraphrases selection.
+An example to illustrate the effect of using different corpora to train the 2 paraphrase re-ranking models is the phrase pair \{\emph{legalise}, \emph{legalize}\}, as shown in Table \ref{table11} Meaning, grammar and MonoDS all received top rank out of all paraphrases, whereas BiP assigns a rank of 10 out of 23. Since the bilingual pivoting method was trained with Europarl data, which is dominated by British english, BiP fails to acknowledge the American spelling of the same word. On the other hand, distributional similarity feature vectors were extracted from the n-gram corpus with different variations of english, hence this information was constructively informative for paraphrase ranking. This property can be exploited for adaptation of specific domain of paraphrases selection.
 
 
 \begin{table*}
@@ -479,7 +481,7 @@ A main direction of future work is to take full advantage of the complementary k
 % re-write the following paragraph: %%%%%%%%%%%%%%%%%%%%%% ================== < here
 Traditional methods for computing distributional similarity scores such as the induction process utilized by \newcite{PascaDienes05}, requires substantial computational storage for collecting contextual counts for each phrase in a large collection as well as the amount of time for computing the quantitative measure of paraphrases. As a result, scalability of these methods hinders paraphrase extraction on large data sets. In our study, monolingual distributional similarity is implemented via Locality Sensitive Hashing, which represents contextual features signatures in small dimensions allowing linear time computation of approximate cosine distance, and can update signature in an online fashion \cite{Charikar02, VanDurmeLallACL10}. This encourages future effort of extending the proposed method to very large sets of candidate paraphrases, as well as the establishing a large database of paraphrases and the corresponding distributional similarity signatures.
 
-Other future directions include examining the effect on paraphrases scores from an increased number of pivoting languages in the bilingual paraphrase model, eliminating the limitations imposed by the web-scale n-gram corpus on both the maximum length of phrase tokens and the sparsity of features for higher n-grams, and training models with domain-specific corpora to extract distributional similarity signatures tailored for certain applications.
+Other future directions include examining the effect on paraphrases scores from an increased number of pivoting languages in the bilingual paraphrase model, eliminating the limitations imposed by the web-scale n-gram corpus on both the maximum length of phrase tokens and the sparsity of features for higher n-grams, training models with domain-specific corpora to extract distributional similarity signatures tailored for certain applications, and explore the possibility of augmenting the paraphrase extraction procedure to include monolingual features in order to alleviate the problems of misalignment.
 
 
 %@@ briefly mention applying LSH and tomb counter to reduce paraphrase error due to misalignment @@
