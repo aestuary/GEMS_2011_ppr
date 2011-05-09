@@ -111,40 +111,12 @@ We attempt to re-rank the paraphrases using other information.  This is similar 
 \section{Using Monolingual Resources}
 \label{sect:mds}
 
-Prior work has explored the acquisition of paraphrases using distributional
-similarity computed from monolingual resources, such as in the DIRT results of
-\newcite{Lin01discoveryof}. Later work by \newcite{bhagatacl08}, building on an
-earlier effort in noun clustering \cite{ravichandranACL05}, leveraged the
-Locality Sensitive Hash (LSH) results of \newcite{charikar02} and
-\newcite{IndykSTOC98} in order to scale the acquisition model to large datasets.
-
-In these models, phrases are judged to be similar based on the cosine of their
-associated context vectors. In some cases, such as by Lin and Pantel,
-distributional context is defined as the frequency within which a given element
-appears in various syntactic positions with respect to other lexical
-items.\footnote{For example, the nouns \emph{apple} and \emph{orange} are
-  contextually similar partly owing to their shared tendency to be the object of
-  the verb \emph{eat}.} While syntactic contexts provide strong evidence of
-distributional preferences, they are relatively computationally expensive to
-come by, prompting the use instead of n-gram features when employing very large
-corpora (such as in the work of Bhagat and Ravichandran).\footnote{For example,
-  \emph{apple} and \emph{orange} both tend to be one word to the right of
-  \emph{an}, and one to the left of \emph{juice}.}
-
-Here we derived distributional similarity through the use of the Google n-grams
-\cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams
-are sub-sentential (the n-grams are no longer than 5 tokens by design), it was
-not feasible to parse, which led to the use of unigram contexts. For each phrase
-$x$ we wished to paraphrase, we extracted the context vector of $x$ from the
-n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$,
-$f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$),
-or ($w_{i+1}=b, f$), respectively. In order to avoid storing each context vector
-explicitly, and to enable faster cosine comparisons, we employed the online LSH
-approach of \newcite{VanDurmeLallACL10}.
-
+\mnote{ insert summary on Monolingual Distributional Similarity }
 
 %\section{Dimensionality Reduction via LSH}
 %\label{sect:lsh}
+
+\mnote{ insert LSH summary }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -366,8 +338,7 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 \label{fig_meanTopK}
 \end{figure*}
 
-Since crowd-sourced human evaluation is known to be noisy, the analysis on top K paraphrases as a function of K is an alternative way to evaluate the quality of paraphrase rankings produced by different metrics. Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as K grows.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
-@@ mention decrease in size of support as K grow@@
+Since crowd-sourced human evaluation is known to be noisy, rather than examining the correlation using the entire ranked paraphrase lists, analyzing top K paraphrases as a function of K is another appropriate way to evaluate the goodness of different metrics. Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Due to different sizes of paraphrase pool for various phrases, the support of the averaged scores decreases from 500 to 100 as K increases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as K grows.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
 
 % max top K candidates
 In question answering applications such as search query, the order of answers presented is important because the lower an answer is ranked, the less likely it would be looked at or chosen, or, equivalently, more time would be spent to find an optimal answer. Based on this intuition, the paraphrase ranking methods are evaluated using the maximum human judgment score among the top K candidates obtained by each method. As shown in Table \ref{table10}, when only the top candidate is considered, the averaged score corresponding to the monolingual re-ranking methods are roughly the same as that to the bilingual methods in meaning, but as K grows, the bilingual methods outperforms the monolingual methods. In terms of grammaticality, scores associated with monolingual re-ranking methods are consistently higher than the bilingual methods but the difference tapers off as K increases. This suggests that when only limited top paraphrase candidates can be evaluated, MonoDS should guarantee better quality of results.
