@@ -111,12 +111,40 @@ We attempt to re-rank the paraphrases using other information.  This is similar 
 \section{Using Monolingual Resources}
 \label{sect:mds}
 
-\mnote{ insert summary on Monolingual Distributional Similarity }
+Prior work has explored the acquisition of paraphrases using distributional
+similarity computed from monolingual resources, such as in the DIRT results of
+\newcite{Lin01discoveryof}. Later work by \newcite{bhagatacl08}, building on an
+earlier effort in noun clustering \cite{ravichandranACL05}, leveraged the
+Locality Sensitive Hash (LSH) results of \newcite{charikar02} and
+\newcite{IndykSTOC98} in order to scale the acquisition model to large datasets.
+
+In these models, phrases are judged to be similar based on the cosine of their
+associated context vectors. In some cases, such as by Lin and Pantel,
+distributional context is defined as the frequency within which a given element
+appears in various syntactic positions with respect to other lexical
+items.\footnote{For example, the nouns \emph{apple} and \emph{orange} are
+  contextually similar partly owing to their shared tendency to be the object of
+  the verb \emph{eat}.} While syntactic contexts provide strong evidence of
+distributional preferences, they are relatively computationally expensive to
+come by, prompting the use instead of n-gram features when employing very large
+corpora (such as in the work of Bhagat and Ravichandran).\footnote{For example,
+  \emph{apple} and \emph{orange} both tend to be one word to the right of
+  \emph{an}, and one to the left of \emph{juice}.}
+
+Here we derived distributional similarity through the use of the Google n-grams
+\cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams
+are sub-sentential (the n-grams are no longer than 5 tokens by design), it was
+not feasible to parse, which led to the use of unigram contexts. For each phrase
+$x$ we wished to paraphrase, we extracted the context vector of $x$ from the
+n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$,
+$f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$),
+or ($w_{i+1}=b, f$), respectively. In order to avoid storing each context vector
+explicitly, and to enable faster cosine comparisons, we employed the online LSH
+approach of \newcite{VanDurmeLallACL10}.
+
 
 %\section{Dimensionality Reduction via LSH}
 %\label{sect:lsh}
-
-\mnote{ insert LSH summary }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
