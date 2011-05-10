@@ -39,7 +39,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This paper improves an existing bilingual paraphrase extraction technique using monolingual distributional similarity to re-rank candidate paraphrases.  Raw monolingual data  provides a complementary and orthogonal source of information that lessens the commonly observed errors in bilingual pivot-based methods. We incorporated a newly developed locality sensitive hashing algorithm into the monolingual score calculation in order to facilitate a practical implementation of this method over large volumes of data. Experimental study reveals that monolingual scoring of bilingually extracted paraphrases has a substantially stronger correlation with human judgment  than the probabilities assigned by the bilingual pivoting method.
+This paper improves an existing bilingual paraphrase extraction technique using monolingual distributional similarity to re-rank candidate paraphrases.  Raw monolingual data  provides a complementary and orthogonal source of information that lessens the commonly observed errors in bilingual pivot-based methods. We incorporated a newly developed locality sensitive hashing algorithm into the monolingual score calculation in order to facilitate a practical implementation of this method over large volumes of data. Experimental study reveals that monolingual scoring of bilingually extracted paraphrases has a significantly stronger correlation with human judgment in grammaticality than the probabilities assigned by the bilingual pivoting method.
 
 %This shows promises in further improvement of paraphrase quality through merging of the variety of scores...@@
 
@@ -113,12 +113,16 @@ to derive feature functions and extract paraphrase tables. Feature functions and
 \section{Using Monolingual Resources}
 \label{sect:mds}
 
-\mnote{ insert summary on Monolingual Distributional Similarity }
+Prior work has explored the acquisition of paraphrases using distributional similarity computed from monolingual resources, such as in the DIRT results of \newcite{Lin01discoveryof}. Later work by \newcite{BhagatRavichandran08}, building on an earlier effort in noun clustering \cite{ravichandranACL05}, leveraged the Locality Sensitive Hash (LSH) results of \newcite{Charikar02} and \newcite{IndykSTOC98} in order to scale the acquisition model to large datasets.
+
+In these models, phrases are judged to be similar based on the cosine of their associated context vectors. In some cases, such as by Lin and Pantel, distributional context is defined as the frequency within which a given element appears in various syntactic positions with respect to other lexical items.\footnote{For example, the nouns \emph{apple} and \emph{orange} are contextually similar partly owing to their shared tendency to be the object of the verb \emph{eat}.} While syntactic contexts provide strong evidence of distributional preferences, they are relatively computationally expensive to come by, prompting the use instead of n-gram features when employing very large corpora (such as in the work of Bhagat and Ravichandran).\footnote{For example, \emph{apple} and \emph{orange} both tend to be one word to the right of \emph{an}, and one to the left of \emph{juice}.}
+
+Here we derived distributional similarity through the use of the Google n-grams \cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by design), it was not feasible to parse, which led to the use of unigram contexts. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employed the online LSH approach of \newcite{VanDurmeLallACL10}.
+
 
 %\section{Dimensionality Reduction via LSH}
 %\label{sect:lsh}
 
-\mnote{ insert LSH summary }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,9 +171,7 @@ Kendall's tau b, a variant of Kendall's tau, accounts for tied ranking within a 
 \subsection{Preliminary study on Urdu-English data}
 \label{sect:results_ur_en}
 
-@@@ need editing to fit in with the rest of the section @@@
-add:This corpus is significantly smaller than the corpora used in \newcite{CallisonBurch08} which contained a total of 315 million English words and as such, the translation and paraphrase candidates presented here are expected of lesser quality.
-add: this demonstrates the flexibility of the BiP method to utilize any foreign language as the pivot
+A small preliminary study of the paraphrasing metrics were performed prior to the experimental work with French-English corpora. Due to the significantly smaller corpus size as compared to the one used in \newcite{CallisonBurch08}, the translation and paraphrase candidates presented here are expected of lesser quality. Nonetheless, the results in this demonstrates the flexibility of the choice of foreign language used in the bilingual pivoting paraphrase extraction.
 
 An example shown in Table~\ref{table1} consists of a list of paraphrases generated for the word  {\em unnecessarily} and the corresponding paraphrase scores from each of the 3 confidence metrics. Only the top 5 candidates are shown for the ease of comparison. Out of the top 5 paraphrases, only two from the original bilingual paraphrase extraction are semantically close to actual phrase and none of them are syntactically correct. With the S-C paraphrase model, only the best paraphrase candidate, {\em needlessly}, carries the close enough meaning to {\em unnecessarily}. 
 
@@ -216,7 +218,7 @@ Table~\ref{table2} shows another example of the extracted paraphrases for the ph
 \subsection{Experimental Results}
 \label{sect:results_fr_en}
 
-Prior to performing analysis on the data collected from the experiment, preprocessing was carried out for data quality control and for correct Kendall's tau calculation. A HIT entry is rejected if the turker fails on the control questions embedded in the HIT or if more than a pre-defined number of entries are left blank. Ranked lists produced by human judgment for a particular phrase would be tossed out if rankings are equal across all candidates. Hence, Kendall's tau coefficients are calculated from different sizes of support, which are indicated along with the results. A total of 100 phrases and 5 sentence per phrase are selected for the experiment, resulting in a maximum support size of 500.
+Prior to performing analysis on the data collected from the experiment, preprocessing was performed for data quality control and for correct Kendall's tau calculation. A HIT entry is rejected if a turker fails on the control questions embedded in the HIT or if more than a pre-defined number of entries are left blank. Ranked lists produced by human judgment for a particular phrase would be tossed out if rankings are equal across all paraphrase candidates. Hence, Kendall's tau coefficients are calculated from various sizes of support which are indicated along with the results. A total of 100 phrases and 5 sentence per phrase are selected for the experiment, resulting in a maximum support size of 500 for Kendall's tau coefficient calculation.
 
 \begin{table}%[t!]
 \begin{center}
@@ -243,16 +245,16 @@ Prior to performing analysis on the data collected from the experiment, preproce
 % cnt_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
 
-% both panels, grammar: Mono > Bi
+\mnote{grammar: MonoDS $>$ BiP in both panels} %%%
 The Kendall's tau coefficients calculated using human evaluation and various paraphrase re-ranking scores are reported Table \ref{tbl:table4}. In agreement with the results in the pilot study, the positive values of Kendall's tau across the entire table confirm both monolingual and bilingual approaches for paraphrase re-ranking are consistent with human judgement overall. In the grammaticality category, monolingual distributional similarity re-ranking generally correlates stronger with human judgment than bilingual pivoting methods. For example, in the top panel, given a paraphrase table generated by bilingual pivoting method, Kendall's tau for monolingual distributional similarity metric (BiP-MonoDS) achieves 0.24 while that of the bilingual pivoting re-ranking (BiP) is only 0.04. Similarly, re-ranking of the paraphrases extracted with syntactically-constrained bilingual pivoting shows a stronger correlation between SyntBiP-MonoDS and human judgment (0.22) than the SyntBiP (0.08.) The rest of the table suggest likewise. This result further increases the confidence of distributional similarity in paraphrase re-ranking in terms of grammaticality as compared to bilingual pivoting metric. This can be explained by the fact the distance between two phrases in terms of contextual distribution defines the closeness between the associated syntactic structures, which is directly related to grammatical fluency.
 
-% both panels, meaning: Bi > Mono
+\mnote{meaning: BiP $>$ MonoDS in both panels} %%%
 In terms of meaning preservation, the Kendall's tau for MonoDS is mostly lower than the bilingual approaches, which implies paraphrase score as a function of translation probability from a bilingual approach maintain a better measure of phrasal meaning than monolingual paraphrase metric. For instance, with syntactic constraints, bilingual pivoting re-ranking reaches a Kendall's tau of 0.19, 0.04 higher than that of SyntBiP-MonoDS. Despite of the sharing of paraphrase candidates, distributional similarity assigns paraphrase scores depending on only contextual similarity, which does not guarantee the closeness of the context, i.e. meaning, of the phrases. On the contrary, bilingual pivoting quantifies quality of paraphrases based on likelihood the shared foreign translation, which inherently associates strongly with the meaning of the phrases.
 
-% both panels, Bi: Meaning > Grammar; Mono: Grammar > Meaning
+\mnote{BiP: Meaning $>$ Grammar; MonoDS: Grammar $>$ Meaning in both panels} %%%
 A interesting characteristics in the methods can be observed by comparing the coefficients within each row. In general, each row corresponds to the correlation between a particular re-ranking method to the meaning and grammar scores. In all of the bilingual pivoting approaches, Kendall's tau is higher in meaning preservation than grammaticality. For instance, SyntBiP has a Kendall's tau of 0.19 in meaning category, 0.11 higher than that in grammaticality. Contrastingly, distributional similarity metrics correlates more with the grammaticality, except for the case of matched syntactic type.     An example would be for BiP-MonoDS where it achieves a correlation value of 0.24 in the grammaticality but only a 0.14 with the meaning scores. Bilingual pivoting without additional constraints is known to produce paraphrases that has closer meaning to the original phrase as compared to grammaticality \cite{BannardCallisonBurch05}, whereas with the distributional similarity metric is known to group phrases into syntactic classes, with less emphasis on the relative meaning of phrases. This suggests that the orthogonal advantages of each re-ranking methods can potentially be exploited and combined to construct a more fitting paraphrase re-ranking metric.
 
-% Bi, Meaning: SyntBiP > BiP; Grammar: SyntBiPmatched > SyntBiP
+\mnote{BiP, Meaning: SyntBiP $>$ BiP; Grammar: SyntBiPmatched $>$ SyntBiP} %%%
 In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same syntactic type as the source phrase are included in the ranked list for Kendall's tau calculation. The same set of phrases that satisfies the syntactic type requirement is also used for calculations with the original re-ranking methods (labeled as SyntBiP* and SyntBiP-MonoDS* in the table.) Comparing only the bilingual methods across panels, syntactic matching definitely increases the correlation of bilingual pivoting metrics in grammaticality with human judgments (e.g. 0.15 for SyntBiP$_{matched}$ and 0.08 for SyntBiP) but with only minimal effects on meaning. The maximum values in the bottom panel for both categories are roughly the same as that in the corresponding category in the upper panel (\{0.21,0.19\} in meaning and \{0.22, 0.24\} in grammar for lower and upper panels, respectively.) This suggests that syntactic type matching offers only minor advantage when distributional similarity metric is used in conjunction of the bilingual approach, although it definitely help in grammaticality within purely bilingual pivoting re-ranking.
 
 The fact that meaning generally correlates less with any of the metrics than grammaticality can be partially explained by realizing that grammaticality is fairly rigidly defined whereas meaning is a subjective measure that varies across individuals and sentence context. As such, human judgement scores on meaning are subjected to more noise and inconsistency than grammar, which indirectly contribute to lower Kendall's tau coefficients.
@@ -260,8 +262,7 @@ The fact that meaning generally correlates less with any of the metrics than gra
 A similar analysis was performed by breaking up phrases into n-gram categories and the result, which is not included here, was close to the overall case where re-ranking scores based on bilingual pivoting have higher correlation in meaning and lower in grammar than those based on distributional similarity.
 
 
-
-%%%  effect of paraphrase candidate pool size
+\mnote{effect of paraphrase candidate pool sizes} %%%
 The effects from the paraphrase candidate pool sizes are illustrated in Table \ref{table7}. Both ranking metrics decrease gradually in correlation with human judgment in meaning as the number of available paraphrases grows. The same relationship occurs for BiP in the grammaticality but the Kendal's tau stays roughly the same, which implies that even at large numbers of paraphrase candidates, distributional similarity can serve as a metric   close to human judgment in ordering grammaticality.
 
 %%%%%%%%% table for pphrase size analysis, at MOST size N
@@ -289,7 +290,7 @@ The effects from the paraphrase candidate pool sizes are illustrated in Table \r
 % kTauPPsize_all_sorted: all Kendal Tau scores
 % cntPPsize_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
-% analysis on relationship between human judgment scores and LSH binning 
+\mnote{correlation between human judgment scores and LSH binning} %%%
 
 %%%%%%%%% table for LSH cutoff on average meaning and grammar analysis
 \begin{table}%[t!]
@@ -321,14 +322,16 @@ The effects from the paraphrase candidate pool sizes are illustrated in Table \r
 % kTauLSHCutoff_all_sorted: all Kendal Tau scores
 % cntLSHCutoff_all: all counts of sentID (i.e. phrase-sentence pair) used to calculate a particular kTau
 
-To verify whether scores of MonoDS via LSH correspond to human judgment of paraphrases, human evaluation scores are averaged for meaning and grammar within each range of approximate cosine distance, as shown in Table \ref{table9}. Similar to results in previous tables, scores are uniformly higher in grammar than meaning across all score bins. The averaged grammar scores decreases monotonically and proportionally to the change in LSH values, as expected from the previously discussion. With regard to meaning scores, the averaged values roughly correspond to the decrease of LSH values, implying distributional similarity correlates weakly to human judgment of the meaning preservation of paraphrase. 
+To verify whether scores of MonoDS via LSH correspond to human judgment of paraphrases, human evaluation scores are averaged for meaning and grammar within each range of approximate cosine distance, as shown in Table \ref{table9}. Supports are larger than 500 because different paraphrase candidates are also taken into account.
+
+Similar to results in previous tables, scores are uniformly higher in grammar than meaning across all score bins. The averaged grammar scores decreases monotonically and proportionally to the change in LSH values, as expected from the previously discussion. With regard to meaning scores, the averaged values roughly correspond to the decrease of LSH values, implying distributional similarity correlates weakly to human judgment of the meaning preservation of paraphrase. 
 
 Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x $>$ 0.95) to the second bin (0.95 $\geq$ x $>$ 0.9) is the largest within each category. For example, in the meaning category, while the score goes from 3.99 in the first bin to 3.17 in the second bin, the rest of the bins hovers around 3.20 in the following 6 bins. Similar trend can be observed in the grammar averaged scores as well. This suggests that high confidence in meaning and grammaticality can be associated with paraphrases that achieves LSH scores of 0.95 or above.
 
 %** top range: one bin on top way higher than the avg value in the lower bins (~3.20) = can be confident about paraphrase with above 0.95 (step function drop off after 0.05 from 1)
 
 
-% top K analysis
+\mnote{on top K analysis} %%%
 %@@ data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
 % graph of average topK w.r.t. K
@@ -342,7 +345,7 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 
 Since crowd-sourced human evaluation is known to be noisy, rather than examining the correlation using the entire ranked paraphrase lists, analyzing top K paraphrases as a function of K is another appropriate way to evaluate the goodness of different metrics. Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Due to different sizes of paraphrase pool for various phrases, the support of the averaged scores decreases from 500 to 100 as K increases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as K grows.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
 
-% max top K candidates
+\mnote{on max top K candidates}%%%
 In question answering applications such as search query, the order of answers presented is important because the lower an answer is ranked, the less likely it would be looked at or chosen, or, equivalently, more time would be spent to find an optimal answer. Based on this intuition, the paraphrase ranking methods are evaluated using the maximum human judgment score among the top K candidates obtained by each method. As shown in Table \ref{table10}, when only the top candidate is considered, the averaged score corresponding to the monolingual re-ranking methods are roughly the same as that to the bilingual methods in meaning, but as K grows, the bilingual methods outperforms the monolingual methods. In terms of grammaticality, scores associated with monolingual re-ranking methods are consistently higher than the bilingual methods but the difference tapers off as K increases. This suggests that when only limited top paraphrase candidates can be evaluated, MonoDS should guarantee better quality of results.
 
 %%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
@@ -485,34 +488,23 @@ An example in Table \ref{table6} compare the lists of top 10 re-ranked paraphras
 \end{table}
 
 
-
-
-
-
-
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusions and Future Work}
 In this paper, we have presented a novel paraphrase ranking metric that assigns confidence score to paraphrase candidates according to their monolingual distributional similarity to the original phrase. While bilingual pivoting-based paraphrase models provides wide coverage of paraphrase candidates and syntactic constraints on the model confines the structural match, additional contextual similarity information provided by monolingual semantic statistics increases the accuracy of paraphrase ranking within the target language. Reduction of storage and speed for distributional distributional features was achieved by LSH approximation of the feature vectors. Through the experimental study carried out on Mechanical Turk, it was shown that monolingual distributional score correlates strongly with human assessment of paraphrases in terms of grammaticality, yet have minimal effects on meaning preservation of paraphrases.
 
-While we speculated that MonoDS would improve both meaning and grammar scoring for paraphrases based on the fact that contextual similarity entails information in those dimensions, we found in the results that only grammaticality was benefited from the monolingual approach. This is likely due to the choice of contextual features, which in this case is only single neighboring word and contains very local information. A consideration for future work to enhance paraphrasal meaning preservation would be to explore other feature sets, such as syntactic dependency parsing as implemented by \newcite{}, increasing number of neighboring words in feature extraction.
+While we speculated that MonoDS would improve both meaning and grammar scoring for paraphrases based on the fact that contextual similarity entails information in those dimensions, we found in the results that only grammaticality was benefited from the monolingual approach. This is likely due to the choice of contextual features, which in this case is only single neighboring word that carry only local information. A consideration for future work to enhance paraphrasal meaning preservation would be to explore other feature sets, such as syntactic dependency parsing as implemented by \newcite{LinACL97}, mutual information between co-occurences of phrases with words similar to the work of \newcite{ChurchHanks91}, and increasing number of neighboring words in feature extraction.
 
-A main direction of future work is to take full advantage of the complementary knowledge of paraphrase selection in both bilingual and monolingual ranking schemes by combining the corresponding confidence measures along with other features such as n-gram length, language model scores, etc.. One approach would be to perform minimum error rate training similar to \newcite{ZhaoEtAlACL08} in which linear weights of a feature function for a set of paraphrases candidate are trained iteratively to minimize the phrasal-substitution-based error rate. Instead of phrasal substitution in Zhao's method, quantitative measure of correlation with human judgment can be used as the objective function to be optimized during training. Another technique for aggregating results from different methods is SVM-rank, which          to train a set of weights for ranks from each scoring method as a feature.... @@ 
+A main direction of future work is to take full advantage of the complementary knowledge of paraphrase selection in both bilingual and monolingual ranking schemes by combining the corresponding confidence measures along with other features such as n-gram length, language model scores, etc.. One approach would be to perform minimum error rate training similar to \newcite{ZhaoEtAlACL08} in which linear weights of a feature function for a set of paraphrases candidate are trained iteratively to minimize the phrasal-substitution-based error rate. Instead of phrasal substitution in Zhao's method, quantitative measure of correlation with human judgment can be used as the objective function to be optimized during training. Other techniques such as SVM-rank \cite{Joachims02} should also be investigated for aggregating results from multiple ranked lists. 
 
 %The translation score computed with syntactically constrained bilingual paraphrase model implicitly incorporates context dependency for paraphrases through parsing, whereas monolingual distributional similarity inherently lacks such information. One possible modification to the distributional similarity score would be to include the neighboring context in the LSH signature extraction. For example, the word immediately preceding the original phrase in a sentence can be used as the ``right context" concatenated to right-most 3-gram, or less, of the candidate paraphrase, of which a LSH signature can be computed. Similar procedure on the word following the phrase in the sentence would produce a ``left-context" LSH signature. These additional context-dependent features will likely improve the cosine similarity paraphrase ranking.
 
 % re-write the following paragraph: %%%%%%%%%%%%%%%%%%%%%% ================== < here
-Traditional methods for computing distributional similarity scores such as the induction process utilized by \newcite{PascaDienes05}, requires substantial computational storage for collecting contextual counts for each phrase in a large collection as well as the amount of time for computing the quantitative measure of paraphrases. As a result, scalability of these methods hinders paraphrase extraction on large data sets. In our study, monolingual distributional similarity is implemented via Locality Sensitive Hashing, which represents contextual features signatures in small dimensions allowing linear time computation of approximate cosine distance, and can update signature in an online fashion \cite{Charikar02, VanDurmeLallACL10}. This encourages future effort of extending the proposed method to very large sets of candidate paraphrases, as well as the establishing a large database of paraphrases and the corresponding distributional similarity signatures.
+Traditional methods for computing distributional similarity scores such as the induction process utilized by \newcite{PascaDienes05}, requires substantial computational storage for collecting contextual counts for each phrase in a large collection as well as the amount of time for computing the quantitative measure of paraphrases. As a result, scalability of these methods hinders paraphrase extraction on large data sets. In our study, monolingual distributional similarity is implemented via Locality Sensitive Hashing, which represents contextual features signatures in small dimensions allowing linear time computation of approximate cosine distance, and can update signature in an online fashion \cite{Charikar02,VanDurmeLallACL10}. This encourages future effort of extending the proposed method to very large sets of candidate paraphrases, as well as the establishing a large database of paraphrases and the corresponding distributional similarity signatures.
 
 Other future directions include examining the effect on paraphrases scores from an increased number of pivoting languages in the bilingual paraphrase model, eliminating the limitations imposed by the web-scale n-gram corpus on both the maximum length of phrase tokens and the sparsity of features for higher n-grams, training models with domain-specific corpora to extract distributional similarity signatures tailored for certain applications, and explore the possibility of augmenting the paraphrase extraction procedure to include monolingual features in order to alleviate the problems of misalignment.
 
 
-%@@ briefly mention applying LSH and tomb counter to reduce paraphrase error due to misalignment @@
+%@@ briefly mention applying LSH and tomb counter to reduce paraphrase error due to misalignment ?@@
 
 %@@ combination of difference score through minimum error rate training; should combine non-syntactically constrained model with LSH because hiero style provides larger coverage of candidate paraphrases and LSH can increase confidence in the ones that are more likely to be a good paraphrase, whereas syn-contrained model already throws out large number of candidates @@
 %@@ the success from pilot study encourages to move from only small amount of test phrases to a large scale evaluation on mechanical turk; maybe even evaluate effect (on coverage, performance, etc) the number of pivoting languages, which will potentially result in larger number of paraphrase candidates per phrase @@
