@@ -57,8 +57,10 @@ Paraphrases are the rewording of a phrase in which the meaning is preserved. Dat
 
 We exploit both types of data, applying a monolingually-derived similarity metric to the output of the pivot-based bilingual paraphrase model.  In this paper we:
 \begin{itemize}
-\item Show that monolingual cosine similarity calculated on large volumes texts ranks bilingually extracted paraphrases better than the paraphrase probability originally defined by \newcite{BannardCallisonBurch05}
-\item Something else
+\item Show that monolingual cosine similarity calculated on large volumes texts ranks bilingually extracted paraphrases better than the paraphrase probability originally defined by \newcite{BannardCallisonBurch05} in terms of grammaticality judgment.
+\item Demonstrate that monolingual distributional similarity can be implemented by Locality Sensitive Hashing, a computationally efficient approximation algorithm that has recently been extended to online signature generation \cite{Charikar02,VanDurmeLallACL10}
+\item Investigate and identify the strength and weaknesses of each method in order to combine the paraphrase ranking metrics in the future.
+\mnote{Something else?}
 \end{itemize}
 % Our work overlaps with their approach in the paraphrase generation with bilingual translation rules. However, instead of assigning paraphrase score based on phrase translation probabilities, we introduced a measure dependent on monolingual distributional similarity built upon large n-gram corpus. Locality sensitive hashing method of \newcite{Charikar02}, which has been recently extended to online signature generation by \newcite{VanDurmeLallACL10}, was implemented to enable faster computation by reducing the similarity feature space dimension with random projection. Descriptions on each stage of the process will be covered in the following sections, which are followed by examples and evaluation results.
 
@@ -95,8 +97,8 @@ where ${p(e_2|e_1)}$ is the paraphrase probability, ${p(e|f)}$ and ${p(f|e)}$ ar
 
 Anecdotally, this paraphrase probability sometimes seem unable discriminate between good and bad paraphrases, so some researchers disregard it and treat the extracted paraphrases as an unsorted set \cite{Snover2010}.  \newcite{CallisonBurch08} attempts to improve the ranking by limiting paraphrases to be the same syntactic type.  
 
-We attempt to re-rank the paraphrases using other information.  This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who ...
-
+We attempt to re-rank the paraphrases using other information. This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who made use of multiple resources %, namely the thesaurus, monolingual parallel corpus, monolingual comparable corpus, bilingual phrase table, dictionary definitions, clusters of similar user queries, and self paraphrase 
+to derive feature functions and extract paraphrase tables. Feature functions and the language model feature are combined with feature weights in a log-linear model. The paraphrase that maximizes the log-linear function is then selected as the optimal paraphrase. Feature weights are optimized by minimizing the phrase substitution error rate, an objective function proposed by the authors, on the development set using gradient descent. In our work, we examine how bilingual and monolingual re-ranking metric complement each other and explore the possibilities of robustly combining the two scores in the future.
 
 
 \begin{figure}
