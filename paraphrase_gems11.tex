@@ -256,7 +256,7 @@ The characteristics of each re-ranking method can be observed by comparing the c
 \mnote{BiP, Meaning: SyntBiP $>$ BiP; Grammar: SyntBiPmatched $>$ SyntBiP} %%%
 In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same syntactic type as the source phrase are included in the ranked list for Kendall's tau calculation. The phrases associated with these paraphrases are used for calculating Kendall's tau for the original re-ranking methods (labeled as SyntBiP* and SyntBiP-MonoDS*). Comparing only the bilingual methods across panels, syntactic matching definitely increases the correlation of bilingual pivoting metrics with human judgments in grammaticality (e.g. 0.15 for SyntBiP$_{matched}$ and 0.08 for SyntBiP) but with only minimal effects on meaning. The maximum values in the bottom panel for both categories are roughly the same as that in the corresponding category in the upper panel (\{0.21,0.19\} in meaning and \{0.22, 0.24\} in grammar for lower and upper panels, respectively.) This suggests that syntactic type matching offers only minor advantage when distributional similarity metric is used in conjunction with the bilingual approach, although it definitely help in grammaticality within purely bilingual pivoting re-ranking.
 
-It should not be too surprising that most of the re-ranking metric correlates less with meaning than grammar judgment because grammaticality is fairly rigidly defined whereas meaning is a subjective measure that varies among individuals and depending on sentence context. As such, human judgement scores on meaning are subjected to more noise and inconsistency, which indirectly contribute to lower Kendall's tau coefficients.
+It should not be surprising that most of the re-ranking metric correlates less with meaning than grammar judgment because grammaticality is fairly rigidly defined whereas meaning is a subjective measure that varies among individuals and depending on sentence context. As such, human judgement scores on meaning are subjected to more noise and inconsistency, which indirectly contribute to lower Kendall's tau coefficients.
 
 
 
@@ -349,49 +349,29 @@ Since crowd-sourced human evaluation is known to be noisy, rather than examining
 \mnote{on max top K candidates}%%%
 In question answering applications such as search query, the order of answers presented is important because the lower an answer is ranked, the less likely it would be looked at or chosen, or, equivalently, more time would be spent to find an optimal answer. Based on this intuition, the paraphrase ranking methods are evaluated using the maximum human judgment score among the top K candidates obtained by each method. As shown in Table \ref{table10}, when only the top candidate is considered, the averaged score corresponding to the monolingual re-ranking methods are roughly the same as that to the bilingual methods in meaning, but as K grows, the bilingual methods outperforms the monolingual methods. In terms of grammaticality, scores associated with monolingual re-ranking methods are consistently higher than the bilingual methods but the difference tapers off as K increases. This suggests that when only limited top paraphrase candidates can be evaluated, MonoDS should guarantee better quality of results.
 
-%%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
-\begin{table*}%[t!]
-\begin{center}
-\begin{tabular}{rccccccccc}%{|l|l|l|}
-\hline \hline & & \multicolumn{2}{c} {\footnotesize K = 1} &  \multicolumn{2}{c}{\footnotesize K = 3} &  \multicolumn{2}{c}{\footnotesize K= 5} &  \multicolumn{2}{c}{\footnotesize K = 10} \\
-\bf \scriptsize Re-ranking Method & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
-{\scriptsize BiP} & {\scriptsize 500} & {\scriptsize 3.62 } & {\scriptsize 3.83} & {\scriptsize 4.13} & {\scriptsize 4.22}  & {\scriptsize 4.26} & {\scriptsize 4.38} & {\scriptsize 4.39} & {\scriptsize 4.52}  \\
-{\scriptsize BiP-MonoDS} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 4.07} & {\scriptsize 4.45}  & {\scriptsize 4.19} & {\scriptsize 4.54} & {\scriptsize 4.30} & {\scriptsize 4.62}  \\
-{\scriptsize SyntBiP}& {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.04} & {\scriptsize 4.13} & {\scriptsize 4.47}  & {\scriptsize 4.20} & {\scriptsize 4.55} & {\scriptsize 4.25} & {\scriptsize 4.63} \\
-{\scriptsize SyntBiP-MonoDS} & {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.23} & {\scriptsize 4.01} & {\scriptsize 4.54}  & {\scriptsize 4.09} & {\scriptsize 4.62} & {\scriptsize 4.23} & {\scriptsize 4.67} \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
-\label{table10} 
-\end{table*}
-% variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
-
-
-
-fdasfds
 
 %%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
 \begin{table}%[t!]
 \begin{center}
-\begin{tabular}{cccc m{10mm} cc}%{|l|l|l|}
-\hline \hline & & & \multicolumn{4}{c} {\bf \scriptsize Re-ranking Method} \\
-& {\bf \scriptsize K} && {\scriptsize BiP} & {\scriptsize BiP-MonoDS} & {\scriptsize SyntBiP} & {\scriptsize SyntBiP-MonoDS} \\
+\begin{tabular}{ccc p{10mm} cp{10mm}}%{|l|l|l|}
+%{@{\extracolsep{\fill}}ccccccc}
+\hline \hline & &  \multicolumn{4}{c} {\bf \scriptsize Re-ranking Method} \\
+& {\bf \scriptsize K} & {\scriptsize BiP} & {\scriptsize BiP-MonoDS} & {\scriptsize SyntBiP} & {\scriptsize SyntBiP-MonoDS} \\
 \hline
-\multirow{4}{*}{\scriptsize 1} & \bf \scriptsize M & {\scriptsize 3.62 } & {\scriptsize 3.67} & {\scriptsize 3.58} & {\scriptsize 3.58}\\
-& {\scriptsize 1} & \bf \scriptsize G  & {\scriptsize 3.83} & {\scriptsize 4.11} & {\scriptsize 4.04}  & {\scriptsize 4.23}\\
-&{\scriptsize 3} & \bf \scriptsize M & {\scriptsize 4.13}  & {\scriptsize 4.07} & {\scriptsize 4.13} & {\scriptsize 4.01}\\
-&{\scriptsize 3} & \bf \scriptsize G & {\scriptsize 4.22} & {\scriptsize 4.45}  & {\scriptsize 4.47} & {\scriptsize 4.54}\\
+\multirow{4}{*}{\scriptsize M} &{\scriptsize 1} & {\scriptsize 3.62 } & \multicolumn{1}{c}{\scriptsize 3.67} & {\scriptsize 3.58} & {\scriptsize 3.58}\\
+&{\scriptsize 3} & {\scriptsize 4.13}  & \multicolumn{1}{c} {\scriptsize 4.07} & {\scriptsize 4.13} & {\scriptsize 4.01}\\
+&{\scriptsize 5} & {\scriptsize 4.26}   & \multicolumn{1}{c} {\scriptsize 4.19}  & {\scriptsize 4.20}  & {\scriptsize 4.09}\\
+&{\scriptsize 10} & {\scriptsize 4.39}   & \multicolumn{1}{c} {\scriptsize 4.30} & {\scriptsize 4.25} & {\scriptsize 4.23} \\
 \hline
-\multirow{4}{*}{\scriptsize 5} & \bf \scriptsize M & {\scriptsize 4.26}   & {\scriptsize 4.19}  & {\scriptsize 4.20}  & {\scriptsize 4.09}\\
-&{\scriptsize 5} & \bf \scriptsize G   & {\scriptsize 4.38} & {\scriptsize 4.54}& {\scriptsize 4.55}  & {\scriptsize 4.62} \\
-&{\scriptsize 10} & \bf \scriptsize M & {\scriptsize 4.39}   & {\scriptsize 4.30} & {\scriptsize 4.25} & {\scriptsize 4.23} \\
-&{\scriptsize 10} & \bf \scriptsize G & {\scriptsize 4.52} & {\scriptsize 4.62} & {\scriptsize 4.63} & {\scriptsize 4.67} \\
+\multirow{4}{*} {\scriptsize G} & \bf \scriptsize 1  & {\scriptsize 3.83} & \multicolumn{1}{c} {\scriptsize 4.11} & {\scriptsize 4.04}  & {\scriptsize 4.23}\\
+&{\scriptsize 3} & {\scriptsize 4.22} & \multicolumn{1}{c} {\scriptsize 4.45}  & {\scriptsize 4.47} & {\scriptsize 4.54}\\
+&{\scriptsize 5}  & {\scriptsize 4.38} & \multicolumn{1}{c} {\scriptsize 4.54}& {\scriptsize 4.55}  & {\scriptsize 4.62} \\
+&{\scriptsize 10} & {\scriptsize 4.52} & \multicolumn{1}{c} {\scriptsize 4.62} & {\scriptsize 4.63} & {\scriptsize 4.67} \\
 \hline
 \end{tabular}
 \end{center}
 \caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method, where the size of support for BiP and BiP-MonoDS is 500, for SyntBiP and SyntBiP-MonoDS is 335. (M = Meaning, G = Grammar) }
-\label{table14} 
+\label{table10} 
 \end{table}
 % variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
@@ -460,7 +440,7 @@ An example to illustrate the effect of using different corpora to train the 2 pa
 {\scriptsize \emph{to deal properly with, address}} & {\scriptsize 35} & {\scriptsize 1156253} & {\scriptsize 4.5} & {\scriptsize 5.5} & {\scriptsize 4} & {\scriptsize 29.5} \\
 {\scriptsize \emph{you have just stated, you have just suggested}} & {\scriptsize 31} & {\scriptsize 129614} & {\scriptsize 13.5} & {\scriptsize 8.5} & {\scriptsize 4} & {\scriptsize 30} \\
 {\scriptsize \emph{attackers, forwards on}} & {\scriptsize 34} & {\scriptsize 526677} & {\scriptsize 7.5} & {\scriptsize 6} & {\scriptsize 1} & {\scriptsize 33} \\
-{\scriptsize \emph{}} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
+%{\scriptsize \emph{}} & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } & {\scriptsize } \\
 \hline
 \end{tabular}
 \end{center}
@@ -500,8 +480,8 @@ An example in Table \ref{table6} compare the lists of top 10 re-ranked paraphras
 \begin{center}
 \begin{tabular}{lll}%{|l|l|l|}
 \hline\hline 
-\multicolumn{3}{c} {\bf \footnotesize \emph{reluctant}}\\ \hline
-\multicolumn{1}{c}{\bf \footnotesize MonoDS-alone} & \multicolumn{1}{c} {\bf \footnotesize BiP} \\ \hline
+\multicolumn{3}{c} {\bf \scriptsize \emph{reluctant}}\\ \hline
+\multicolumn{1}{c}{\bf \scriptsize MonoDS-alone} & \multicolumn{1}{c} {\bf \scriptsize BiP} \\ \hline
 {\scriptsize \emph{willing} (0.992)} & {\scriptsize \emph{not} (0.558)} & {\scriptsize } \\
 {\scriptsize \emph{loath} (0.983)} & {\scriptsize \emph{unwilling} (0.041)} & {\scriptsize } \\
 {\scriptsize \emph{eager} (0.98)}& {\scriptsize \emph{reluctance} (0.031)}& {\scriptsize } \\
@@ -856,4 +836,23 @@ Table \ref{tbl:table3} shows the Kendall's tau coefficients that quantifies the 
 
 % variable avgTopKmean in code, e.g. avgTopKmean[kTop]['meaning']['hiero']
 
+
+%%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
+% same as table10 but in different arrangements
+\begin{table*}%[t!]
+\begin{center}
+\begin{tabular}{rccccccccc}%{|l|l|l|}
+\hline \hline & & \multicolumn{2}{c} {\footnotesize K = 1} &  \multicolumn{2}{c}{\footnotesize K = 3} &  \multicolumn{2}{c}{\footnotesize K= 5} &  \multicolumn{2}{c}{\footnotesize K = 10} \\
+\bf \scriptsize Re-ranking Method & \bf \scriptsize S & \bf \scriptsize M & \bf \scriptsize G  & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize M & \bf \scriptsize G \\ \hline
+{\scriptsize BiP} & {\scriptsize 500} & {\scriptsize 3.62 } & {\scriptsize 3.83} & {\scriptsize 4.13} & {\scriptsize 4.22}  & {\scriptsize 4.26} & {\scriptsize 4.38} & {\scriptsize 4.39} & {\scriptsize 4.52}  \\
+{\scriptsize BiP-MonoDS} & {\scriptsize 500} & {\scriptsize 3.67} & {\scriptsize 4.11} & {\scriptsize 4.07} & {\scriptsize 4.45}  & {\scriptsize 4.19} & {\scriptsize 4.54} & {\scriptsize 4.30} & {\scriptsize 4.62}  \\
+{\scriptsize SyntBiP}& {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.04} & {\scriptsize 4.13} & {\scriptsize 4.47}  & {\scriptsize 4.20} & {\scriptsize 4.55} & {\scriptsize 4.25} & {\scriptsize 4.63} \\
+{\scriptsize SyntBiP-MonoDS} & {\scriptsize 335} & {\scriptsize 3.58} & {\scriptsize 4.23} & {\scriptsize 4.01} & {\scriptsize 4.54}  & {\scriptsize 4.09} & {\scriptsize 4.62} & {\scriptsize 4.23} & {\scriptsize 4.67} \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method (M = Meaning, G = Grammar,  S = Support) }
+\label{table14} 
+\end{table*}
+% variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
