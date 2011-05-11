@@ -1,12 +1,3 @@
-%
-% Adapted from File acl-hlt2011.tex
-%
-% Contact: gdzhou@suda.edu.cn
-%%
-%% Based on the style files for ACL2008 by Joakim Nivre and Noah Smith
-%% and that of ACL2010 by Jing-Shin Chang and Philipp Koehn
-
-
 \documentclass[11pt]{article}
 \usepackage{acl-hlt2011}
 \usepackage{times}
@@ -22,6 +13,8 @@
 \newcommand{\mnote}[1]{\marginpar{\raggedleft\footnotesize\itshape#1}} 
 
 \title{Paraphrase Acquisition Combining Monolingual and Bilingual Information}
+\title{Re-ranking Paraphrases Extracted from Bilingual Parallel Corpora \\ Using Monolingual Distributional Similarity}
+\title{Re-ranking Bilingually Extracted Paraphrases \\ Using Monolingual Distributional Similarity}
 
 %\author{First Author \\
 %  Affiliation / Address line 1 \\
@@ -39,7 +32,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This paper improves an existing bilingual paraphrase extraction technique using monolingual distributional similarity to re-rank candidate paraphrases.  Raw monolingual data  provides a complementary and orthogonal source of information that lessens the commonly observed errors in bilingual pivot-based methods. We incorporated a newly developed locality sensitive hashing algorithm into the monolingual score calculation in order to facilitate a practical implementation of this method over large volumes of data. Experimental study reveals that monolingual scoring of bilingually extracted paraphrases has a significantly stronger correlation with human judgment in grammaticality than the probabilities assigned by the bilingual pivoting method.
+This paper improves an existing bilingual paraphrase extraction technique using monolingual distributional similarity to re-rank candidate paraphrases.  Raw monolingual data  provides a complementary and orthogonal source of information that lessens the commonly observed errors in bilingual pivot-based methods. We incorporate a newly developed locality sensitive hashing algorithm into the monolingual score calculation in order to facilitate a practical implementation of this method over large volumes of data. Experimental study reveals that monolingual scoring of bilingually extracted paraphrases has a significantly stronger correlation with human judgment in grammaticality than the probabilities assigned by the bilingual pivoting method.
 
 %This shows promises in further improvement of paraphrase quality through merging of the variety of scores...@@
 
@@ -59,8 +52,7 @@ We exploit both types of data, applying a monolingually-derived similarity metri
 \begin{itemize}
 \item Show that monolingual cosine similarity calculated on large volumes texts ranks bilingually extracted paraphrases better than the paraphrase probability originally defined by \newcite{BannardCallisonBurch05} in terms of grammaticality judgment.
 \item Demonstrate that monolingual distributional similarity can be implemented by Locality Sensitive Hashing, a computationally efficient approximation algorithm that has recently been extended to online signature generation \cite{Charikar02,VanDurmeLallACL10}
-\item Investigate and identify the strength and weaknesses of each method in order to combine the paraphrase ranking metrics in the future.
-\mnote{Something else?}
+\item Investigate and identify the strength and weaknesses of scoring paraphrases using monolingual distributional similarity versus the bilingually calculated paraphrase probability, and suggest was of combining the different scores in the future.
 \end{itemize}
 % Our work overlaps with their approach in the paraphrase generation with bilingual translation rules. However, instead of assigning paraphrase score based on phrase translation probabilities, we introduced a measure dependent on monolingual distributional similarity built upon large n-gram corpus. Locality sensitive hashing method of \newcite{Charikar02}, which has been recently extended to online signature generation by \newcite{VanDurmeLallACL10}, was implemented to enable faster computation by reducing the similarity feature space dimension with random projection. Descriptions on each stage of the process will be covered in the following sections, which are followed by examples and evaluation results.
 
@@ -76,6 +68,8 @@ We exploit both types of data, applying a monolingually-derived similarity metri
 
 %\section{Multilingual Paraphrase Extraction via Pivoting}
 \section{Related Work}
+
+\subsection{Paraphrase Extraction from Bitexts}
 
  \newcite{BannardCallisonBurch05} proposed identifying paraphrases by pivoting through phrases in a bilingual parallel corpora. 
 Figure~\ref{paraphrase-illustration} illustrates their paraphrase extraction process. A phrase to be paraphrased, like {\it thrown into jail}, is found in a German-English parallel corpus.  The corresponding foreign phrase ({\it festgenommen}) is identified using word alignment and phrase extraction techniques from phrase-based statistical machine translation \cite{KoehnEtAl03}.  Other occurrences of the foreign phrase in the parallel corpus may align to another English phrases like {\it jailed}.  (similar to SAMT formalism developed by \newcite{ZollmannVenygopal06} )%Following \newcite{BannardCallisonBurch05}, we treated any English phrases that share a common foreign phrase as potential paraphrases of each other.
@@ -368,8 +362,6 @@ In question answering applications such as search query, the order of answers pr
 % variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
 
 
-
-fdasfds
 
 %%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
 \begin{table}%[t!]
