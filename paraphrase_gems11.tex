@@ -81,7 +81,7 @@ Bad paraphrases, such as
  {\it maltreated}, {\it thrown}, {\it cases}, {\it custody}, {\it arrest}, and {\it protection}, may also arise due to poor word alignment quality and other factors.
 
 \newcite{BannardCallisonBurch05} defined a paraphrase probability to rank these paraphrase candidates,  as follows:
-\begin{eqnarray} \label{paraphrase-prob-1}
+\begin{eqnarray} 
  \hat{e_2}	& = & \arg \max_{e_2 \neq e_1} p(e_2 | e_1)\label{paraphrase-prob}  \\
   p(e_2|e_1) &=& \sum_f p(e_2,f|e_1)\\
                   &=& \sum_f p(e_2|f,e_1) p(f|e_1) \\
@@ -107,7 +107,7 @@ to derive feature functions and extract paraphrase tables. The paraphrase that m
 
 %In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
 
-\subsection{Monolingual Distributional Similarity}
+\subsection{Monolingual Distributional Similarity}\label{section:monolingual-distributional-similarity}
 
 %\section{Confidence Measure based on Monolingual Distributional Similarity}
 %\section{Using Monolingual Resources}
@@ -132,43 +132,92 @@ Monolingual corpora  like the Google n-grams can be very large, so a variety of 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Evaluation}
-We evaluate the paraphrase confidence metrics by first demonstrating some paraphrase examples from a small preliminary study on bilingual pivoting paraphrase extraction and re-ranking methods. Next, we present the results from an experimental study, pivoting over a large French-English corpus, to qualitatively evaluate the correlation between each paraphrase scoring method and human judgments in terms of paraphrase grammaticality and meaning-preservation. %A more systematic analysis will then be presented in Section \ref{results_fr_en} through another experimental study  demonstrating the strengths and weaknesses of each method. 
+\section{Ranking Paraphrases}
 
-For presentation simplicity, monolingual distributional similarity via LSH, bilingual pivoting and syntactically-constrained bilingual pivoting are labeled throughout as MonoDS, BiP and SyntBiP, respectively. In terms of paraphrase extraction methods, bilingual pivoting (BiP) and syntactically-constrained bilingual pivoting (SyntBiP) re-ranking methods are assumed to operate on paraphrases extracted from the respective paraphrasing methods. For the monolingual distributional similarity (MonoDS) scores, the paraphrase extraction method is indicated by the prefix of the label, for example, BiP-MonoDS. Note that for Section \ref{sect:results_fr_en}, an additional re-ranking method denoted as SyntBiP$_{matched}$ is the same as SyntBiP except that only paraphrases with syntactic type matching that of the original phrase in a given sentence are included in the correlation calculation.
+We use several different methods to rank candidate sets of paraphrases that are extracted from bilingual parallel corpora.  Our three scoring methods are: 
+\begin{itemize}
+\item {\bf MonoDS} -- monolingual distributional similarity calculated over the Google n-gram corpus via LSH,
+%\footnote{We used a random values pool size of 10000 and 512 random projection vectors (i.e. bits) per n-gram are used for the task.Since the n-gram corpus consists of at most 5-gram and the each distributional similarity feature requires single neighboring token, the LSH signatures are generated only for phrases that are 4-gram or less. Phrase pairs with negative LSH scores, which indicate that the phrases are distributionally dissimilar in the feature space, are ignored in the analysis.}
+ as described in Section \ref{section:monolingual-distributional-similarity}
+\item {\bf BiP} -- bilingual pivoting is calculated as in Equation \ref{paraphrase_prob_eqn} following \newcite{BannardCallisonBurch05}.  The translation model probabilities are estimated from the  Europarl French-English parallel corpus \cite{Koehn05}.
+\item {\bf SyntBiP} -- syntactically-constrained bilingual pivoting.  This refinement to BiP, proposed in  \newcite{CallisonBurch08}, constrains paraphrases to be the same syntactic type as the original phrase.
+\end{itemize}
+When we use MonoDS to re-score a candidate set, we indicate which bilingual paraphrase extraction method was used to extract the candidates as prefix, as in {\bf BiP-MonoDS} or {\bf SyntBiP-MonoDS}.
+
+% Note that for Section \ref{sect:results_fr_en}, an additional re-ranking method denoted as SyntBiP$_{matched}$ is the same as SyntBiP except that only paraphrases with syntactic type matching that of the original phrase in a given sentence are included in the correlation calculation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Data}
+\subsection{Implementation Details}
 
-In the preliminary study, a bilingual paraphrase model was trained using the parallel corpus between Urdu and English from NIST 2009. This data set, which was collected from newswire and weblogs, consists of roughly 1.7 million words and 200K sentences in each language. The word alignments in this parallel corpus were generated with the Berkeley aligner and the English dataset was parsed using Stanford parser \cite{KleinManning03}. %\newcite{VanDurmeLallNIPS09}%VanDurmeLallACL10} \cite{}
+\mnote{todo clean up this section}
 
-For the experimental study in which human judgment was collected from the Mechanical Turk, the French-English parallel text from the Europarl corpus \cite{Koehn05} was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the European parliament with a total of over 1 million sentences and close to 100 million words in the English text. The rest of grammar extraction preprocessing follows the same procedure for the Urdu-English data. This bilingual corpus is a much larger data set and therefore is expected to provide larger coverage and more reasonable paraphrases.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Re-ranking Methods}
-In both experiments, the bilingual pivoting-based paraphrase models were adopted from the bilingual pivoting-based method in \newcite{BannardCallisonBurch05}, and the syntactically-constrained bilingual pivoting in \newcite{CallisonBurch08}. For the syntactically constrained paraphrase extraction, CCG-style notation for syntactic labeling \cite{Steedman99} was incorporated in order to reinforce syntactic type matching for paraphrases in the bilingual pivoting stage. Note that grammar rules from the translation models with non-terminal labels are excluded in paraphrase pivoting.
+ the French-English parallel text from the Europarl corpus \cite{Koehn05} was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the European parliament with a total of over 1 million sentences and close to 100 million words in the English text. Word alignments were generated with the Berkeley aligner.  
+\mnote{Say what the phrase extraction heuristics are}
+  For the SyntBiP, the English side of the parallel corpus was parsed using Stanford parser \cite{KleinManning03}. 
+For non-constituent phrases, CCG-style notation for syntactic labeling \cite{Steedman99} was incorporated in order to reinforce syntactic type matching for paraphrases in the bilingual pivoting stage. 
 
 %The Google N-gram Corpus (Brants and Franz, 2006) 
 The web-scale n-gram collection of \newcite{LinEtAlLREC10} was used to compute the monolingual distributional similarity features. A random values pool size of 10000 and 512 random projection vectors (i.e. bits) per n-gram are used for the task. In order to expand the coverage of the candidates scored by the monolingual method, the LSH signatures are obtained only for the phrases in the union set of the phrase-level outputs from the original and from the syntactically constrained paraphrase models. Since the n-gram corpus consists of at most 5-gram and the each distributional similarity feature requires single neighboring token, the LSH signatures are generated only for phrases that are 4-gram or less. Phrase pairs with negative LSH scores, which indicate that the phrases are distributionally dissimilar in the feature space, are ignored in the analysis.
 
-While the training data for the bilingual paraphrase models and the testing data for human evaluation come from the Europarl corpus in which the english structure follows the European parliament proceedings, the data for monolingual distributional similarity feature extractions comes from web-scale n-gram collection consisting of english text from diverse sources. As a result, language statistics from different data are involved in paraphrase selection based on bilingual pivoting followed by monolingual distributional similarity re-ranking.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Experimental Design}
-The experiments on human evaluation of confidence measures produced by bilingual- and monolingual-based paraphrase scores were performed through human intelligence tasks (HIT) on Amazon's Mechanical Turk in the context of paraphrase substitution. For each of the 4 n-gram category, 25 phrases are randomly sampled from the paraphrase table generated by the bilingual pivoting method. A phrase is selected according to the following requirements:
+\section{Human Evaluation}
+
+The different paraphrase scoring methods were quantitatively evaluated by calculating their correlation with human judgments.   
+
+
+
+Judges evaluated the paraphrase quality through a substitution test.  We selected a number of sentences
+\mnote{say how many?}
+ which contained each test phrase and substituted the phrase with automatically-generated paraphrases.   Judges indicated whether the paraphrases had the same meaning as the original and whether the resulting sentences were grammatical.  They assigned two values to each sentence using the 5-point scales given in Table \ref{annotation-guidelines}.  
+
+
+\begin{table}
+\begin{center}
+\small
+\begin{tabular}{lp{.87\linewidth}}
+\hline
+ \multicolumn{2}{|c|}{{\sc Meaning}} \\
+\hline
+5	&	All of the meaning of the original phrase is retained, and nothing is added\\
+4	&	The meaning of the original phrase is retained, although some additional information may be added but does not transform the meaning\\
+3	&	The meaning of the original phrase is retained, although some information may be deleted without too great a loss in the meaning\\
+2	&	Substantial amount of the meaning is different\\
+1	&	The paraphrase doesn't mean anything close to the original phrase\\
+\end{tabular}
+
+\begin{tabular}{cp{.87\linewidth}}
+\hline
+ \multicolumn{2}{|c|}{{\sc Grammar}} \\
+\hline
+5	&	The sentence with the paraphrase inserted is perfectly grammatical\\
+% and would require no correction\\
+4	&	The sentence is grammatical, but might sound slightly awkward\\
+3	&	The sentence has an agreement error (such as between its subject and verb, or between a plural noun and singular determiner)\\
+2	&	The sentence has multiple errors or omits words that would be required to make it grammatical\\
+1	&	The sentence is totally ungrammatical\\
+\end{tabular}
+\normalsize
+\end{center}
+\caption{Judges scored paraphrases with two 5-point scales.}\label{annotation-guidelines}  
+\end{table}
+
+We selected a total of 100 test phrases, which included 25 unigrams, 25 bigrams, 25 trigrams and 25 4-grams.  These  25 phrases were randomly sampled from the paraphrase table generated by the bilingual pivoting method, with the following restrictions: 
 
 \begin{itemize}
-\item Phrase occurs at least 5 times in the parallel corpus and has appeared in web-scale n-gram, i.e. contains a non-zero LSH signature
+\item The phrase must have occurred at least 5 times in the parallel corpus and must have appeared in web-scale n-gram
 \item There is at least 1 non-negative LSH score based on monolingual distributional similarity.
 \item The union of paraphrase candidates from BiP, SyntBiP and MonoDS must be greater than 10.
 \end{itemize}
 
-After a phrase is chosen, the union of the top paraphrase candidates from each method are used as the final paraphrase set. Five distinct sentences for each source phrase are sampled for constructing the HIT. Each HIT contains multiple sentences, each of which contains a phrase extracted as described. For every paraphrase candidate of a particular phrase, the phrase in the sentence is substituted in by its candidate. Sentences in a HIT are presented to a human judge along with the original context. For each sentence in the HIT, the judge is asked to use a 5-point grading scale to evaluate, in isolation, the extent of meaning-preservation and grammaticality of the paraphrase replacement, with 5 being the most favorable. Human evaluation of each sentence is repeated by multiple turkers (Mechanical Turk workers) and the averaged score for each phrase-paraphrase pair is subsequently used for analysis.
+Five distinct sentences for each source phrase were randomly sampled to capture the fact that paraphrases are valid in some contexts but not others. 
+%
+For each of the test phrases, the union of the top paraphrase candidates from each method are used as the final paraphrase set.\mnote{Charley -- can you be more precise here?}
+ 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Evaluation Metric}
-Evaluation on the correlation between the ranking according to each of the paraphrase scores and human judgment is based on Kendall's tau coefficient, a common measure of correlation between two ranked quantities. Given a set of elements ranked by 2 different metrics, one interpretation of Kendall's tau is the ratio of agreement in relative ranking in all possible pairs of values drawn from the set. Kendall's tau coefficient ranges between -1 and 1, where 1 indicates a perfect agreement between a pair of ranked lists. 
+\subsection{Calculating Correlation}
+Evaluation on the correlation between the ranking according to each of the paraphrase scores and human judgment is based on Kendall's tau coefficient, a common measure of correlation between two ranked lists. Kendall's tau coefficient ranges between -1 and 1, where 1 indicates a perfect agreement between a pair of ranked lists. 
 
 Kendall's tau b, a variant of Kendall's tau, accounts for tied ranking within a ranked list by simply ignoring counts of pairs with ties in the ratio. Since tied rankings sometimes occurs in human judgment results as well as all 3 re-ranking methods, Kendall's tau b is used in our analysis. An overall Kendall's tau coefficient presented in the results section is calculated by averaging all Kendall's tau coefficients of a particular re-ranking method over all phrase-sentence combinations.
 
@@ -861,3 +910,20 @@ Table \ref{tbl:table3} shows the Kendall's tau coefficients that quantifies the 
 % variable avgTopKmean in code, e.g. avgTopKmean[kTop]['meaning']['hiero']
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%
+%% Text removed by Chris for space
+%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Data}
+
+In the preliminary study, a bilingual paraphrase model was trained using the parallel corpus between Urdu and English from NIST 2009. This data set, which was collected from newswire and weblogs, consists of roughly 1.7 million words and 200K sentences in each language. The word alignments in this parallel corpus were generated with the Berkeley aligner and the English dataset was parsed using Stanford parser \cite{KleinManning03}. %\newcite{VanDurmeLallNIPS09}%VanDurmeLallACL10} \cite{}
+
+For the experimental study in which human judgment was collected from the Mechanical Turk, the French-English parallel text from the Europarl corpus \cite{Koehn05} was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the European parliament with a total of over 1 million sentences and close to 100 million words in the English text. The rest of grammar extraction preprocessing follows the same procedure for the Urdu-English data. This bilingual corpus is a much larger data set and therefore is expected to provide larger coverage and more reasonable paraphrases.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+While the training data for the bilingual paraphrase models and the testing data for human evaluation come from the Europarl corpus in which the english structure follows the European parliament proceedings, the data for monolingual distributional similarity feature extractions comes from web-scale n-gram collection consisting of english text from diverse sources. As a result, language statistics from different data are involved in paraphrase selection based on bilingual pivoting followed by monolingual distributional similarity re-ranking.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
