@@ -50,7 +50,7 @@ Paraphrases are the rewording of a phrase in which the meaning is preserved. Dat
 
 We exploit both types of data, applying a monolingually-derived similarity metric to the output of the pivot-based bilingual paraphrase model.  In this paper we:
 \begin{itemize}
-\item Show that monolingual cosine similarity calculated on large volumes texts ranks bilingually extracted paraphrases better than the paraphrase probability originally defined by \newcite{BannardCallisonBurch05} in terms of grammaticality judgment.
+\item Show that monolingual cosine similarity calculated on large volumes texts ranks bilingually extracted paraphrases better than the paraphrase probability originally defined by \newcite{BannardCallisonBurch05} in terms of grammaticality.
 \item Demonstrate that monolingual distributional similarity can be implemented by Locality Sensitive Hashing, a computationally efficient approximation algorithm that has recently been extended to online signature generation \cite{Charikar02,VanDurmeLallACL10}
 \item Investigate and identify the strength and weaknesses of scoring paraphrases using monolingual distributional similarity versus the bilingually calculated paraphrase probability, and suggest was of combining the different scores in the future.
 \end{itemize}
@@ -102,7 +102,10 @@ where ${p(e_2|e_1)}$ is the paraphrase probability, ${p(e|f)}$ and ${p(f|e)}$ ar
 Anecdotally, this paraphrase probability sometimes seems unable to discriminate between good and bad paraphrases, so some researchers disregard it and treat the extracted paraphrases as an unsorted set \cite{Snover2010}.  \newcite{CallisonBurch08} attempts to improve the ranking by limiting paraphrases to be the same syntactic type.  
 
 We attempt to re-rank the paraphrases using other information. This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who made use of multiple resources %, namely the thesaurus, monolingual parallel corpus, monolingual comparable corpus, bilingual phrase table, dictionary definitions, clusters of similar user queries, and self paraphrase 
-to derive feature functions and extract paraphrase tables. The paraphrase that maximizes the log-linear function, consisting of various feature functions, is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing a {\it phrase substitution error rate}, a measure proposed by the authors, on the development set using gradient descent. In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
+to derive feature functions and extract paraphrase tables. The paraphrase that maximizes the log-linear function, consisting of various feature functions, is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing a {\it phrase substitution error rate}, a measure proposed by the authors, on the development set.
+% using gradient descent. 
+
+%In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
 
 \subsection{Monolingual Distributional Similarity}
 
@@ -117,10 +120,10 @@ In these models, phrases are judged to be similar based on the cosine distance o
  In these models, \emph{apple} and \emph{orange} are similar because both tend to be one word to the right of \emph{an}, and one to the left of \emph{juice}.
 
 
-Here we derived distributional similarity through the use of the Google n-grams \cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by design), it was not feasible to parse, which led to the use of unigram contexts. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. 
+Here we calculate distributional similarity using the Google n-gram corpus \cite{GoogleNgrams}. Since the n-grams are sub-sentential (they are sequences of a most 5-grams), it was not feasible to parse  them. Therefore our contexts are based on surrounding words rather than syntactic relations. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. 
 
 
-Since monolingual text is available in very large quantities, a variety of methods have been used to scale to larger data sets \cite{IndykSTOC98}  and improve the speed of vector comparisons through lossy representations \cite{Charikar02}.  We build on the Locality Sensitive Hashing (LSH) work of  \newcite{BhagatRavichandran08}. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employed the online LSH approach of \newcite{VanDurmeLallACL10}.
+Monolingual corpora  like the Google n-grams can be very large, so a variety of methods have been developed to scale to these large data sets \cite{IndykSTOC98}  and to improve the speed of vector comparisons through lossy representations \cite{Charikar02} like Locality Sensitive Hashes  \cite{BhagatRavichandran08}. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employed the online LSH approach of \newcite{VanDurmeLallACL10}.
 
 
 %\section{Dimensionality Reduction via LSH}
