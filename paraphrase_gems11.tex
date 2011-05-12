@@ -192,7 +192,7 @@ The web-scale n-gram collection of \newcite{LinEtAlLREC10} was used to compute t
 The different paraphrase scoring methods were through a human evaluation.   
 %
 Judges evaluated the paraphrase quality through a substitution test.  We selected 500 sentences
- which contained 100 test phrase and substituted the phrase with automatically-generated paraphrases.   Judges indicated whether the paraphrases had the same meaning as the original and whether the resulting sentences were grammatical.  They assigned two values to each sentence using the 5-point scales given in Table \ref{annotation-guidelines}.  
+ which contained 100 test phrase and substituted the phrase with automatically-generated paraphrases.   Judges indicated whether the paraphrases had the same meaning as the original and whether the resulting sentences were grammatical.  They assigned two values to each sentence using the 5-point scales given in Table \ref{annotation-guidelines}.  \mnote{these guidelines can be dropped, in which case, just point to my EMNLP 2008 paper for the guidelines}
 
 
 \begin{table}
@@ -319,6 +319,15 @@ In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same synt
 
 \subsection{Thresholding Using MonoDS Scores}
 
+% graph of average topK w.r.t. K
+\begin{figure*}
+\begin{center}
+\includegraphics[width=0.78\linewidth]{meanTopK} %[width=\linewidth]
+\end{center}
+\caption{\small Mean score in the top K paraphrase candidates as a function of K for different re-ranking metrics}
+\label{fig_meanTopK}
+\end{figure*}
+
 To verify whether scores of MonoDS via LSH correspond to human judgment of paraphrases, human evaluation scores are averaged for meaning and grammar within each range of approximate cosine distance, as shown in Table \ref{table9}. Supports are larger than 500 because different paraphrase candidates are also taken into account.
 \mnote{Todo: could we generate a similar table to Table \ref{table9} for BiP and/or SyntBiP?  That might hit home the point that the paraphrase scores are bad for thresholding}
 
@@ -329,17 +338,9 @@ Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x
 %** top range: one bin on top way higher than the avg value in the lower bins (~3.20) = can be confident about paraphrase with above 0.95 (step function drop off after 0.05 from 1)
 
 
-\mnote{on top K analysis} %%%
-%@@ data is noisy (known fact from mTurk, cite), so kTau metric can be benefited if only topK candidates are used in the evaluation, however cutoff of K needs to be determined systematically/adaptively@@
 
-% graph of average topK w.r.t. K
-\begin{figure*}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{meanTopK} %[width=\linewidth]
-\end{center}
-\caption{\small Mean score in the top K paraphrase candidates as a function of K for different re-ranking metrics}
-\label{fig_meanTopK}
-\end{figure*}
+
+\subsection{Top K Analysis} %%%
 
 Figure \ref{fig_meanTopK} shows the mean human assigned score within the top K candidates averaged across all phrases. Due to different sizes of paraphrase pool for various phrases, the support of the averaged scores decreases from 500 to 100 as K increases. Compared across the categories, meaning scores have lower range of score and a more uniform trend of decreasing values as K grows.  In grammaticality, BiP clearly underperforms whereas the SyntBiP-MonoDS maintains the best score among all methods over all values of K. In addition, a slow dropoff up until K = 4 implies that quality of paraphrases remains relatively high going from top 1 to top 4 candidates.
 
@@ -366,39 +367,14 @@ In question answering applications such as search query, the order of answers pr
 
 
 
-%%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
-\begin{table}%[t!]
-\begin{center}
-\begin{tabular}{ccccp{10mm}cc}
-\hline \hline & & & \multicolumn{4}{c} {\bf \scriptsize Re-ranking Method} \\
-& {\bf \scriptsize K} && {\scriptsize BiP} & {\scriptsize BiP-MonoDS} & {\scriptsize SyntBiP} & {\scriptsize SyntBiP-MonoDS} \\
-\hline
-\multirow{4}{*}{\scriptsize 1} & \bf \scriptsize M & {\scriptsize 3.62 } & {\scriptsize 3.67} & {\scriptsize 3.58} & {\scriptsize 3.58}\\
-& {\scriptsize 1} & \bf \scriptsize G  & {\scriptsize 3.83} & {\scriptsize 4.11} & {\scriptsize 4.04}  & {\scriptsize 4.23}\\
-&{\scriptsize 3} & \bf \scriptsize M & {\scriptsize 4.13}  & {\scriptsize 4.07} & {\scriptsize 4.13} & {\scriptsize 4.01}\\
-&{\scriptsize 3} & \bf \scriptsize G & {\scriptsize 4.22} & {\scriptsize 4.45}  & {\scriptsize 4.47} & {\scriptsize 4.54}\\
-\hline
-\multirow{4}{*}{\scriptsize 5} & \bf \scriptsize M & {\scriptsize 4.26}   & {\scriptsize 4.19}  & {\scriptsize 4.20}  & {\scriptsize 4.09}\\
-&{\scriptsize 5} & \bf \scriptsize G   & {\scriptsize 4.38} & {\scriptsize 4.54}& {\scriptsize 4.55}  & {\scriptsize 4.62} \\
-&{\scriptsize 10} & \bf \scriptsize M & {\scriptsize 4.39}   & {\scriptsize 4.30} & {\scriptsize 4.25} & {\scriptsize 4.23} \\
-&{\scriptsize 10} & \bf \scriptsize G & {\scriptsize 4.52} & {\scriptsize 4.62} & {\scriptsize 4.63} & {\scriptsize 4.67} \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method, where the size of support for BiP and BiP-MonoDS is 500, for SyntBiP and SyntBiP-MonoDS is 335. (M = Meaning, G = Grammar) }
-\label{table14} 
-\end{table}
-% variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
-
-
-
-
 % @@ examples of LSH better than BiP @@
 \mnote{example of misalignment: 3 examples} %%%
 %- considerable changes    1069038 caused quite    1.0     1.0     21.5    1.0  (m:23)
 %- always declared 377087  always been     1.0     1.0     19.0    8.0 (m:20)
 %- significantly affected  10321   known   2.0     2.5     20.0    4.0 	(max 20)
 %@@ example for which LSH helping out Multilingual Pivoting when misalignment is severe (non-sense paraphrases) (1) cite ccb's ppr and mention well-known fact about aligner quality and direct deterioration propagation in pivoting-based (or any grammar-extraction-based method) paraphrase extraction and (2) *briefly* mention potentially incorporating of LSH and tomb counter in improving misalignments, for example, by counting whether aligned phrases co-occur frequent enough in corpus) @@
+
+\section{Detailed Examples}
 The examples in the top panel of Table \ref{table11} illustrates a few disadvantages of the bilingual paraphrase scores and how monolingual re-ranking complements the bilingual methods. Translation models based on bilingual corpora is known to suffer from misalignment of the parallel text \cite{BannardCallisonBurch05}, producing incorrect translations that propagate through in the paraphrase model. This issue is exemplified in the phrase pairs \{\emph{considerable changes, caused quite}\}, \{\emph{always declared, always been}\}, and \{\emph{significantly affected, known}\} listed Table \ref{table11}. The paraphrases are clearly unrelated to the corresponding phrases as evident from the low rankings from human judges. Nonetheless, they were included as candidates likely due to misalignment and were ranked relatively high by BiP metric. Note that in these cases LSH produces results that agrees with the meaning and grammar rankings.
 
 \mnote{example of LSH helping grammaticality}
@@ -948,4 +924,33 @@ A similar analysis was performed by breaking up phrases into n-gram categories a
 
 \mnote{effect of paraphrase candidate pool sizes} %%%
 The effects from the paraphrase candidate pool sizes are illustrated in Table \ref{table7}. Both ranking metrics decrease gradually in correlation with human judgment in meaning as the number of available paraphrases grows. The same relationship occurs for BiP in the grammaticality but the Kendal's tau stays roughly the same, which implies that even at large numbers of paraphrase candidates, distributional similarity can serve as a metric   close to human judgment in ordering grammaticality.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%% Average of **max** of Top K meaning and grammar for each re-ranking score 
+\begin{table}%[t!]
+\begin{center}
+\begin{tabular}{ccccp{10mm}cc}
+\hline \hline & & & \multicolumn{4}{c} {\bf \scriptsize Re-ranking Method} \\
+& {\bf \scriptsize K} && {\scriptsize BiP} & {\scriptsize BiP-MonoDS} & {\scriptsize SyntBiP} & {\scriptsize SyntBiP-MonoDS} \\
+\hline
+\multirow{4}{*}{\scriptsize 1} & & \bf \scriptsize  M & {\scriptsize 3.62 } & {\scriptsize 3.67} & {\scriptsize 3.58} & {\scriptsize 3.58}\\
+& {\scriptsize 1} & \bf \scriptsize G  & {\scriptsize 3.83} & {\scriptsize 4.11} & {\scriptsize 4.04}  & {\scriptsize 4.23}\\
+&{\scriptsize 3} & \bf \scriptsize M & {\scriptsize 4.13}  & {\scriptsize 4.07} & {\scriptsize 4.13} & {\scriptsize 4.01}\\
+&{\scriptsize 3} & \bf \scriptsize G & {\scriptsize 4.22} & {\scriptsize 4.45}  & {\scriptsize 4.47} & {\scriptsize 4.54}\\
+\hline
+\multirow{4}{*}{\scriptsize 5} & & \bf \scriptsize M & {\scriptsize 4.26}   & {\scriptsize 4.19}  & {\scriptsize 4.20}  & {\scriptsize 4.09}\\
+&{\scriptsize 5} & \bf \scriptsize G   & {\scriptsize 4.38} & {\scriptsize 4.54}& {\scriptsize 4.55}  & {\scriptsize 4.62} \\
+&{\scriptsize 10} & \bf \scriptsize M & {\scriptsize 4.39}   & {\scriptsize 4.30} & {\scriptsize 4.25} & {\scriptsize 4.23} \\
+&{\scriptsize 10} & \bf \scriptsize G & {\scriptsize 4.52} & {\scriptsize 4.62} & {\scriptsize 4.63} & {\scriptsize 4.67} \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Average of the maximum human evaluation score from top K candidates for each re-ranking method, where the size of support for BiP and BiP-MonoDS is 500, for SyntBiP and SyntBiP-MonoDS is 335. (M = Meaning, G = Grammar) }
+\label{table14} 
+\end{table}
+% variable avgTopK in code, e.g. avgTopK[kTop]['meaning']['hiero']
+
 
