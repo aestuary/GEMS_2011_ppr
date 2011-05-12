@@ -72,7 +72,8 @@ We exploit both types of data, applying a monolingually-derived similarity metri
 \subsection{Paraphrase Extraction from Bitexts}
 
  \newcite{BannardCallisonBurch05} proposed identifying paraphrases by pivoting through phrases in a bilingual parallel corpora. 
-Figure~\ref{paraphrase-illustration} illustrates their paraphrase extraction process. A phrase to be paraphrased, like {\it thrown into jail}, is found in a German-English parallel corpus.  The corresponding foreign phrase ({\it festgenommen}) is identified using word alignment and phrase extraction techniques from phrase-based statistical machine translation \cite{KoehnEtAl03}.  Other occurrences of the foreign phrase in the parallel corpus may align to another English phrases like {\it jailed}.  (similar to SAMT formalism developed by \newcite{ZollmannVenygopal06} )%Following \newcite{BannardCallisonBurch05}, we treated any English phrases that share a common foreign phrase as potential paraphrases of each other.
+Figure~\ref{paraphrase-illustration} illustrates their paraphrase extraction process. A phrase to be paraphrased, like {\it thrown into jail}, is found in a German-English parallel corpus.  The corresponding foreign phrase ({\it festgenommen}) is identified using word alignment and phrase extraction techniques from phrase-based statistical machine translation \cite{KoehnEtAl03}.  Other occurrences of the foreign phrase in the parallel corpus may align to another English phrases like {\it jailed}.  
+%Following \newcite{BannardCallisonBurch05}, we treated any English phrases that share a common foreign phrase as potential paraphrases of each other.
 %
 As the original phrase occurs several times and aligns with many different foreign phrases, each of these may align to a variety of other English paraphrases.  Thus, {\it thrown into jail} not only paraphrases as {\it jailed}, but also as {\it arrested}, {\it detained}, {\it imprisoned}, {\it incarcerated}, {\it locked up}, and so on.
 %{\it taken into custody}, and {\it thrown into prison} and others like {\it be thrown in prison}, {\it been thrown into jail}, {\it being arrested}, {\it in jail}, {\it in prison}, {\it put in prison for}, {\it were thrown into jail}, and {\it who are held in detention}. 
@@ -89,11 +90,6 @@ Bad paraphrases, such as
 \end{eqnarray}
 where ${p(e_2|e_1)}$ is the paraphrase probability, ${p(e|f)}$ and ${p(f|e)}$ are the translation probabilities from a statistical translation model.  
 
-Anecdotally, this paraphrase probability sometimes seems unable to discriminate between good and bad paraphrases, so some researchers disregard it and treat the extracted paraphrases as an unsorted set \cite{Snover2010}.  \newcite{CallisonBurch08} attempts to improve the ranking by limiting paraphrases to be the same syntactic type.  
-
-We attempt to re-rank the paraphrases using other information. This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who made use of multiple resources %, namely the thesaurus, monolingual parallel corpus, monolingual comparable corpus, bilingual phrase table, dictionary definitions, clusters of similar user queries, and self paraphrase 
-to derive feature functions and extract paraphrase tables. The paraphrase that maximizes the log-linear function, consisting of the feature functions and language model feature, is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing the phrase substitution error rate, a measure proposed by the authors, on the development set using gradient descent. In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
-
 
 \begin{figure}
 \begin{center}
@@ -103,15 +99,28 @@ to derive feature functions and extract paraphrase tables. The paraphrase that m
 \label{paraphrase-illustration}
 \end{figure}
 
+Anecdotally, this paraphrase probability sometimes seems unable to discriminate between good and bad paraphrases, so some researchers disregard it and treat the extracted paraphrases as an unsorted set \cite{Snover2010}.  \newcite{CallisonBurch08} attempts to improve the ranking by limiting paraphrases to be the same syntactic type.  
+
+We attempt to re-rank the paraphrases using other information. This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who made use of multiple resources %, namely the thesaurus, monolingual parallel corpus, monolingual comparable corpus, bilingual phrase table, dictionary definitions, clusters of similar user queries, and self paraphrase 
+to derive feature functions and extract paraphrase tables. The paraphrase that maximizes the log-linear function, consisting of various feature functions, is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing a {\it phrase substitution error rate}, a measure proposed by the authors, on the development set using gradient descent. In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
+
+\subsection{Monolingual Distributional Similarity}
+
 %\section{Confidence Measure based on Monolingual Distributional Similarity}
-\section{Using Monolingual Resources}
+%\section{Using Monolingual Resources}
 \label{sect:mds}
 
-Prior work has explored the acquisition of paraphrases using distributional similarity computed from monolingual resources, such as in the DIRT results of \newcite{Lin01discoveryof}. Later work by \newcite{BhagatRavichandran08}, building on an earlier effort in noun clustering \cite{ravichandranACL05}, leveraged the Locality Sensitive Hash (LSH) results of \newcite{Charikar02} and \newcite{IndykSTOC98} in order to scale the acquisition model to large datasets.
+Prior work has explored the acquisition of paraphrases using distributional similarity computed from monolingual resources, such as in the DIRT results of \newcite{Lin01discoveryof}.
+Other examples of monolingually-derived paraphrases include work on clustering similar nouns \cite{ravichandranACL05}.
 
-In these models, phrases are judged to be similar based on the cosine distance of their associated context vectors. In some cases, such as by Lin and Pantel, distributional context is defined as the frequency within which a given element appears in various syntactic positions with respect to other lexical items.\footnote{For example, the nouns \emph{apple} and \emph{orange} are contextually similar partly owing to their shared tendency to be the object of the verb \emph{eat}.} While syntactic contexts provide strong evidence of distributional preferences, they are relatively computationally expensive to come by, prompting the use instead of n-gram features when employing very large corpora (such as in the work of Bhagat and Ravichandran).\footnote{For example, \emph{apple} and \emph{orange} both tend to be one word to the right of \emph{an}, and one to the left of \emph{juice}.}
+In these models, phrases are judged to be similar based on the cosine distance of their associated context vectors. In some cases, such as by Lin and Pantel, distributional context is defined as the frequency within which a given element appears in various syntactic positions with respect to other lexical items. For example, the nouns \emph{apple} and \emph{orange} are contextually similar partly owing to their shared tendency to be the object of the verb \emph{eat}. While syntactic contexts provide strong evidence of distributional preferences, it is computationally expensive to parse very large corpora, so it is also common to represent context vectors with simpler representations like adjacent words and n-grams.
+ In these models, \emph{apple} and \emph{orange} are similar because both tend to be one word to the right of \emph{an}, and one to the left of \emph{juice}.
 
-Here we derived distributional similarity through the use of the Google n-grams \cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by design), it was not feasible to parse, which led to the use of unigram contexts. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employed the online LSH approach of \newcite{VanDurmeLallACL10}.
+
+Here we derived distributional similarity through the use of the Google n-grams \cite{GoogleNgrams}. Given both the size of the collection, and that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by design), it was not feasible to parse, which led to the use of unigram contexts. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. 
+
+
+Since monolingual text is available in very large quantities, a variety of methods have been used to scale to larger data sets \cite{IndykSTOC98}  and improve the speed of vector comparisons through lossy representations \cite{Charikar02}.  We build on the Locality Sensitive Hashing (LSH) work of  \newcite{BhagatRavichandran08}. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employed the online LSH approach of \newcite{VanDurmeLallACL10}.
 
 
 %\section{Dimensionality Reduction via LSH}
