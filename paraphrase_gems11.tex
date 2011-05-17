@@ -42,7 +42,7 @@ Our experiments reveal that monolingual scoring of bilingually extracted paraphr
 
 \section{Introduction}
 %\mnote{add back some details that were omitted due to acl short ppr constaint?}
-\mnote{note to self: revise according to notes from chris, ben and also in moleskin notebook}
+%\mnote{note to self: revise according to notes from chris, ben and also in moleskin notebook}
 Paraphrasing is the rewording of a phrase such that meaning is preserved. Data-driven paraphrase acquisition techniques can be categorized by the type of data that they use \cite{MadnaniDorr10}.  Monolingual paraphrasing techniques cluster phrases through statistical characteristics such as dependency path similarities or distributional co-occurrence information \cite{Lin01discoveryof,PascaDienes05}.   Bilingual paraphrasing techniques use parallel corpora extract potential paraphrases by grouping English phrases that share the same foreign translations \cite{BannardCallisonBurch05}.  Other efforts blur the lines between the two, applying techniques from statistical machine translation to monolingual data or extracting paraphrases from multiple English translations of the same foreign text \cite{Barzilay2001,PangEtAl03,QuirkDolanBrockett04}.
 
 %Although the knowledge used by monolingual and bilingual paraphrasing techniques is largely orthogonal, only limited effort has been devoted to merging the two lines of work to develop new methodologies and applications. For instance, word-alignment from parallel monolingual data was used to train a phrasal ``translation" model \cite{QuirkDolanBrockett04}; paraphrases extracted from output of SMT trained on bilingual text are incorporated into query expansion for answer retrieval \cite{RiezlerEtAl07}.
@@ -109,7 +109,6 @@ to derive feature functions and extract paraphrase tables. The paraphrase that m
 %In our work, we examine how bilingual and monolingual re-ranking metrics complement each other in order to effectively combine them.
 
 \subsection{Monolingual Distributional Similarity}\label{section:monolingual-distributional-similarity}
-1
 %\section{Confidence Measure based on Monolingual Distributional Similarity}
 %\section{Using Monolingual Resources}
 \label{sect:mds}
@@ -508,7 +507,7 @@ Compared across the two categories, meaning scores have lower range of score and
 \section{Detailed Examples}
 \mnote{need to make sure final formatting puts Table \ref{table11} to the beginning of Section 6}
 \subsection{MonoDS Filters Bad BiP Paraphrases}
-The examples in the top panel of Table \ref{table11} illustrates a few disadvantages of the bilingual paraphrase scores and how monolingual re-ranking complements the bilingual methods. Translation models based on bilingual corpora are known to suffer from misalignment of the parallel text \cite{BannardCallisonBurch05}, producing incorrect translations that propagate through in the paraphrase model. This issue is exemplified in the phrase pairs \{\emph{considerable changes, caused quite}\}, \{\emph{always declared, always been}\}, and \{\emph{significantly affected, known}\} listed Table \ref{table11}. The paraphrases are clearly unrelated to the corresponding phrases as evident from the low rankings from human judges. Nonetheless, they were included as candidates likely due to misalignment and were ranked relatively high by BiP metric. For example, \emph{considerable changes} was aligned to \emph{modifie consid{\'e}rablement} correctly, however, the French phrase was inaccurately matched with \emph{caused quite} by the aligner instead of \emph{caused quite ... new}, inducing the bad paraphrase. Note that in these cases LSH produces the results that agrees with the meaning and grammar rankings.
+The examples in the top panel of Table \ref{table11} illustrates a few disadvantages of the bilingual paraphrase scores and how monolingual re-ranking complements the bilingual methods. Translation models based on bilingual corpora are known to suffer from misalignment of the parallel text \cite{BannardCallisonBurch05}, producing incorrect translations that propagate through in the paraphrase model. This issue is exemplified in the phrase pairs \{\emph{considerable changes, caused quite}\}, \{\emph{always declared, always been}\}, and \{\emph{significantly affected, known}\} listed Table \ref{table11}. The paraphrases are clearly unrelated to the corresponding phrases as evident from the low rankings from human judges. Nonetheless, they were included as candidates likely due to misalignment and were ranked relatively high by BiP metric. For example, \emph{considerable changes} was aligned to \emph{modifie consid{\'e}rablement} correctly. However, due to a combination of loose translations and difficulty in aligning multiple words that are spread out in a sentence, the French phrase was inaccurately matched with \emph{caused quite} by the aligner, inducing a bad paraphrase. Note that in these cases LSH produces the results that agrees with the meaning and grammar rankings.
 
 
 %\mnote{example of LSH helping grammaticality}
@@ -546,7 +545,7 @@ An example to illustrate the effect of using different corpora to train the 2 pa
 
 
  
-\subsection{Limitations of MonoDS Implementation}\mnote{"Our MonoDS" in title changes it to 2 lines}
+\subsection{Limitations of MonoDS Implementation}%"Our MonoDS" in title changes it to 2 lines
 
 %\mnote{Additional of sources of error from LSH} %%%
 While the monolingual distributional similarity shows promise as a paraphrase ranking method, there are a number of additional drawbacks associated with the implementation.% through LSH. The process of obtaining counts from the n-gram corpus to construct the distributional feature vector requires traversing through the entire collection of N-grams, which takes a substantial amount of time. A revision of the algorithm to allow parallel processing can possibly alleviate such problem. Another issue is the tradeoff between the size of LSH signature vector and the consistency of approximated phrasal cosine distance over multiple repetitions of LSH extraction. While compactness of LSH features in terms of the the number of bits for each feature vector is desirable for computational speed and storage, it sacrifices the accuracy of the phrasal distributional similarity due the the fact that a smaller vector size translates to a greater dependency of the feature vector on the random seeds in the random projection. 
