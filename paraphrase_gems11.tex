@@ -351,7 +351,7 @@ In the bottom panel of Table \ref{tbl:table4}, only paraphrases of the same synt
 % for negative logarithmic BiP probabilities, see bottom of this doc
 \begin{table}%[t!] % original version with separate tables and for LSH with support are at the bottom of this doc
 \begin{center}
-\begin{tabular}{ccc|ccc}%{|l|l|l|} ################################### fill in table with results avgLSHgrammar and avgLSHmeaning
+\begin{tabular}{ccc|ccc}%{|l|l|l|}
 \hline \hline
 \multicolumn{3}{c|} {\bf \scriptsize BiP Paraphrase Score} & \multicolumn{3}{c} {\bf \scriptsize MonoDS LSH Score} \\
 \bf \scriptsize Region & \bf \scriptsize M & \bf \scriptsize G & \bf \scriptsize Region & \bf \scriptsize M & \bf \scriptsize G \\ \hline
@@ -378,17 +378,32 @@ MonoDS serves as much better thresholding score for extracting high precision pa
 % avgHmeaning: all avged meaning scores
 % cntAvgHmeaning: support ****
 
-%1.0
-%0.367879441171
-%0.135335283237
-%0.0497870683679
-%0.0183156388887
-%0.00673794699909
-%0.00247875217667
-%0.000911881965555
-%0.000335462627903
-%0.000123409804087
-%4.53999297625e-05
+
+%%%%%%%%% table for COMBINED threshold analysis with averaged meaning and grammar scores
+\begin{table}
+\begin{center}
+\begin{tabular}{c|ccc}
+\hline \hline
+{\bf \scriptsize BiP Paraphrase}& \multicolumn{3}{|c} {\bf \scriptsize MonoDS LSH Score} \\
+{\bf \scriptsize Score} & \scriptsize $\ge$ 0.05 & \scriptsize $\ge$ 0.01 & \scriptsize $\ge$ 6.7e-3 \\
+\hline
+\scriptsize $\ge$ 0.9 & \scriptsize 4.18/4.40 & \scriptsize 4.05/4.39 & \scriptsize 4.03/4.37\\
+\scriptsize $\ge$ 0.8 & \scriptsize 3.96/4.26 & \scriptsize 3.89/4.27 & \scriptsize 3.85/4.20\\
+\scriptsize $\ge$ 0.7 & \scriptsize 3.92/4.11 & \scriptsize  3.84/4.18 & \scriptsize 3.79/4.11\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Averaged human judgment scores (Meaning/Grammar) as a function of combined paraphrase and binned LSH score criteria.}
+\label{table9b}
+\end{table}
+%Supprt        0.05     0.01    0.0067
+%0.9	  	145      375      390
+%0.8	 	285      700      795
+%0.7	  	365      915      1095
+% variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
+% avgHLmeaning: all avged meaning scores
+% cntAvgHLmeaning: support ****
+
 
 
 One possible use for the paraphrase scores would be as a cutoff threshold where any paraphrases exceeding that value would be selected. Ideally, this would retain only high precision paraphrases.
