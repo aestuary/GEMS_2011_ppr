@@ -113,23 +113,48 @@ to derive feature functions and extract paraphrase tables. The paraphrase that m
 %\section{Using Monolingual Resources}
 \label{sect:mds}
 
-Prior work has explored the acquisition of paraphrases using distributional similarity computed from monolingual resources, such as in the DIRT results of \newcite{Lin01discoveryof}.
-Other examples of monolingually-derived paraphrases include work on clustering similar nouns \cite{ravichandranACL05}.
+Prior work has explored the acquisition of paraphrases using distributional
+similarity computed from monolingual resources, such as in the DIRT results of
+\newcite{Lin01discoveryof}. In these models, phrases are judged to be similar
+based on the cosine distance of their associated context vectors. In some cases,
+such as by Lin and Pantel, distributional context is defined as the frequency
+within which a given element appears in various syntactic positions with respect
+to other lexical items. For example, the nouns \emph{apple} and \emph{orange}
+are contextually similar partly owing to their shared tendency to be the object
+of the verb \emph{eat}. While syntactic contexts provide strong evidence of
+distributional preferences, it is computationally expensive to parse very large
+corpora, so it is also common to represent context vectors with simpler
+representations like adjacent words and n-grams \cite{ravichandranACL05}. In
+these models, \emph{apple} and \emph{orange} might be judged similar because
+both tend to be one word to the right of \emph{an}, and one to the left of
+\emph{juice}.
 
-In these models, phrases are judged to be similar based on the cosine distance of their associated context vectors. In some cases, such as by Lin and Pantel, distributional context is defined as the frequency within which a given element appears in various syntactic positions with respect to other lexical items. For example, the nouns \emph{apple} and \emph{orange} are contextually similar partly owing to their shared tendency to be the object of the verb \emph{eat}. While syntactic contexts provide strong evidence of distributional preferences, it is computationally expensive to parse very large corpora, so it is also common to represent context vectors with simpler representations like adjacent words and n-grams.
- In these models, \emph{apple} and \emph{orange} are similar because both tend to be one word to the right of \emph{an}, and one to the left of \emph{juice}.
+Here we calculate distributional similarity using a web-scale n-gram corpus
+\cite{GoogleNgrams,LinEtAlLREC10}. Given both the size of the collection, and
+that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by
+design), it was not feasible to parse, which led to the use of unigram contexts.
+For each phrase $x$ we wished to paraphrase, we extracted the context vector of
+$x$ from the n-gram collection as such: every (n-gram, frequency) pair of the
+form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair:
+($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. In order to scale to this
+size of a collection, we relied on Locality Sensitive Hashing (LSH), as was done
+previously by \newcite{ravichandranACL05} and \newcite{BhagatRavichandran08}. To
+avoid computing feature vectors explicitly, which can be a memory intensive
+bottleneck, we employed the online LSH variant described by
+\newcite{VanDurmeLallACL10}.
 
-
-Here we calculate distributional similarity using the web-scale n-gram corpus \cite{GoogleNgrams,LinEtAlLREC10}. Since the n-grams are sub-sentential (they are sequences of a most 5-grams), it was not feasible to parse  them. Therefore our contexts are based on surrounding words rather than syntactic relations. For each phrase $x$ we wished to paraphrase, we extracted the context vector of $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair: ($w_{i-1}=a, f$), or ($w_{i+1}=b, f$), respectively. 
-
-
-Monolingual corpora  like the Google n-grams can be very large, so a variety of methods have been developed to scale to these large data sets \cite{IndykSTOC98}  and to improve the speed of vector comparisons through lossy representations \cite{Charikar02} like Locality Sensitive Hashes  \cite{BhagatRavichandran08}. In order to avoid storing each context vector explicitly, and to enable faster cosine comparisons, we employ the online LSH approach of \newcite{VanDurmeLallACL10}.
-
-
-%\section{Dimensionality Reduction via LSH}
-%\label{sect:lsh}
-
-
+This method, based on the earlier work of \newcite{IndykSTOC98} and
+\newcite{Charikar02}, approximates the cosine similarity between two feature
+vectors based on the Hamming distance in a reduced bit-wise representation. In
+brief, for the feature vectors $\vec{u}$, $\vec{v}$, each of dimension $d$, then
+the cosine similarity is defined as: $\frac{\vec{u} \cdot
+  \vec{v}}{|\vec{u}||\vec{v}|}$. If we \emph{project} $\vec{u}$ and $\vec{v}$
+through a $d$ by $b$ random matrix populated with draws from $N(0,1)$, then we
+convert our feature vectors to \emph{bit signatures} of length $b$, by setting
+each bit of the signature conditioned on whether or not the respective projected
+value is greater than or equal to 0. Given the bit signatures $h(\vec{u})$ and
+$h(\vec{v})$, we approximate cosine with the formula:
+$\cos(\frac{D(h(\vec{u}),h(\vec{v}))}{b}\pi)$, where $D()$ is Hamming distance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ranking Paraphrases}
@@ -226,7 +251,15 @@ Table~\ref{table2} shows the paraphrase candidates for the phrase {\em huge amou
 
 \subsection{BiP Helps MonoDS by Filtering Antonyms}%BiP Filters Antonyms for MonoDS}%Main MonoDS Drawback Lessened by BiP}
 
-Monolingual distributional similarity is widely known to conflate words with opposite meaning and has motivated a large body of prior work on antonym detection \cite{Lin01discoveryof,MohammadEtAl08,Mohammad_multiplealternative08,MarneffeFindingcontradictions08,Voorhees08}. Antonyms of a phrase are mostly filtered out in the pivoting step of the BiP methods since they tend not to share the same foreign translation. As such, applying MonoDS re-ranking on paraphrase candidates extracted by BiP methods can considerably enhance the quality of ranking.
+Monolingual distributional similarity is widely known to conflate words with
+opposite meaning and has motivated a large body of prior work on antonym
+detection
+\cite{Lin01discoveryof,MohammadEtAl08,Mohammad_multiplealternative08,MarneffeFindingcontradictions08,Voorhees08}.
+But since they tend not to share the same foreign translation, then antonyms of
+a phrase are rarely produced in the pivoting step of the BiP methods. As such,
+applying MonoDS \emph{re-ranking} on paraphrase candidates extracted by BiP
+methods can considerably enhance the quality of ranking, while sidestepping the
+antonym problem that arises from using MonoDS alone.
 
 A hand-crafted example of top 10 paraphrase list generated by each re-ranking methods is shown in Table \ref{table6}. Hand-selected antonyms of \emph{reluctant} are inserted to the paraphrase candidates extracted by BiP before they are re-ranked by MonoDS. This is analogous to the case without pre-filtering of paraphrases by BiP and that all phrases are treated equally by MonoDS alone. BiP cannot rank these hand-selected paraphrases because, by construction, they do not share any foreign translation and hence their paraphrase scores are not defined. As expected from the drawbacks of monolingual-based statistics, the terms \emph{willing} and \emph{eager} are assigned top scores by MonoDS as listed in Table \ref{table6}, although good paraphrases such as \emph{somewhat reluctant}, \emph{disinclined} are also ranked highly in the list. This example illustrates how BiP complements the monolingual re-ranking technique by providing orthogonal information to address the issue of antonyms for MonoDS.
 
@@ -253,7 +286,18 @@ THRAX extracts phrase pairs that are labeled with complex syntactic labels follo
 %CCG-style notation for syntactic labeling \cite{Steedman99} was incorporated in order to reinforce syntactic type matching for paraphrases in the bilingual pivoting stage. 
 
 %The Google N-gram Corpus (Brants and Franz, 2006) 
-For MonoDS, the web-scale n-gram collection of \newcite{LinEtAlLREC10} was used to compute the monolingual distributional similarity features. A random values pool size of 10000 and 512 random projection vectors (i.e. bits) per n-gram are used for the task. In order to expand the coverage of the candidates scored by the monolingual method, the LSH signatures are obtained only for the phrases in the union set of the phrase-level outputs from the original and from the syntactically constrained paraphrase models. Since the n-gram corpus consists of at most 5-gram and the each distributional similarity feature requires a single neighboring token, the LSH signatures are generated only for phrases that are 4-gram or less. Phrases that didn't appear in the n-grams width at least one feature were discarded.
+For MonoDS, the web-scale n-gram collection of \newcite{LinEtAlLREC10} was used
+to compute the monolingual distributional similarity features, using 512 bits
+per signature in the resultant LSH projection. Following
+\newcite{VanDurmeLallACL10}, we implicitly represented the projection matrix
+with a \emph{pool} of size 10,000. In order to expand the coverage of the
+candidates scored by the monolingual method, the LSH signatures are obtained
+only for the phrases in the union set of the phrase-level outputs from the
+original and from the syntactically constrained paraphrase models. Since the
+n-gram corpus consists of at most 5-gram and the each distributional similarity
+feature requires a single neighboring token, the LSH signatures are generated
+only for phrases that are 4-gram or less. Phrases that didn't appear in the
+n-grams width at least one feature were discarded.
 
 
 
@@ -561,7 +605,16 @@ Another example of how data sparsity affects LSH feature vectors is the phrase \
 We have presented a novel paraphrase ranking metric that assigns a score to paraphrase candidates according to their monolingual distributional similarity to the original phrase. While bilingual pivoting-based paraphrase models provides wide coverage of paraphrase candidates and syntactic constraints on the model confines the structural match, additional contextual similarity information provided by monolingual semantic statistics increases the accuracy of paraphrase ranking within the target language. %Reduction of storage and speed gain for distributional features was achieved by LSH approximation of the feature vectors. 
 Through a manual evaluation, it was shown that monolingual distributional score strongly correlates with human assessment of paraphrase quality in terms of grammaticality, yet has minimal effects on meaning preservation of paraphrases.
 
-While we speculated that MonoDS would improve both meaning and grammar scoring for paraphrases based on the fact that contextual similarity entails information in those dimensions, we found in the results that only grammaticality was improved from the monolingual approach. This is likely due to the choice of how context is represented, which in this case is only single neighboring words. A consideration for future work to enhance paraphrasal meaning preservation would be to explore other contextual representations, such as syntactic dependency parsing as implemented by \newcite{LinACL97}, mutual information between co-occurences of phrases with words similar to the work of \newcite{ChurchHanks91}, or increasing number of neighboring words used in n-gram based representations like ours.
+While we speculated that MonoDS would improve both meaning and grammar scoring
+for paraphrases based on the fact that contextual similarity entails information
+in those dimensions, we found in the results that only grammaticality was
+improved from the monolingual approach. This is likely due to the choice of how
+context is represented, which in this case is only single neighboring words. A
+consideration for future work to enhance paraphrasal meaning preservation would
+be to explore other contextual representations, such as syntactic dependency
+parsing \cite{LinACL97}, mutual information between co-occurences of phrases
+\newcite{ChurchHanks91}, or increasing number of neighboring words used in
+n-gram based representations like ours.
 
 A main direction of future work is to take full advantage of the complementary knowledge of paraphrase selection in both bilingual and monolingual ranking schemes by combining the corresponding confidence measures along with other features such as n-gram length, language model scores, etc. One approach would be to perform minimum error rate training similar to \newcite{ZhaoEtAlACL08} in which linear weights of a feature function for a set of paraphrases candidate are trained iteratively to minimize the phrasal-substitution-based error rate. Instead of phrasal substitution in Zhao's method, quantitative measure of correlation with human judgment can be used as the objective function to be optimized during training. Other techniques such as SVM-rank \cite{Joachims02} should also be investigated for aggregating results from multiple ranked lists. 
 
