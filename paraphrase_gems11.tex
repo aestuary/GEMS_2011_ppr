@@ -117,12 +117,15 @@ Prior work has explored the acquisition of paraphrases using distributional
 similarity computed from monolingual resources, such as in the DIRT results of
 \newcite{Lin01discoveryof}. In these models, phrases are judged to be similar
 based on the cosine distance of their associated context vectors. In some cases,
-such as by Lin and Pantel, distributional context is defined using frequencies of words appearing in various syntactic relations with other lexical items. For example, the nouns \emph{apple} and \emph{orange}
-are contextually similar partly because they both often appear as the object
-of the verb \emph{eat}. While syntactic contexts provide strong evidence of
-distributional preferences, it is computationally expensive to parse very large
-corpora, so it is also common to represent context vectors with simpler
-representations like adjacent words and n-grams \cite{ravichandranACL05}. In
+such as by Lin and Pantel, or the seminal work of \newcite{ChurchHanks91},
+distributional context is defined using frequencies of words appearing in
+various syntactic relations with other lexical items. For example, the nouns
+\emph{apple} and \emph{orange} are contextually similar partly because they both
+often appear as the object of the verb \emph{eat}. While syntactic contexts
+provide strong evidence of distributional preferences, it is computationally
+expensive to parse very large corpora, so it is also common to represent context
+vectors with simpler representations like adjacent words and n-grams
+\cite{ChurchHanks91,LapataKellerSaLP05,BhagatRavichandran08,Bergsma:09,VanDurmeLallACL10}. In
 these models, \emph{apple} and \emph{orange} might be judged similar because
 both tend to be one word to the right of \emph{an}, and one to the left of
 \emph{juice}.
