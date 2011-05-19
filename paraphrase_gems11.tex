@@ -117,10 +117,8 @@ Prior work has explored the acquisition of paraphrases using distributional
 similarity computed from monolingual resources, such as in the DIRT results of
 \newcite{Lin01discoveryof}. In these models, phrases are judged to be similar
 based on the cosine distance of their associated context vectors. In some cases,
-such as by Lin and Pantel, distributional context is defined as the frequency
-within which a given element appears in various syntactic positions with respect
-to other lexical items. For example, the nouns \emph{apple} and \emph{orange}
-are contextually similar partly owing to their shared tendency to be the object
+such as by Lin and Pantel, distributional context is defined using frequencies of words appearing in various syntactic relations with other lexical items. For example, the nouns \emph{apple} and \emph{orange}
+are contextually similar partly because they both often appear as the object
 of the verb \emph{eat}. While syntactic contexts provide strong evidence of
 distributional preferences, it is computationally expensive to parse very large
 corpora, so it is also common to represent context vectors with simpler
@@ -132,7 +130,7 @@ both tend to be one word to the right of \emph{an}, and one to the left of
 Here we calculate distributional similarity using a web-scale n-gram corpus
 \cite{GoogleNgrams,LinEtAlLREC10}. Given both the size of the collection, and
 that the n-grams are sub-sentential (the n-grams are no longer than 5 tokens by
-design), it was not feasible to parse, which led to the use of unigram contexts.
+design), it was not feasible to parse, which led to the use of n-gram contexts.  Here we use adjacent unigrams.
 For each phrase $x$ we wished to paraphrase, we extracted the context vector of
 $x$ from the n-gram collection as such: every (n-gram, frequency) pair of the
 form: ($a x$, $f$), or ($x b$, $f$), gave rise to the (feature, value) pair:
@@ -352,7 +350,7 @@ Since tied rankings occur in the human judgments and re-ranking methods, Kendall
 \hline
 \end{tabular}
 \end{center}
-\caption{Kendall Tau's rank correlation coefficients between human judgment of meaning and grammaticality for the different paraphrase scoring methods. Bottom panel: SyntBiP$_{matched}$ is the same as SyntBiP except paraphrases must match with the original phrase in syntactic type. SyntBiP* and MonoDS* are the same as before except they share the same phrase support with SyntBiP$_{matched}$.}
+\caption{Kendall's Tau rank correlation coefficients between human judgment of meaning and grammaticality for the different paraphrase scoring methods. Bottom panel: SyntBiP$_{matched}$ is the same as SyntBiP except paraphrases must match with the original phrase in syntactic type. SyntBiP* and MonoDS* are the same as before except they share the same phrase support with SyntBiP$_{matched}$.}
 \label{tbl:table4} 
 \end{table}
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
@@ -432,27 +430,22 @@ To verify whether scores from each method correspond to human judgments for para
 
 Observe that for the BiP paraphrase scores on the left panel, no trend on the averaged grammar scores across all score bins is present. While a mild correlation exists between the averaged meaning scores and the paraphrase scores, the top score region (1$>$ x $\ge$ 0) corresponds to merely an averaged value of 3.58 on a 5-point scale. Therefore, thresholding on paraphrase scores among a set of candidates would not guarantee accurate paraphrases in grammar or meaning.
 
-On the right panel, MonoDS LSH scores on paraphrase candidates produced by BiP are uniformly higher in grammar than meaning across all score bins, similar to the correlation results in Table \ref{tbl:table4}. The averaged grammar scores decreases monotonically and proportionally to the change in LSH values. With regard to meaning scores, the averaged values roughly correspond to the decrease of LSH values, implying distributional similarity correlates weakly with human judgment in the meaning preservation of paraphrase. Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x $>$ 0.95) to the second bin (0.95 $\geq$ x $>$ 0.9) is the largest within both meaning and grammar. %For example, in the meaning category, while the score goes from 3.99 in the first bin to 3.17 in the second bin, the rest of the bins hovers around 3.20 in the following 6 bins. A similar trend can be observed in the grammar averaged scores as well. 
-\textbf{This suggests that thresholding on top tiered LSH scores can be a good filter for extracting high precision paraphrases.} BiP scores, by comparison, are not as useful for thresholding grammaticality. 
-%This confirms the observations by \newcite{Snover2010}.
-
-
 
 %%%%%%%%% table for COMBINED threshold analysis with averaged meaning and grammar scores
 \begin{table}
 \begin{center}
 \begin{tabular}{c|ccc}
 \hline \hline
-{\bf \scriptsize MonoDS }& \multicolumn{3}{|c} {\bf \scriptsize BiP Paraphrase Score} \\
-{\bf \scriptsize LSH Score} & \scriptsize $\ge$ 0.05 & \scriptsize $\ge$ 0.01 & \scriptsize $\ge$ 6.7e-3 \\
+{\bf \scriptsize MonoDS LSH }& \multicolumn{3}{|c} {\bf \scriptsize BiP Paraphrase Threshold} \\
+{\bf \scriptsize Threshold} & \scriptsize $\ge$ 0.05 & \scriptsize $\ge$ 0.01 & \scriptsize $\ge$ 6.7e-3 \\
 \hline
-\scriptsize $\ge$ 0.9 & \scriptsize 4.18/4.40 & \scriptsize 4.05/4.39 & \scriptsize 4.03/4.37\\
-\scriptsize $\ge$ 0.8 & \scriptsize 3.96/4.26 & \scriptsize 3.89/4.27 & \scriptsize 3.85/4.20\\
-\scriptsize $\ge$ 0.7 & \scriptsize 3.92/4.11 & \scriptsize  3.84/4.18 & \scriptsize 3.79/4.11\\
+\scriptsize $\ge$ 0.9 & \scriptsize 4.2 / 4.4 & \scriptsize 4.1 / 4.4 & \scriptsize 4.0 / 4.4\\
+\scriptsize $\ge$ 0.8 & \scriptsize 4.0 / 4.3 & \scriptsize 3.9 / 4.3 & \scriptsize 3.9 / 4.2\\
+\scriptsize $\ge$ 0.7 & \scriptsize 3.9 / 4.1 & \scriptsize  3.8 / 4.2 & \scriptsize 3.8 / 4.1\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Averaged human judgment scores (Meaning/Grammar) as a function of combined paraphrase and binned LSH score criteria.}
+\caption{Thresholding using both the MonoDS and BiP scores further improves the average human judgment of Meaning / Grammar.}
 \label{table9b}
 \end{table}
 %Supprt        0.05     0.01    0.0067
@@ -466,6 +459,9 @@ On the right panel, MonoDS LSH scores on paraphrase candidates produced by BiP a
 
 
 
+On the right panel, MonoDS LSH scores on paraphrase candidates produced by BiP are uniformly higher in grammar than meaning across all score bins, similar to the correlation results in Table \ref{tbl:table4}. The averaged grammar scores decreases monotonically and proportionally to the change in LSH values. With regard to meaning scores, the averaged values roughly correspond to the decrease of LSH values, implying distributional similarity correlates weakly with human judgment in the meaning preservation of paraphrase. Note that the drop in averaged scores is the largest from the top bin (1$\geq$ x $>$ 0.95) to the second bin (0.95 $\geq$ x $>$ 0.9) is the largest within both meaning and grammar. %For example, in the meaning category, while the score goes from 3.99 in the first bin to 3.17 in the second bin, the rest of the bins hovers around 3.20 in the following 6 bins. A similar trend can be observed in the grammar averaged scores as well. 
+\textbf{This suggests that thresholding on top tiered LSH scores can be a good filter for extracting high precision paraphrases.} BiP scores, by comparison, are not as useful for thresholding grammaticality. 
+%This confirms the observations by \newcite{Snover2010}.
 
 
 \subsection{Top K Analysis} %%%
