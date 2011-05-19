@@ -342,9 +342,9 @@ Since tied rankings occur in the human judgments and re-ranking methods, Kendall
 \begin{tabular}{rcc}%{|l|l|l|}
 \hline\hline \bf \footnotesize Re-ranking Method & \bf \footnotesize Meaning & \bf \footnotesize Grammar \\ \hline
 {\scriptsize BiP} & {\scriptsize 0.14} & {\scriptsize 0.04} \\
-{\scriptsize BiP-MonoDS} & {\scriptsize 0.14} & {\scriptsize \bf 0.24$\dagger$} \\
+{\scriptsize BiP-MonoDS} & {\scriptsize 0.14} & {\scriptsize \bf 0.24$\ddagger$} \\
 {\scriptsize SyntBiP} & {\scriptsize \bf 0.19}& {\scriptsize 0.08} \\
-{\scriptsize SyntBip-MonoDS} & {\scriptsize 0.15} & {\scriptsize 0.22$\dagger$} \\
+{\scriptsize SyntBip-MonoDS} & {\scriptsize 0.15} & {\scriptsize 0.22$\ddagger$} \\
 \hline 
 {\scriptsize SyntBiP$_{matched}$} &  {\scriptsize 0.20} & {\scriptsize 0.15} \\
 {\scriptsize SyntBiP$_{matched}$-MonoDS}&  {\scriptsize 0.17} & {\scriptsize 0.16} \\
@@ -353,7 +353,7 @@ Since tied rankings occur in the human judgments and re-ranking methods, Kendall
 \hline
 \end{tabular}
 \end{center}
-\caption{Kendall's Tau rank correlation coefficients between human judgment of meaning and grammaticality for the different paraphrase scoring methods. Bottom panel: SyntBiP$_{matched}$ is the same as SyntBiP except paraphrases must match with the original phrase in syntactic type. SyntBiP* and MonoDS* are the same as before except they share the same phrase support with SyntBiP$_{matched}$. ($\dagger$: MonoDS outperforms the corresponding BiP re-ranking at \emph{p}-value $\le$0.05)}
+\caption{Kendall's Tau rank correlation coefficients between human judgment of meaning and grammaticality for the different paraphrase scoring methods. Bottom panel: SyntBiP$_{matched}$ is the same as SyntBiP except paraphrases must match with the original phrase in syntactic type. SyntBiP* and MonoDS* are the same as before except they share the same phrase support with SyntBiP$_{matched}$. ($\ddagger$ and $\dagger$: MonoDS outperforms the corresponding BiP re-ranking at \emph{p}-value $\le$0.01 and \emph{p}-value $\le$0.05, respectively)}
 \label{tbl:table4} 
 \end{table}
 % variables from which values are taken from in eval_paraphrase_judgment_hit_Apr2011.py
