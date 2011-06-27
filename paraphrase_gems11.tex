@@ -289,13 +289,13 @@ Monolingual distributional similarity is widely known to conflate words with
 opposite meaning and has motivated a large body of prior work on antonym
 detection
 \cite{Lin03identifyingsynonyms,Lin01discoveryof,MohammadEtAl08,Mohammad_multiplealternative08,MarneffeFindingcontradictions08,Voorhees08}.
-Contrastingly, the antonyms of a phrase are rarely produced during pivoting of the BiP methods because they tend not to share the same foreign translations.
+In contrast, the antonyms of a phrase are rarely produced during pivoting of the BiP methods because they tend not to share the same foreign translations.
 % As such, applying MonoDS \emph{reranking} on paraphrase candidates extracted by BiP methods can considerably enhance the quality of ranking, while sidestepping the antonym problem that arises from using MonoDS alone.
 Since the reranking framework proposed here begins with paraphrases acquired by the BiP methodology,
 %, which is unsusceptible to antonym problems
 MonoDS can considerably enhance the quality of ranking while sidestepping the antonym problem that arises from using MonoDS alone.
 
-To support this intuition, an example of a paraphrase list with inserted hand-selected phrases ranked by each reranking methods is shown in Table \ref{table6}\footnote{Generating paraphrase list by MonoDS requires building features for all phrases in the corpus, which is computationally impractical and hence, was not considered here.}. Hand-selected antonyms of \emph{reluctant} are inserted to the paraphrase candidates extracted by BiP before they are reranked by MonoDS. This is analogous to the case without pre-filtering of paraphrases by BiP and that all phrases are treated equally by MonoDS alone. BiP cannot rank these hand-selected paraphrases because, by construction, they do not share any foreign translation and hence their paraphrase scores are not defined. As expected from the drawbacks of monolingual-based statistics, the terms \emph{willing} and \emph{eager} are assigned top scores by MonoDS as listed in Table \ref{table6}, although good paraphrases such as \emph{somewhat reluctant}, \emph{disinclined} are also ranked highly in the list. This example illustrates how BiP complements the monolingual reranking technique by providing orthogonal information to address the issue of antonyms for MonoDS.
+To support this intuition, an example of a paraphrase list with inserted hand-selected phrases ranked by each reranking methods is shown in Table \ref{table6}\footnote{Generating a paraphrase list by MonoDS alone requires building features for all phrases in the corpus, which is computationally impractical and hence, was not considered here.}. Hand-selected antonyms of \emph{reluctant} are inserted to the paraphrase candidates extracted by BiP before they are reranked by MonoDS. This is analogous to the case without pre-filtering of paraphrases by BiP and that all phrases are treated equally by MonoDS alone. BiP cannot rank these hand-selected paraphrases because, by construction, they do not share any foreign translation and hence their paraphrase scores are not defined. As expected from the drawbacks of monolingual-based statistics, the terms \emph{willing} and \emph{eager} are assigned top scores by MonoDS as listed in Table \ref{table6}, although good paraphrases such as \emph{somewhat reluctant}, \emph{disinclined} are also ranked highly in the list. This example illustrates how BiP complements the monolingual reranking technique by providing orthogonal information to address the issue of antonyms for MonoDS.
 
 %@@ need to go back on how example was constructed, and then have Ben clean up section @@
 %@@ add citations of prior antonym work in DIRT paper and Bonnie Dorr's ppr on antonym detection to address the pervasive problem of antonym in distributional similarity methods; same drawback of this type of methodology observed in our paraphrase reranking example; how prefiltering using BiP methods would address the issue @@
@@ -718,14 +718,15 @@ In future work we will make use of other complementary bilingual and monolingual
 
 % ccb nikesh: position indep occurence
 
-\begin{flushleft}
-\vspace{+.5em}
-{\bf \large Acknowledgments}
-\vspace{+.5em}
+%% \begin{flushleft}
+%% \vspace{+.5em}
+%% {\bf \large Acknowledgments}
+%% \vspace{+.5em}
+%\end{flushleft}
+%% \mnote{(EuroMatrixPlus and Courtney Napoles)}
 
-\mnote{(EuroMatrixPlus and Courtney Napoles)}
-This research was supported by EuroMatrixPlus (?) and authors would like to acknowledge the input from Courtney Napoles.
-\end{flushleft}
+\paragraph{Acknowledgements} Thanks to Courtney Napoles for advice regarding a pilot version of this work.  Research was  supported in part by EuroMatrixPlus (?).
+
 %
 
 \bibliographystyle{acl}
