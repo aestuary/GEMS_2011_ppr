@@ -314,8 +314,8 @@ To support this intuition, an example of a paraphrase list with inserted hand-se
 %\mnote{todo clean up this subsection}
 
 For BiP and SyntBiP, the French-English parallel text from the Europarl corpus \cite{Koehn05} was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the European parliament with a total of about 1.3 million sentences and close to 97 million words in the English text. Word alignments were generated with the Berkeley aligner. For the SyntBiP, the English side of the parallel corpus was parsed using Stanford parser \cite{KleinManning03}. 
-The translation models were trained with THRAX, a grammar extractor for machine translation\footnote{https://github.com/jweese/thrax}. % recently developed at Johns Hopkins University
-THRAX extracts phrase pairs that are labeled with complex syntactic labels following \newcite{ZollmannVenygopal06}.
+The translation models were trained with Thrax, a grammar extractor for machine translation \cite{WeeseThrax11}. % recently developed at Johns Hopkins University
+Thrax extracts phrase pairs that are labeled with complex syntactic labels following \newcite{ZollmannVenygopal06}.
 %For non-constituent phrases, 
 %CCG-style notation for syntactic labeling \cite{Steedman99} was incorporated in order to reinforce syntactic type matching for paraphrases in the bilingual pivoting stage. 
 
@@ -725,7 +725,7 @@ In future work we will make use of other complementary bilingual and monolingual
 %\end{flushleft}
 %% \mnote{(EuroMatrixPlus and Courtney Napoles)}
 
-\paragraph{Acknowledgements} Thanks to Courtney Napoles for advice regarding a pilot version of this work.  Research was  supported in part by EuroMatrixPlus (?).
+\paragraph{Acknowledgements} Thanks to Courtney Napoles for advice regarding a pilot version of this work. Thanks to Jonathan Weese and Matt Post for their help with Thrax. Research was  supported in part by EuroMatrixPlus (?).
 
 %
 
