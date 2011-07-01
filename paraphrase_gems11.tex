@@ -138,7 +138,7 @@ where ${p(e_2|e_1)}$ is the paraphrase probability, and ${p(e|f)}$ and ${p(f|e)}
 \begin{center}
 \includegraphics[width=\linewidth]{pivot-2}
 \end{center}
-\vspace{-.35cm}
+%\vspace{-.35cm}
 \caption{\small Using a bilingual parallel corpus to extract paraphrases.\vspace{-.12cm}}
 \label{paraphrase-illustration}
 \end{figure}
@@ -222,7 +222,7 @@ $\cos(\frac{D(h(\vec{u}),h(\vec{v}))}{b}\pi)$, where $D()$ is Hamming distance.
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Paraphrases for {\em huge amount of} according to the bilingual pivoting (BiP), syntactic-constrainted bilingual pivoting (SyntBiP) translation score and the monolingual similarity score via LSH (MonoDS), ranked by corresponding scores listed next to each paraphrase. Syntactic type of the phrase is [JJ+NN+IN].} 
 \label{table2}
 \end{table}
@@ -294,7 +294,7 @@ Table~\ref{table2} shows the paraphrase candidates for the phrase {\em huge amou
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Ordered reranked paraphrase candidates for the phrase \emph{reluctant} according to monolingual distributional similarity (MonoDS$_{hand-selected}$) and bilingual pivoting paraphrase (BiP) method. Two hand-selected phrases are labeled with asterisks.\vspace{-.12cm}}
 \label{table6} 
 \end{table}
@@ -420,7 +420,7 @@ Since tied rankings occur in the human judgments and reranking methods, Kendall'
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Kendall's Tau rank correlation coefficients between human judgment of meaning and grammaticality for the different paraphrase scoring methods. Bottom panel: SyntBiP$_{matched}$ is the same as SyntBiP except paraphrases must match with the original phrase in syntactic type. SyntBiP* and MonoDS* are the same as before except they share the same phrase support with SyntBiP$_{matched}$. ($\ddagger$ and $\dagger$: MonoDS outperforms the corresponding BiP reranking at \emph{p}-value $\le$0.01 and \emph{p}-value $\le$0.05, respectively)\vspace{-.12cm}}
 \label{tbl:table4} 
 \end{table}
@@ -467,7 +467,7 @@ We performed a one-tailed sign test on the Kendall's Tau values across phrases t
 \begin{center}
 \includegraphics[width=0.78\linewidth]{meanTopK_vertical_LW2_MS8_2} %[width=\linewidth]
 \end{center}
-\vspace{-.35cm}
+%\vspace{-.35cm}
 \caption{\small Averaged scores in the top K paraphrase candidates as a function of K for different reranking metrics. All methods performs similarly in meaning preservation, but SyntBiP-MonoDS outperforms other scoring methods in grammaticality, as shown in the bottom graph.\vspace{-.12cm}}
 \label{fig_meanTopK}
 \end{figure}
@@ -505,7 +505,7 @@ To verify whether scores from each method correspond to human judgments for para
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Averaged human judgment scores as a function of binned paraphrase scores and binned LSH scores. %showing the correlation between human judgment and each method for paraphrases candidates extracted by BiP
 MonoDS serves as much better thresholding score for extracting high precision paraphrases.\vspace{-.12cm}}
 \label{table9}
@@ -534,7 +534,7 @@ Observe that for the BiP paraphrase scores on the left panel, no trend on the av
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Thresholding using both the MonoDS and BiP scores further improves the average human judgment of Meaning / Grammar.\vspace{-.12cm}}
 \label{table9b}
 \end{table}
@@ -587,7 +587,7 @@ Compared across the two categories, meaning scores have lower range of score and
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Average of the \emph{maximum} human evaluation score from top K candidates for each reranking method. Support sizes for BiP- and SyntBiP-based metrics are 500 and 335, respectively. (M = Meaning, G = Grammar)} 
 \label{table10} 
 \end{table}
@@ -646,7 +646,7 @@ Compared across the two categories, meaning scores have lower range of score and
 \hline
 \end{tabular}
 \end{center}
-\vspace{-.25cm}
+%\vspace{-.25cm}
 \caption{Examples of phrase pair rankings by different reranking methods and human judgments in terms of meaning and grammar. Higher rank (smaller numbers) corresponds to more favorable paraphrases by the associated metric. \\($\dagger$: Phrases are listed twice to show the ranking variation when substitutions are evaluated in different sentences.)} % that it is a reasonable substitution in one sentence and a poor substitution in another.\vspace{-.12cm}}
 \label{table11}
 \end{table*}
